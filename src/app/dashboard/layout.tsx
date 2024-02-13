@@ -1,10 +1,18 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import { Navigation } from '@/components/navigation';
 
 export const metadata: Metadata = {
   title: 'The Road to Next - Dashboard',
   description: 'The Dashboard',
 };
+
+const leftNavItems = [
+  { title: 'Dashboard', href: '/dashboard' },
+  { title: 'Tickets', href: '/dashboard/tickets' },
+  { title: 'Settings', href: '/dashboard/settings' },
+];
+
+const rightNavItems = [{ title: 'Sign Out', href: '/' }];
 
 export default function DashboardLayout({
   children,
@@ -13,15 +21,11 @@ export default function DashboardLayout({
 }>) {
   return (
     <>
-      <header className="sticky top-8 z-50 flex w-full px-8 justify-between ">
-        <div className="flex gap-x-4">
-          <Link href="/dashboard/tickets">Tickets</Link>
-          <Link href="/dashboard/settings">Settings</Link>
-        </div>
-
-        <div>
-          <Link href="/">Sign Out</Link>
-        </div>
+      <header className="sticky top-8 z-50 flex w-full px-8 justify-between">
+        <Navigation
+          leftNavItems={leftNavItems}
+          rightNavItems={rightNavItems}
+        />
       </header>
 
       <div className="flex-1 pt-8">{children}</div>

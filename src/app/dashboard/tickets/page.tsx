@@ -1,8 +1,5 @@
-'use client';
-
-import React from 'react';
 import { TicketItem } from '@/features/ticket/components/ticket-item';
-import { Ticket, TicketStatus } from '@/features/ticket/type';
+import { Ticket } from '@/features/ticket/type';
 
 const initialTickets: Ticket[] = [
   {
@@ -26,30 +23,10 @@ const initialTickets: Ticket[] = [
 ];
 
 const TicketsPage = () => {
-  const [tickets, setTickets] =
-    React.useState<Ticket[]>(initialTickets);
-
-  const handleChangeTicketStatus = (
-    ticketId: string,
-    ticketStatus: TicketStatus
-  ) => {
-    setTickets((prevTickets) =>
-      prevTickets.map((ticket) =>
-        ticket.id === ticketId
-          ? { ...ticket, status: ticketStatus }
-          : ticket
-      )
-    );
-  };
-
   return (
     <div className="max-w-96 flex flex-col gap-y-2">
-      {tickets.map((ticket) => (
-        <TicketItem
-          key={ticket.id}
-          ticket={ticket}
-          onChangeTicketStatus={handleChangeTicketStatus}
-        />
+      {initialTickets.map((ticket) => (
+        <TicketItem key={ticket.id} ticket={ticket} />
       ))}
     </div>
   );

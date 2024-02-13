@@ -1,27 +1,59 @@
 'use client';
 
+import * as React from 'react';
+import Link from 'next/link';
 import {
   NavigationMenu,
-  NavigationMenuList,
   NavigationMenuItem,
-  NavigationMenuTrigger,
-  NavigationMenuContent,
   NavigationMenuLink,
-} from '@radix-ui/react-navigation-menu';
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from '@/components/ui/navigation-menu';
 
-const Navigation = () => {
-  return (
+type NavItem = {
+  title: string;
+  href: string;
+};
+
+type NavigationItemProps = {
+  navItem: NavItem;
+};
+
+const NavigationItem = ({ navItem }: NavigationItemProps) => (
+  <NavigationMenuItem key={navItem.title}>
+    <Link href={navItem.href} legacyBehavior passHref>
+      <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+        {navItem.title}
+      </NavigationMenuLink>
+    </Link>
+  </NavigationMenuItem>
+);
+
+type NavigationProps = {
+  leftNavItems: NavItem[];
+  rightNavItems: NavItem[];
+};
+
+const Navigation = ({
+  leftNavItems,
+  rightNavItems,
+}: NavigationProps) => (
+  <>
     <NavigationMenu>
       <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <NavigationMenuLink>Link</NavigationMenuLink>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
+        {leftNavItems.map((item) => (
+          <NavigationItem key={item.title} navItem={item} />
+        ))}
       </NavigationMenuList>
     </NavigationMenu>
-  );
-};
+    <NavigationMenu>
+      <NavigationMenuList>
+        {rightNavItems.map((item) => (
+          <NavigationItem key={item.title} navItem={item} />
+        ))}
+      </NavigationMenuList>
+    </NavigationMenu>
+  </>
+);
 
 export { Navigation };
