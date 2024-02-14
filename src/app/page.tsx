@@ -14,7 +14,7 @@ const HomePage = () => {
         </Link>
       </header>
 
-      <div className="flex-1 pt-8">HomePage</div>
+      <div className="flex-1 pt-8 flex">HomePage</div>
     </>
   );
 };

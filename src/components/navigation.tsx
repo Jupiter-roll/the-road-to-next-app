@@ -1,7 +1,5 @@
 'use client';
 
-import * as React from 'react';
-import Link from 'next/link';
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -9,6 +7,7 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
+import Link from 'next/link';
 
 type NavItem = {
   title: string;

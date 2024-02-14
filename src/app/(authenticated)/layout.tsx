@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 
 const leftNavItems = [
   { title: 'Dashboard', href: '/dashboard' },
-  { title: 'Tickets', href: '/dashboard/tickets' },
-  { title: 'Settings', href: '/dashboard/settings' },
+  { title: 'Tickets', href: '/tickets' },
+  { title: 'Settings', href: '/settings' },
 ];
 
 const rightNavItems = [{ title: 'Sign Out', href: '/' }];
@@ -28,7 +28,7 @@ export default function DashboardLayout({
         />
       </header>
 
-      <div className="flex-1 pt-8">{children}</div>
+      <div className="flex-1 pt-8 flex">{children}</div>
     </>
   );
 }
