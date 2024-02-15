@@ -5,7 +5,7 @@ import { prisma } from '@/services/prisma';
 import { revalidatePath } from 'next/cache';
 import { FormState, transformError } from '@/utils/transform-error';
 
-const ticketSchema = z.object({
+const createTicketSchema = z.object({
   title: z.string().min(1).max(191),
   content: z.string().min(1).max(191),
 });
@@ -15,7 +15,7 @@ export const createTicket = async (
   formData: FormData
 ) => {
   try {
-    const rawFormData = ticketSchema.parse({
+    const rawFormData = createTicketSchema.parse({
       title: formData.get('title'),
       content: formData.get('content'),
     });
