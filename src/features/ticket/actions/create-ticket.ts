@@ -1,24 +1,41 @@
 'use server';
 
-import prisma from '@/services/prisma';
+import { z } from 'zod';
+import { prisma } from '@/services/prisma';
 import { revalidatePath } from 'next/cache';
+import { FormState, transformError } from '@/utils/transform-error';
 
-export const createTicket = async (formData: FormData) => {
-  const rawFormData = {
-    title: formData.get('title'),
-    content: formData.get('content'),
-  };
+const ticketSchema = z.object({
+  title: z.string().min(1).max(191),
+  content: z.string().min(1).max(191),
+});
 
-  if (!rawFormData.title || !rawFormData.content) {
-    throw new Error('Title and content are required');
+export const createTicket = async (
+  _formState: FormState,
+  formData: FormData
+) => {
+  try {
+    const rawFormData = ticketSchema.parse({
+      title: formData.get('title'),
+      content: formData.get('content'),
+    });
+
+    await prisma.ticket.create({
+      data: {
+        title: rawFormData.title,
+        content: rawFormData.content,
+      },
+    });
+  } catch (error) {
+    return transformError(error);
   }
 
-  await prisma.ticket.create({
-    data: {
-      title: rawFormData.title as string,
-      content: rawFormData.content as string,
-    },
-  });
-
   revalidatePath('/tickets');
+
+  return {
+    status: 'SUCCESS' as const,
+    fieldErrors: {},
+    message: 'Ticket created successfully!',
+    timestamp: Date.now(),
+  };
 };

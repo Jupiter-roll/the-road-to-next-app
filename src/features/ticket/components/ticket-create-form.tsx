@@ -1,107 +1,43 @@
-import { Button } from '@/components/ui/button';
+'use client';
+
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { createTicket } from '../actions/create-ticket';
+import { SubmitButton } from '@/components/form/submit-button';
+import { useFormState } from 'react-dom';
+import { EMPTY_FORM_STATE } from '@/utils/transform-error';
+import { FieldError } from '@/components/form/field-error';
+import { useToastMessage } from '@/components/form/use-toast-message';
+import { useFormReset } from '@/components/form/use-form-reset';
 
 const TicketCreateForm = () => {
-  return (
-    <form action={createTicket} className="flex flex-col gap-y-2">
-      <label htmlFor="title">Title</label>
-      <input
-        id="title"
-        name="title"
-        type="text"
-        className="bg-background p-2 text-sm rounded-md"
-      />
+  const [formState, action] = useFormState(
+    createTicket,
+    EMPTY_FORM_STATE
+  );
 
-      <label htmlFor="content">Content</label>
-      <textarea
+  const formRef = useFormReset(formState);
+  useToastMessage(formState);
+
+  return (
+    <form
+      action={action}
+      ref={formRef}
+      className="flex flex-col gap-y-2"
+    >
+      <Input id="title" name="title" placeholder="Title ..." />
+      <FieldError formState={formState} name="title" />
+
+      <Textarea
         id="content"
         name="content"
-        className="bg-background p-2 text-sm rounded-md"
+        placeholder="Content ..."
       />
+      <FieldError formState={formState} name="content" />
 
-      <Button variant="outline" type="submit">
-        Create
-      </Button>
+      <SubmitButton />
     </form>
   );
 };
 
 export { TicketCreateForm };
-
-// 'use client';
-
-// import { Button } from '@/components/ui/button';
-// import {
-//   Form,
-//   FormControl,
-//   FormField,
-//   FormItem,
-//   FormMessage,
-// } from '@/components/ui/form';
-// import { Input } from '@/components/ui/input';
-// import { Textarea } from '@/components/ui/textarea';
-// import { zodResolver } from '@hookform/resolvers/zod';
-// import { useForm } from 'react-hook-form';
-// import { z } from 'zod';
-
-// export const TicketCreateFormSchema = z.object({
-//   title: z.string().min(1, {
-//     message: 'Is required',
-//   }),
-//   content: z.string().min(1, {
-//     message: 'Is required',
-//   }),
-// });
-
-// const TicketCreateForm = () => {
-//   const form = useForm<z.infer<typeof TicketCreateFormSchema>>({
-//     resolver: zodResolver(TicketCreateFormSchema),
-//     defaultValues: {
-//       title: '',
-//       content: '',
-//     },
-//   });
-
-//   const onSubmit = () => {
-//     // TODO action
-//   };
-
-//   return (
-//     <Form {...form}>
-//       <form
-//         onSubmit={form.handleSubmit(onSubmit)}
-//         className="flex flex-col gap-y-2"
-//       >
-//         <FormField
-//           control={form.control}
-//           name="title"
-//           render={({ field }) => (
-//             <FormItem>
-//               <FormControl>
-//                 <Input placeholder="Title ..." {...field} />
-//               </FormControl>
-//               <FormMessage />
-//             </FormItem>
-//           )}
-//         />
-
-//         <FormField
-//           control={form.control}
-//           name="content"
-//           render={({ field }) => (
-//             <FormItem>
-//               <FormControl>
-//                 <Textarea placeholder="Content ..." {...field} />
-//               </FormControl>
-//               <FormMessage />
-//             </FormItem>
-//           )}
-//         />
-
-//         <Button type="submit">Submit</Button>
-//       </form>
-//     </Form>
-//   );
-// };
-
-// export { TicketCreateForm };

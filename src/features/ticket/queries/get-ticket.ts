@@ -1,7 +1,7 @@
-import prisma from '@/services/prisma';
+import { prisma } from '@/services/prisma';
 
 export const getTicket = async (id: string) => {
-  return prisma.ticket.findUniqueOrThrow({
+  return await prisma.ticket.findUniqueOrThrow({
     where: {
       id,
     },
