@@ -3,6 +3,8 @@ import { TicketCreateForm } from '@/features/ticket/components/ticket-create-for
 import { TicketList } from '@/features/ticket/components/ticket-list';
 import { Suspense } from 'react';
 
+export const dynamic = 'force-dynamic';
+
 const TicketsPage = () => {
   return (
     <div className="w-96 flex flex-col gap-y-8">
