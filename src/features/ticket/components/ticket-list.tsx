@@ -2,9 +2,7 @@ import { getTickets } from '../queries/get-tickets';
 import { TicketItem } from './ticket-item';
 
 const TicketList = async () => {
-  const tickets = await getTickets(
-    Number((Math.random() * 1000).toFixed(0))
-  );
+  const tickets = await getTickets();
 
   return (
     <div className="flex flex-col gap-y-2">
