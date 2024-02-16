@@ -42,7 +42,15 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
         </div>
       </Card>
 
-      {isDetail ? null : (
+      {isDetail ? (
+        <div className="flex flex-col justify-between">
+          <Button variant="outline" size="icon" asChild>
+            <Link href={`/tickets/${ticket.id}/edit`}>
+              <PencilIcon className="h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+      ) : (
         <div className="flex flex-col justify-between">
           <Button variant="outline" size="icon" asChild>
             <Link href={`/tickets/${ticket.id}`}>

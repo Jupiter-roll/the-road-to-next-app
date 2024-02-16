@@ -13,13 +13,14 @@ import { useState } from 'react';
 
 type DatePickerProps = {
   name: string;
+  defaultValue?: string;
 };
 
-const DatePicker = ({ name }: DatePickerProps) => {
+const DatePicker = ({ name, defaultValue }: DatePickerProps) => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const [date, setDate] = useState<string>(
-    dayjs(new Date()).format('YYYY-MM-DD')
+    defaultValue ?? dayjs(new Date()).format('YYYY-MM-DD')
   );
 
   const handleDate = (date: Date | undefined) => {

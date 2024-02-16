@@ -5,8 +5,9 @@ import { z } from 'zod';
 import { prisma } from '@/services/prisma';
 import { revalidatePath } from 'next/cache';
 import { FormState, transformError } from '@/utils/transform-error';
+import { redirect } from 'next/navigation';
 
-const createTicketSchema = z.object({
+const upsertTicketSchema = z.object({
   title: z.string().min(1).max(191),
   content: z.string().min(1).max(191),
   deadline: z
@@ -18,36 +19,51 @@ const createTicketSchema = z.object({
   bounty: z.coerce.number().positive(),
 });
 
-export const createTicket = async (
+export const upsertTicket = async (
+  id: string | undefined,
   _formState: FormState,
   formData: FormData
 ) => {
   try {
-    const data = createTicketSchema.parse({
+    const rawFormData = upsertTicketSchema.parse({
       title: formData.get('title'),
       content: formData.get('content'),
       deadline: formData.get('deadline'),
       bounty: formData.get('bounty'),
     });
 
-    await prisma.ticket.create({
-      data: {
-        title: data.title,
-        content: data.content,
-        deadline: data.deadline,
-        bounty: currency(data.bounty).intValue,
-      },
-    });
+    const dbData = {
+      ...rawFormData,
+      bounty: currency(rawFormData.bounty).intValue,
+    };
+
+    if (id) {
+      await prisma.ticket.update({
+        where: {
+          id,
+        },
+        data: dbData,
+      });
+    } else {
+      await prisma.ticket.create({
+        data: dbData,
+      });
+    }
   } catch (error) {
     return transformError(error);
   }
 
-  revalidatePath('/tickets');
+  if (id) {
+    redirect(`/tickets/${id}`);
+  } else {
+    revalidatePath('/tickets');
+  }
 
   return {
     status: 'SUCCESS' as const,
     fieldErrors: {},
-    message: 'Ticket created successfully!',
+    // would not show up for update, because we redirect anyway
+    message: `Ticket ${id ? 'updated' : 'created'} successfully!`,
     timestamp: Date.now(),
   };
 };
