@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import clsx from 'clsx';
 import {
   ArrowUpRightFromSquareIcon,
   CheckCircleIcon,
@@ -9,7 +8,8 @@ import {
   PencilIcon,
 } from 'lucide-react';
 import Link from 'next/link';
-import { Ticket } from '../type';
+import { Ticket } from '@prisma/client';
+import { displayCurrency } from '@/utils/currency';
 
 const TICKET_ICONS = {
   OPEN: <FileTextIcon />,
@@ -27,17 +27,18 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
     <div className="flex gap-x-1 animate-fade-in-from-top">
       <Card className="min-w-0 text-slate-100 p-4 flex-1 flex gap-x-4">
         <div>{TICKET_ICONS[ticket.status]}</div>
-        <div className="min-w-0 flex flex-col gap-y-1">
+        <div className="min-w-0 flex-1 flex flex-col gap-y-1">
           <h2 className="text-lg font-semibold truncate">
             {ticket.title}
           </h2>
-          <p
-            className={clsx('text-sm truncate', {
-              'line-through': ticket.status === 'DONE',
-            })}
-          >
-            {ticket.content}
-          </p>
+          <div className="flex-1 flex justify-between">
+            <p className="text-sm text-slate-400">
+              {displayCurrency(ticket.bounty)}
+            </p>
+            <p className="text-sm text-slate-400">
+              {ticket.deadline}
+            </p>
+          </div>
         </div>
       </Card>
 
