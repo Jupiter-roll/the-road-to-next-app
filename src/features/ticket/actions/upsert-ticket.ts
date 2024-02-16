@@ -54,6 +54,7 @@ export const upsertTicket = async (
   }
 
   if (id) {
+    revalidatePath(`/tickets/${id}`);
     redirect(`/tickets/${id}`);
   } else {
     revalidatePath('/tickets');

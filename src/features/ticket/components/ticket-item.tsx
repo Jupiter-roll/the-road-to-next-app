@@ -31,6 +31,11 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
           <h2 className="text-lg font-semibold truncate">
             {ticket.title}
           </h2>
+
+          {isDetail ? (
+            <p className="text-sm text-slate-400">{ticket.content}</p>
+          ) : null}
+
           <div className="flex-1 flex justify-between">
             <p className="text-sm text-slate-400">
               {displayCurrency(ticket.bounty)}

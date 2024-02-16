@@ -1,5 +1,6 @@
 import { TicketItem } from '@/features/ticket/components/ticket-item';
 import { getTicket } from '@/features/ticket/queries/get-ticket';
+import { prisma } from '@/services/prisma';
 import { notFound } from 'next/navigation';
 
 type TicketPageProps = {
@@ -23,3 +24,13 @@ const TicketPage = async ({ params }: TicketPageProps) => {
 };
 
 export default TicketPage;
+
+export async function generateStaticParams() {
+  const tickets = await prisma.ticket.findMany();
+
+  return tickets.map((ticket) => ({
+    params: {
+      ticketId: ticket.id,
+    },
+  }));
+}
