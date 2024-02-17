@@ -2,10 +2,13 @@ import type { Metadata } from 'next';
 import { Navigation } from '@/components/navigation';
 import {
   dashboardPath,
-  homePath,
   settingsPath,
+  signInPath,
   ticketsPath,
 } from '@/utils/paths';
+import { SignOutButton } from '@/features/auth/components/sign-out-buttom';
+import { validateRequest } from '@/features/auth/queries/validate-request';
+import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'The Road to Next - Dashboard',
@@ -18,20 +21,23 @@ const leftNavItems = [
   { title: 'Settings', href: settingsPath() },
 ];
 
-const rightNavItems = [{ title: 'Sign Out', href: homePath() }];
-
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { user } = await validateRequest();
+
+  if (!user) {
+    redirect(signInPath());
+  }
+
   return (
     <>
       <header className="sticky top-8 z-50 flex w-full px-8 justify-between">
-        <Navigation
-          leftNavItems={leftNavItems}
-          rightNavItems={rightNavItems}
-        />
+        <Navigation leftNavItems={leftNavItems} />
+
+        <SignOutButton />
       </header>
 
       <div className="flex-1 pt-8 flex">{children}</div>

@@ -13,6 +13,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@lucia-auth/adapter-prisma": "^4.0.0",
     "@prisma/client": "^5.9.1",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
@@ -27,12 +28,16 @@
     "currency.js": "^2.0.4",
     "date-fns": "^3.3.1",
     "dayjs": "^1.11.10",
+    "lucia": "^3.0.1",
     "lucide-react": "^0.325.0",
     "next": "14.1.0",
+    "next-themes": "^0.2.1",
+    "oslo": "^1.1.1",
     "prisma": "^5.9.1",
     "react": "^18",
     "react-day-picker": "^8.10.0",
     "react-dom": "^18",
+    "sonner": "^1.4.0",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4"

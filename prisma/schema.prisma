@@ -8,6 +8,22 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model User {
+  id             String    @id
+  sessions       Session[]
+  username       String    @unique
+  hashedPassword String
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  userId    String
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  @@index([userId])
+}
+
 model Ticket {
   id        String       @id @default(cuid())
   createdAt DateTime     @default(now())

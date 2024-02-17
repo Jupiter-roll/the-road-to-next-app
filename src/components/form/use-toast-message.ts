@@ -1,31 +1,25 @@
 import { FormState } from '@/utils/transform-error';
-import { useToast } from '../ui/use-toast';
+import { toast } from 'sonner';
 import { useRef, useEffect } from 'react';
 
 const useToastMessage = (formState: FormState) => {
-  const { toast } = useToast();
-
   const prevTimestamp = useRef(formState.timestamp);
 
   useEffect(() => {
-    if (
+    const showToast =
       formState.message &&
-      formState.timestamp !== prevTimestamp.current
-    ) {
-      toast({
-        description: formState.message,
-        variant:
-          formState.status === 'ERROR' ? 'destructive' : 'default',
-      });
+      formState.timestamp !== prevTimestamp.current;
+
+    if (showToast) {
+      if (formState.status === 'ERROR') {
+        toast.error(formState.message);
+      } else {
+        toast.success(formState.message);
+      }
 
       prevTimestamp.current = formState.timestamp;
     }
-  }, [
-    formState.status,
-    formState.message,
-    toast,
-    formState.timestamp,
-  ]);
+  }, [formState.status, formState.message, formState.timestamp]);
 };
 
 export { useToastMessage };

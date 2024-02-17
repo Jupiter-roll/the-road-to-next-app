@@ -30,24 +30,13 @@ const NavigationItem = ({ navItem }: NavigationItemProps) => (
 
 type NavigationProps = {
   leftNavItems: NavItem[];
-  rightNavItems: NavItem[];
 };
 
-const Navigation = ({
-  leftNavItems,
-  rightNavItems,
-}: NavigationProps) => (
+const Navigation = ({ leftNavItems }: NavigationProps) => (
   <>
     <NavigationMenu>
       <NavigationMenuList>
         {leftNavItems.map((item) => (
-          <NavigationItem key={item.title} navItem={item} />
-        ))}
-      </NavigationMenuList>
-    </NavigationMenu>
-    <NavigationMenu>
-      <NavigationMenuList>
-        {rightNavItems.map((item) => (
           <NavigationItem key={item.title} navItem={item} />
         ))}
       </NavigationMenuList>

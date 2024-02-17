@@ -34,7 +34,6 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
     >
       <div>
         <Input
-          id="title"
           name="title"
           placeholder="Title ..."
           defaultValue={ticket?.title}
@@ -44,7 +43,6 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
 
       <div>
         <Textarea
-          id="content"
           name="content"
           placeholder="Content ..."
           defaultValue={ticket?.content}
@@ -62,7 +60,6 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
         </div>
         <div className="w-1/2">
           <Input
-            id="bounty"
             name="bounty"
             placeholder="Bounty ($)"
             type="number"

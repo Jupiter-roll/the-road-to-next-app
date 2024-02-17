@@ -12,7 +12,7 @@ const SubmitButton = ({ label }: SubmitButtonProps) => {
   const { pending } = useFormStatus();
 
   return (
-    <Button disabled={pending} variant="outline" type="submit">
+    <Button disabled={pending} type="submit">
       {pending && (
         <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
       )}
