@@ -6,7 +6,8 @@ import { prisma } from '@/services/prisma';
 import { revalidatePath } from 'next/cache';
 import { FormState, transformError } from '@/utils/transform-error';
 import { redirect } from 'next/navigation';
-import { ticketPath, ticketsPath } from '@/utils/paths';
+import { signInPath, ticketPath, ticketsPath } from '@/utils/paths';
+import { validateRequest } from '@/features/auth/queries/validate-request';
 
 const upsertTicketSchema = z.object({
   title: z.string().min(1).max(191),
@@ -33,7 +34,14 @@ export const upsertTicket = async (
       bounty: formData.get('bounty'),
     });
 
+    const { user } = await validateRequest();
+
+    if (!user) {
+      redirect(signInPath());
+    }
+
     const dbData = {
+      userId: user.id,
       ...rawFormData,
       bounty: currency(rawFormData.bounty).intValue,
     };
