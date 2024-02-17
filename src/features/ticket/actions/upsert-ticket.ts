@@ -8,6 +8,7 @@ import { FormState, transformError } from '@/utils/transform-error';
 import { redirect } from 'next/navigation';
 import { signInPath, ticketPath, ticketsPath } from '@/utils/paths';
 import { validateRequest } from '@/features/auth/queries/validate-request';
+import { getCurrentUserOrRedirect } from '@/features/auth/queries/get-current-user-or-redirect';
 
 const upsertTicketSchema = z.object({
   title: z.string().min(1).max(191),
@@ -27,6 +28,8 @@ export const upsertTicket = async (
   formData: FormData
 ) => {
   try {
+    const { user } = await getCurrentUserOrRedirect();
+
     const rawFormData = upsertTicketSchema.parse({
       title: formData.get('title'),
       content: formData.get('content'),
@@ -34,14 +37,7 @@ export const upsertTicket = async (
       bounty: formData.get('bounty'),
     });
 
-    const { user } = await validateRequest();
-
-    if (!user) {
-      redirect(signInPath());
-    }
-
     const dbData = {
-      userId: user.id,
       ...rawFormData,
       bounty: currency(rawFormData.bounty).intValue,
     };
@@ -49,13 +45,17 @@ export const upsertTicket = async (
     if (id) {
       await prisma.ticket.update({
         where: {
+          userId: user.id,
           id,
         },
         data: dbData,
       });
     } else {
       await prisma.ticket.create({
-        data: dbData,
+        data: {
+          userId: user.id,
+          ...dbData,
+        },
       });
     }
   } catch (error) {
@@ -71,7 +71,6 @@ export const upsertTicket = async (
   return {
     status: 'SUCCESS' as const,
     fieldErrors: {},
-    // would not show up for update, because we redirect anyway
     message: `Ticket ${id ? 'updated' : 'created'} successfully!`,
     timestamp: Date.now(),
   };
