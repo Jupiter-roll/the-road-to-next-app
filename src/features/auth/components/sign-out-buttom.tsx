@@ -1,10 +1,15 @@
-import { Button } from '@/components/ui/button';
+import { LogOutIcon } from 'lucide-react';
 import { signOut } from '../actions/sign-out';
+import { SubmitButton } from '@/components/form/submit-button';
 
 const SignOutButton = () => {
   return (
     <form action={signOut}>
-      <Button variant="outline">Sign Out</Button>
+      <SubmitButton
+        label="Sign Out"
+        suffixIcon={<LogOutIcon />}
+        variant="outline"
+      />
     </form>
   );
 };
