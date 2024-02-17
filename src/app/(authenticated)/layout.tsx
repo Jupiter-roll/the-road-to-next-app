@@ -1,5 +1,11 @@
 import type { Metadata } from 'next';
 import { Navigation } from '@/components/navigation';
+import {
+  dashboardPath,
+  homePath,
+  settingsPath,
+  ticketsPath,
+} from '@/utils/paths';
 
 export const metadata: Metadata = {
   title: 'The Road to Next - Dashboard',
@@ -7,12 +13,12 @@ export const metadata: Metadata = {
 };
 
 const leftNavItems = [
-  { title: 'Dashboard', href: '/dashboard' },
-  { title: 'Tickets', href: '/tickets' },
-  { title: 'Settings', href: '/settings' },
+  { title: 'Dashboard', href: dashboardPath() },
+  { title: 'Tickets', href: ticketsPath() },
+  { title: 'Settings', href: settingsPath() },
 ];
 
-const rightNavItems = [{ title: 'Sign Out', href: '/' }];
+const rightNavItems = [{ title: 'Sign Out', href: homePath() }];
 
 export default function DashboardLayout({
   children,

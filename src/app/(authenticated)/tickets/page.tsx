@@ -3,7 +3,7 @@ import { TicketUpsertForm } from '@/features/ticket/components/ticket-upsert-for
 import { TicketList } from '@/features/ticket/components/ticket-list';
 import { Suspense } from 'react';
 
-export const dynamic = 'force-dynamic';
+// export const dynamic = 'force-dynamic';
 
 const TicketsPage = () => {
   return (

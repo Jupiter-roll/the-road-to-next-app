@@ -6,6 +6,7 @@ import { prisma } from '@/services/prisma';
 import { revalidatePath } from 'next/cache';
 import { FormState, transformError } from '@/utils/transform-error';
 import { redirect } from 'next/navigation';
+import { ticketPath, ticketsPath } from '@/utils/paths';
 
 const upsertTicketSchema = z.object({
   title: z.string().min(1).max(191),
@@ -53,11 +54,10 @@ export const upsertTicket = async (
     return transformError(error);
   }
 
+  revalidatePath(ticketsPath());
+
   if (id) {
-    revalidatePath(`/tickets/${id}`);
-    redirect(`/tickets/${id}`);
-  } else {
-    revalidatePath('/tickets');
+    redirect(ticketPath(id));
   }
 
   return {

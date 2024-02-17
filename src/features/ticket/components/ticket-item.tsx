@@ -6,10 +6,24 @@ import {
   FileTextIcon,
   GripHorizontalIcon,
   PencilIcon,
+  TrashIcon,
 } from 'lucide-react';
 import Link from 'next/link';
 import { Ticket } from '@prisma/client';
 import { displayCurrency } from '@/utils/currency';
+import dynamic from 'next/dynamic';
+
+const TicketDeleteButton = dynamic(
+  () => import('./ticket-delete-button'),
+  {
+    loading: () => (
+      <Button variant="outline" size="icon">
+        <TrashIcon className="h-4 w-4" />
+      </Button>
+    ),
+    ssr: false,
+  }
+);
 
 const TICKET_ICONS = {
   OPEN: <FileTextIcon />,
@@ -48,15 +62,16 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
       </Card>
 
       {isDetail ? (
-        <div className="flex flex-col justify-between">
+        <div className="flex flex-col gap-y-1">
           <Button variant="outline" size="icon" asChild>
             <Link href={`/tickets/${ticket.id}/edit`}>
               <PencilIcon className="h-4 w-4" />
             </Link>
           </Button>
+          <TicketDeleteButton id={ticket.id} />
         </div>
       ) : (
-        <div className="flex flex-col justify-between">
+        <div className="flex flex-col gap-y-1">
           <Button variant="outline" size="icon" asChild>
             <Link href={`/tickets/${ticket.id}`}>
               <ArrowUpRightFromSquareIcon className="h-4 w-4" />
