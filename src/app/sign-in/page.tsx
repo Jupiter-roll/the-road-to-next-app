@@ -2,10 +2,13 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import { SignInForm } from '@/features/auth/components/sign-in-form';
+import { forgotPasswordPath, signUpPath } from '@/utils/paths';
+import Link from 'next/link';
 
 const SignInPage = () => {
   return (
@@ -18,6 +21,21 @@ const SignInPage = () => {
         <CardContent>
           <SignInForm />
         </CardContent>
+        <CardFooter className="flex justify-between">
+          <Link
+            className="text-sm text-muted-foreground"
+            href={forgotPasswordPath()}
+          >
+            Forgot Password?
+          </Link>
+
+          <Link
+            className="text-sm text-muted-foreground"
+            href={signUpPath()}
+          >
+            No account yet?
+          </Link>
+        </CardFooter>
       </Card>
     </div>
   );

@@ -22,8 +22,8 @@ const SignInForm = () => {
       className="flex flex-col gap-y-2"
     >
       <div>
-        <Input name="username" placeholder="Username" />
-        <FieldError formState={formState} name="username" />
+        <Input name="email" placeholder="Email" />
+        <FieldError formState={formState} name="email" />
       </div>
 
       <div>

@@ -10,7 +10,11 @@ import { lucia } from '@/services/lucia';
 import { dashboardPath } from '@/utils/paths';
 
 const signInSchema = z.object({
-  username: z.string().min(3).max(31),
+  email: z
+    .string()
+    .min(1, { message: 'Is required' })
+    .max(191)
+    .email(),
   password: z.string().min(6).max(191),
 });
 
@@ -19,20 +23,20 @@ export const signIn = async (
   formData: FormData
 ) => {
   try {
-    const { username, password } = signInSchema.parse({
-      username: formData.get('username'),
+    const { email, password } = signInSchema.parse({
+      email: formData.get('email'),
       password: formData.get('password'),
     });
 
     const user = await prisma.user.findUnique({
-      where: { username },
+      where: { email },
     });
 
     if (!user) {
       return {
         status: 'ERROR' as const,
         fieldErrors: {},
-        message: 'Incorrect username or password',
+        message: 'Incorrect email or password',
         timestamp: Date.now(),
       };
     }
@@ -46,7 +50,7 @@ export const signIn = async (
       return {
         status: 'ERROR' as const,
         fieldErrors: {},
-        message: 'Incorrect username or password',
+        message: 'Incorrect email or password',
         timestamp: Date.now(),
       };
     }

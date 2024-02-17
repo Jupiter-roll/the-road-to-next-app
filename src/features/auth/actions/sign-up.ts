@@ -8,11 +8,15 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { generateId } from 'lucia';
 import { lucia } from '@/services/lucia';
-import { homePath } from '@/utils/paths';
+import { dashboardPath } from '@/utils/paths';
 
 const signUpSchema = z
   .object({
-    username: z.string().min(3).max(31),
+    email: z
+      .string()
+      .min(1, { message: 'Is required' })
+      .max(191)
+      .email(),
     password: z.string().min(6).max(191),
     confirmPassword: z.string().min(6).max(191),
   })
@@ -31,8 +35,8 @@ export const signUp = async (
   formData: FormData
 ) => {
   try {
-    const { username, password } = signUpSchema.parse({
-      username: formData.get('username'),
+    const { email, password } = signUpSchema.parse({
+      email: formData.get('email'),
       password: formData.get('password'),
       confirmPassword: formData.get('confirmPassword'),
     });
@@ -43,7 +47,7 @@ export const signUp = async (
     await prisma.user.create({
       data: {
         id: userId,
-        username,
+        email,
         hashedPassword,
       },
     });
@@ -60,5 +64,5 @@ export const signUp = async (
     return transformError(error);
   }
 
-  redirect(homePath());
+  redirect(dashboardPath());
 };
