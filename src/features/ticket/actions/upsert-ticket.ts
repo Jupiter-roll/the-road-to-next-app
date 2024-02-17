@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache';
 import { FormState, transformError } from '@/utils/transform-error';
 import { redirect } from 'next/navigation';
 import { signInPath, ticketPath, ticketsPath } from '@/utils/paths';
-import { validateRequest } from '@/features/auth/queries/validate-request';
+import { getAuth } from '@/features/auth/queries/get-auth';
 import { getCurrentUserOrRedirect } from '@/features/auth/queries/get-current-user-or-redirect';
 
 const upsertTicketSchema = z.object({

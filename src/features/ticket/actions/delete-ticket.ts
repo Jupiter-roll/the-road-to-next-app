@@ -18,6 +18,7 @@ export const deleteTicket = async (id: string) => {
       },
     });
   } catch (error) {
+    console.log(error);
     return transformError(error);
   }
 

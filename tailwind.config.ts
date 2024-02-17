@@ -68,14 +68,14 @@ const config = {
           to: { height: '0' },
         },
         'fade-in-from-top': {
-          from: { opacity: '0', transform: 'translateY(-8px)' },
+          from: { opacity: '0', transform: 'translateY(-16px)' },
           to: { opacity: '1', transform: 'translateY(0)' },
         },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'fade-in-from-top': 'fade-in-from-top 0.2s ease-out',
+        'fade-in-from-top': 'fade-in-from-top 0.5s ease-out',
       },
     },
   },

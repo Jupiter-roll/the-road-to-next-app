@@ -1,6 +1,9 @@
+import { Spinner } from '@/components/spinner';
 import { buttonVariants } from '@/components/ui/button';
+import { TicketList } from '@/features/ticket/components/ticket-list';
 import { signInPath, signUpPath } from '@/utils/paths';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 const HomePage = () => {
   return (
@@ -23,7 +26,13 @@ const HomePage = () => {
         </div>
       </header>
 
-      <div className="flex-1 pt-8 flex">HomePage</div>
+      <div className="flex-1 pt-8 flex">
+        <div className="w-96 flex flex-col gap-y-8">
+          <Suspense fallback={<Spinner />}>
+            <TicketList />
+          </Suspense>
+        </div>
+      </div>
     </>
   );
 };

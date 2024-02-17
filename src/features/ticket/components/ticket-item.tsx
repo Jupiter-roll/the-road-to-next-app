@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { Ticket } from '@prisma/client';
 import { displayCurrency } from '@/utils/currency';
 import dynamic from 'next/dynamic';
+import { getAuth } from '@/features/auth/queries/get-auth';
 
 const TicketDeleteButton = dynamic(
   () => import('./ticket-delete-button'),
@@ -36,7 +37,11 @@ type TicketItemProps = {
   isDetail: boolean;
 };
 
-const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
+const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
+  const { user } = await getAuth();
+
+  const isTicketByUser = true;
+
   return (
     <div className="flex gap-x-1 animate-fade-in-from-top">
       <Card className="min-w-0 text-slate-100 p-4 flex-1 flex gap-x-4">
@@ -63,12 +68,14 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
 
       {isDetail ? (
         <div className="flex flex-col gap-y-1">
-          <Button variant="outline" size="icon" asChild>
-            <Link href={`/tickets/${ticket.id}/edit`}>
-              <PencilIcon className="h-4 w-4" />
-            </Link>
-          </Button>
-          <TicketDeleteButton id={ticket.id} />
+          {isTicketByUser && (
+            <Button variant="outline" size="icon" asChild>
+              <Link href={`/tickets/${ticket.id}/edit`}>
+                <PencilIcon className="h-4 w-4" />
+              </Link>
+            </Button>
+          )}
+          {isTicketByUser && <TicketDeleteButton id={ticket.id} />}
         </div>
       ) : (
         <div className="flex flex-col gap-y-1">

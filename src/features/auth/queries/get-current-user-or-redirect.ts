@@ -1,9 +1,9 @@
 import { signInPath } from '@/utils/paths';
 import { redirect } from 'next/navigation';
-import { validateRequest } from './validate-request';
+import { getAuth } from './get-auth';
 
 export const getCurrentUserOrRedirect = async () => {
-  const { user } = await validateRequest();
+  const { user } = await getAuth();
 
   if (!user) {
     redirect(signInPath());

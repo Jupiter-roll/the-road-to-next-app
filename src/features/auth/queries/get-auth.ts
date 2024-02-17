@@ -4,7 +4,7 @@ import { cache } from 'react';
 import type { Session, User } from 'lucia';
 import { lucia } from '@/services/lucia';
 
-export const validateRequest = cache(
+export const getAuth = cache(
   async (): Promise<
     { user: User; session: Session } | { user: null; session: null }
   > => {

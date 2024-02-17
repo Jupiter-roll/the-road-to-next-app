@@ -7,7 +7,7 @@ import {
   ticketsPath,
 } from '@/utils/paths';
 import { SignOutButton } from '@/features/auth/components/sign-out-buttom';
-import { validateRequest } from '@/features/auth/queries/validate-request';
+import { getAuth } from '@/features/auth/queries/get-auth';
 import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
@@ -26,7 +26,7 @@ export default async function DashboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { user } = await validateRequest();
+  const { user } = await getAuth();
 
   if (!user) {
     redirect(signInPath());
