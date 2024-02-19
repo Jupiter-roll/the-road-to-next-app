@@ -5,7 +5,13 @@ import { signInPath, signUpPath } from '@/utils/paths';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
-const HomePage = () => {
+type HomePageProps = {
+  searchParams: {
+    search: string;
+  };
+};
+
+const HomePage = ({ searchParams }: HomePageProps) => {
   return (
     <>
       <header className="sticky top-8 z-50 flex w-full px-8 justify-between">
@@ -29,7 +35,7 @@ const HomePage = () => {
       <div className="flex-1 pt-8 flex">
         <div className="w-96 flex flex-col gap-y-8">
           <Suspense fallback={<Spinner />}>
-            <TicketList />
+            <TicketList search={searchParams.search} />
           </Suspense>
         </div>
       </div>

@@ -6,7 +6,13 @@ import { getAuth } from '@/features/auth/queries/get-auth';
 
 // export const dynamic = 'force-dynamic';
 
-const TicketsPage = async () => {
+type TicketsPageProps = {
+  searchParams: {
+    search: string;
+  };
+};
+
+const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
   const { user } = await getAuth();
 
   return (
@@ -14,7 +20,7 @@ const TicketsPage = async () => {
       <TicketUpsertForm />
 
       <Suspense fallback={<Spinner />}>
-        <TicketList userId={user?.id} />
+        <TicketList userId={user?.id} search={searchParams.search} />
       </Suspense>
     </div>
   );
