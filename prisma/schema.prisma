@@ -14,6 +14,7 @@ model User {
   email          String    @unique
   hashedPassword String
   tickets        Ticket[]
+  comments       Comment[]
 }
 
 model Session {
@@ -30,12 +31,13 @@ model Ticket {
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
   title     String
-  content   String
+  content   String       @db.VarChar(1024)
   status    TicketStatus @default(OPEN)
   deadline  String
   bounty    Int
   user      User         @relation(fields: [userId], references: [id])
   userId    String
+  comments  Comment[]
 
   @@index([userId])
 }
@@ -44,4 +46,17 @@ enum TicketStatus {
   OPEN
   IN_PROGRESS
   DONE
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  content   String
+  ticket    Ticket   @relation(fields: [ticketId], references: [id])
+  ticketId  String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+
+  @@index([ticketId])
+  @@index([userId])
 }
