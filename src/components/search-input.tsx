@@ -11,10 +11,7 @@ type SearchInputProps = {
 };
 
 const SearchInput = ({ placeholder }: SearchInputProps) => {
-  const [search, setSearch] = useQueryState(
-    'search',
-    searchParser.search
-  );
+  const [search, setSearch] = useQueryState('search', searchParser);
 
   const handleSearch = useDebouncedCallback(
     (event: ChangeEvent<HTMLInputElement>) => {

@@ -3,6 +3,8 @@ import { getTickets } from '../queries/get-tickets';
 import { TicketItem } from './ticket-item';
 import { SortSelect } from '@/components/sort-select';
 import { SerliazedSearchParams } from '../search-params';
+import { Spinner } from '@/components/spinner';
+import { Suspense } from 'react';
 
 type TicketListProps = {
   userId?: string;
@@ -13,7 +15,6 @@ const TicketList = async ({
   userId,
   searchParams,
 }: TicketListProps) => {
-  console.log(searchParams);
   const tickets = await getTickets(userId, searchParams);
 
   return (
@@ -21,10 +22,17 @@ const TicketList = async ({
       <div className="flex gap-x-2">
         <SearchInput placeholder="Search tickets ..." />
         <SortSelect
-          defaulltValue="newest"
           options={[
-            { value: 'newest', label: 'Newest' },
-            { value: 'bounty', label: 'Bounty' },
+            {
+              sortKey: 'createdAt',
+              sortValue: 'desc',
+              label: 'Newest',
+            },
+            {
+              sortKey: 'bounty',
+              sortValue: 'desc',
+              label: 'Bounty',
+            },
           ]}
         />
       </div>
