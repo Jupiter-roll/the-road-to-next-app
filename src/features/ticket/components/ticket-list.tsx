@@ -1,8 +1,8 @@
-import { SearchInput } from '@/components/search-input';
 import { getTickets } from '../queries/get-tickets';
 import { TicketItem } from './ticket-item';
-import { SortSelect } from '@/components/sort-select';
 import { SerliazedSearchParams } from '../search-params';
+import { TicketSearchInput } from './ticket-search-input';
+import { TicketSortSelect } from './ticket-sort-select';
 
 type TicketListProps = {
   userId?: string;
@@ -18,8 +18,8 @@ const TicketList = async ({
   return (
     <div className="flex flex-col gap-y-2">
       <div className="flex gap-x-2">
-        <SearchInput placeholder="Search tickets ..." />
-        <SortSelect
+        <TicketSearchInput placeholder="Search tickets ..." />
+        <TicketSortSelect
           options={[
             {
               sortKey: 'createdAt',
