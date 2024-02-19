@@ -3,8 +3,6 @@ import { getTickets } from '../queries/get-tickets';
 import { TicketItem } from './ticket-item';
 import { SortSelect } from '@/components/sort-select';
 import { SerliazedSearchParams } from '../search-params';
-import { Spinner } from '@/components/spinner';
-import { Suspense } from 'react';
 
 type TicketListProps = {
   userId?: string;
