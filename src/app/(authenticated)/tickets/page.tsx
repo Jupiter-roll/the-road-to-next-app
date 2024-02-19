@@ -3,13 +3,12 @@ import { TicketUpsertForm } from '@/features/ticket/components/ticket-upsert-for
 import { TicketList } from '@/features/ticket/components/ticket-list';
 import { Suspense } from 'react';
 import { getAuth } from '@/features/auth/queries/get-auth';
+import { searchParamsCache } from '@/features/ticket/search-params';
 
 // export const dynamic = 'force-dynamic';
 
 type TicketsPageProps = {
-  searchParams: {
-    search: string;
-  };
+  searchParams: Record<string, string | string[] | undefined>;
 };
 
 const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
@@ -20,7 +19,10 @@ const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
       <TicketUpsertForm />
 
       <Suspense fallback={<Spinner />}>
-        <TicketList userId={user?.id} search={searchParams.search} />
+        <TicketList
+          userId={user?.id}
+          searchParams={searchParamsCache.parse(searchParams)}
+        />
       </Suspense>
     </div>
   );

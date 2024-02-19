@@ -1,14 +1,14 @@
 import { Spinner } from '@/components/spinner';
 import { buttonVariants } from '@/components/ui/button';
 import { TicketList } from '@/features/ticket/components/ticket-list';
+import { searchParamsCache } from '@/features/ticket/search-params';
 import { signInPath, signUpPath } from '@/utils/paths';
+import { Record } from '@prisma/client/runtime/library';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
 type HomePageProps = {
-  searchParams: {
-    search: string;
-  };
+  searchParams: Record<string, string | string[] | undefined>;
 };
 
 const HomePage = ({ searchParams }: HomePageProps) => {
@@ -35,7 +35,9 @@ const HomePage = ({ searchParams }: HomePageProps) => {
       <div className="flex-1 pt-8 flex">
         <div className="w-96 flex flex-col gap-y-8">
           <Suspense fallback={<Spinner />}>
-            <TicketList search={searchParams.search} />
+            <TicketList
+              searchParams={searchParamsCache.parse(searchParams)}
+            />
           </Suspense>
         </div>
       </div>
