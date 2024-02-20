@@ -13,7 +13,6 @@ import { Ticket } from '@prisma/client';
 import { displayCurrency } from '@/utils/currency';
 import dynamic from 'next/dynamic';
 import { getAuth } from '@/features/auth/queries/get-auth';
-import { CommentCreateForm } from '@/features/comment/components/comment-create-form';
 import { Comments } from '@/features/comment/components/comments';
 
 const TicketDeleteButton = dynamic(

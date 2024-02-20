@@ -36,7 +36,7 @@ const CommentCreateForm = ({ ticketId }: CommentCreateFormProps) => {
         <FieldError formState={formState} name="content" />
       </div>
 
-      <SubmitButton label="Create" />
+      <SubmitButton label="Comment" />
     </form>
   );
 };
