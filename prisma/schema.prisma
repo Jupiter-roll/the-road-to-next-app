@@ -52,10 +52,10 @@ model Comment {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   content   String
-  ticket    Ticket   @relation(fields: [ticketId], references: [id])
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
   ticketId  String
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId    String?
 
   @@index([ticketId])
   @@index([userId])

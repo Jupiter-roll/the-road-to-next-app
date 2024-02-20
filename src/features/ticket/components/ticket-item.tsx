@@ -14,6 +14,7 @@ import { displayCurrency } from '@/utils/currency';
 import dynamic from 'next/dynamic';
 import { getAuth } from '@/features/auth/queries/get-auth';
 import { CommentCreateForm } from '@/features/comment/components/comment-create-form';
+import { Comments } from '@/features/comment/components/comments';
 
 const TicketDeleteButton = dynamic(
   () => import('./ticket-delete-button'),
@@ -96,7 +97,7 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
         )}
       </div>
 
-      {isDetail ? <CommentCreateForm ticketId={ticket.id} /> : null}
+      {isDetail ? <Comments ticketId={ticket.id} /> : null}
     </div>
   );
 };
