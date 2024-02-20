@@ -32,8 +32,6 @@ export async function generateStaticParams() {
   const tickets = await prisma.ticket.findMany();
 
   return tickets.map((ticket) => ({
-    params: {
-      ticketId: ticket.id,
-    },
+    ticketId: ticket.id,
   }));
 }

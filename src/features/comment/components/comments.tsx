@@ -5,7 +5,7 @@ type CommentsProps = {
   ticketId: string;
 };
 
-const Comments = ({ ticketId }: CommentsProps) => {
+const Comments = async ({ ticketId }: CommentsProps) => {
   return (
     <div className="flex flex-col gap-y-8">
       <CommentList ticketId={ticketId} />

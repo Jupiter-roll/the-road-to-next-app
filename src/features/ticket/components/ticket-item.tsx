@@ -96,7 +96,7 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
         )}
       </div>
 
-      {isDetail ? <Comments ticketId={ticket.id} /> : null}
+      {/* {isDetail ? <Comments ticketId={ticket.id} /> : null} */}
     </div>
   );
 };
