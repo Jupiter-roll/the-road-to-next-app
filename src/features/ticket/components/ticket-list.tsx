@@ -3,6 +3,7 @@ import { TicketItem } from './ticket-item';
 import { SerliazedSearchParams } from '../search-params';
 import { TicketSearchInput } from './ticket-search-input';
 import { TicketSortSelect } from './ticket-sort-select';
+import { Placeholder } from '@/components/placeholder';
 
 type TicketListProps = {
   userId?: string;
@@ -14,6 +15,14 @@ const TicketList = async ({
   searchParams,
 }: TicketListProps) => {
   const tickets = await getTickets(userId, searchParams);
+
+  if (tickets.length === 0) {
+    return (
+      <div className="flex-1 flex">
+        <Placeholder label="No tickets there yet." />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-y-2">

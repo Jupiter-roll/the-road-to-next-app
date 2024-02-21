@@ -9,7 +9,7 @@ export const getComments = async (ticketId: string) => {
       user: {
         select: {
           id: true,
-          email: true,
+          username: true,
         },
       },
     },

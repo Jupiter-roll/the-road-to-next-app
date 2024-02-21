@@ -77,12 +77,12 @@ const Navigation = async ({ user }: NavigationProps) => {
         <NavigationMenu>
           <NavigationMenuList>
             {[
-              { title: 'Sign In', href: signInPath() },
               {
                 title: 'Sign Up',
                 href: signUpPath(),
                 variant: 'default',
               },
+              { title: 'Sign In', href: signInPath() },
             ].map((item) => (
               <NavigationItem key={item.title} navItem={item} />
             ))}

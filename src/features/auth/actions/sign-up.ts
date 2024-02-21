@@ -9,9 +9,18 @@ import { redirect } from 'next/navigation';
 import { generateId } from 'lucia';
 import { lucia } from '@/services/lucia';
 import { ticketsPath } from '@/utils/paths';
+import { Prisma } from '@prisma/client';
 
 const signUpSchema = z
   .object({
+    username: z
+      .string()
+      .min(1)
+      .max(191)
+      .refine(
+        (value) => !value.includes(' '),
+        'Username cannot contain spaces'
+      ),
     email: z
       .string()
       .min(1, { message: 'Is required' })
@@ -35,7 +44,8 @@ export const signUp = async (
   formData: FormData
 ) => {
   try {
-    const { email, password } = signUpSchema.parse({
+    const { username, email, password } = signUpSchema.parse({
+      username: formData.get('username'),
       email: formData.get('email'),
       password: formData.get('password'),
       confirmPassword: formData.get('confirmPassword'),
@@ -47,6 +57,7 @@ export const signUp = async (
     await prisma.user.create({
       data: {
         id: userId,
+        username,
         email,
         hashedPassword,
       },
@@ -61,6 +72,18 @@ export const signUp = async (
       sessionCookie.attributes
     );
   } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === 'P2002'
+    ) {
+      return {
+        status: 'ERROR' as const,
+        fieldErrors: {},
+        message: 'Either email or username is already in use',
+        timestamp: Date.now(),
+      };
+    }
+
     return transformError(error);
   }
 
