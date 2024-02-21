@@ -1,19 +1,19 @@
 import { DeleteButton } from '@/components/delete-button';
 import { Button } from '@/components/ui/button';
 import { TrashIcon } from 'lucide-react';
-import { deleteTicket } from '../actions/delete-ticket';
+import { deleteComment } from '../actions/delete-comment';
 
-type TicketDeleteButtonProps = {
+type CommentDeleteButtonProps = {
   id: string;
 };
 
-const TicketDeleteButton = ({ id }: TicketDeleteButtonProps) => {
-  const deleteTicketAction = deleteTicket.bind(null, id);
+const CommentDeleteButton = ({ id }: CommentDeleteButtonProps) => {
+  const deleteCommentAction = deleteComment.bind(null, id);
 
   return (
     <DeleteButton
-      action={deleteTicketAction}
-      subject="ticket"
+      action={deleteCommentAction}
+      subject="comment"
       trigger={
         <Button variant="outline" size="icon">
           <TrashIcon className="h-4 w-4" />
@@ -23,4 +23,4 @@ const TicketDeleteButton = ({ id }: TicketDeleteButtonProps) => {
   );
 };
 
-export { TicketDeleteButton };
+export { CommentDeleteButton };

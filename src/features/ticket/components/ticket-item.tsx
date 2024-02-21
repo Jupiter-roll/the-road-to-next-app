@@ -11,21 +11,11 @@ import {
 import Link from 'next/link';
 import { Ticket } from '@prisma/client';
 import { displayCurrency } from '@/utils/currency';
-import dynamic from 'next/dynamic';
 import { getAuth } from '@/features/auth/queries/get-auth';
 import { Comments } from '@/features/comment/components/comments';
-
-const TicketDeleteButton = dynamic(
-  () => import('./ticket-delete-button'),
-  {
-    loading: () => (
-      <Button variant="outline" size="icon">
-        <TrashIcon className="h-4 w-4" />
-      </Button>
-    ),
-    ssr: false,
-  }
-);
+import { deleteTicket } from '../actions/delete-ticket';
+import { DeleteButton } from '@/components/delete-button';
+import { TicketDeleteButton } from './ticket-delete-button';
 
 const TICKET_ICONS = {
   OPEN: <FileTextIcon />,
@@ -40,6 +30,7 @@ type TicketItemProps = {
 
 const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
   const { user } = await getAuth();
+  const deleteTicketAction = deleteTicket.bind(null, ticket.id);
 
   const isTicketByUser = user?.id === ticket.userId;
 

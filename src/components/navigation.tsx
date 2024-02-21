@@ -51,7 +51,8 @@ const Navigation = async ({ user }: NavigationProps) => {
         <NavigationMenu>
           <NavigationMenuList>
             {[
-              { title: 'Tickets', href: ticketsPath() },
+              { title: 'All Tickets', href: homePath() },
+              { title: 'My Tickets', href: ticketsPath() },
               { title: 'Settings', href: settingsPath() },
             ].map((item) => (
               <NavigationItem key={item.title} navItem={item} />
