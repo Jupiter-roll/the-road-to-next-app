@@ -41,16 +41,16 @@ const SignInPage = () => {
         <CardFooter className="flex justify-between">
           <Link
             className="text-sm text-muted-foreground"
-            href={forgotPasswordPath()}
+            href={signUpPath()}
           >
-            Forgot Password?
+            No account yet?
           </Link>
 
           <Link
             className="text-sm text-muted-foreground"
-            href={signUpPath()}
+            href={forgotPasswordPath()}
           >
-            No account yet?
+            Forgot Password
           </Link>
         </CardFooter>
       </Card>

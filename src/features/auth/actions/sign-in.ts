@@ -7,7 +7,7 @@ import { Argon2id } from 'oslo/password';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { lucia } from '@/services/lucia';
-import { dashboardPath } from '@/utils/paths';
+import { ticketsPath } from '@/utils/paths';
 
 const signInSchema = z.object({
   email: z
@@ -67,5 +67,5 @@ export const signIn = async (
     return transformError(error);
   }
 
-  redirect(dashboardPath());
+  redirect(ticketsPath());
 };

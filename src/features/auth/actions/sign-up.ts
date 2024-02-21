@@ -8,7 +8,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { generateId } from 'lucia';
 import { lucia } from '@/services/lucia';
-import { dashboardPath } from '@/utils/paths';
+import { ticketsPath } from '@/utils/paths';
 
 const signUpSchema = z
   .object({
@@ -64,5 +64,5 @@ export const signUp = async (
     return transformError(error);
   }
 
-  redirect(dashboardPath());
+  redirect(ticketsPath());
 };
