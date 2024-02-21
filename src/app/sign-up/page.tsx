@@ -1,3 +1,4 @@
+import { buttonVariants } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -8,7 +9,7 @@ import {
 } from '@/components/ui/card';
 import { SignUpForm } from '@/features/auth/components/sign-up-form';
 import { homePath, signInPath } from '@/utils/paths';
-import { ArrowLeftIcon } from 'lucide-react';
+import { Undo2Icon } from 'lucide-react';
 import Link from 'next/link';
 
 const SignUpPage = () => {
@@ -16,7 +17,18 @@ const SignUpPage = () => {
     <div className="flex-1 flex flex-col justify-center">
       <Card className="w-[350px] animate-fade-in-from-top">
         <CardHeader>
-          <CardTitle>Sign Up</CardTitle>
+          <CardTitle className="flex justify-between items-center">
+            Sign Up
+            <Link
+              href={homePath()}
+              className={buttonVariants({
+                size: 'icon',
+                variant: 'link',
+              })}
+            >
+              <Undo2Icon />
+            </Link>
+          </CardTitle>
           <CardDescription>
             Create an account to get started.
           </CardDescription>
@@ -26,18 +38,10 @@ const SignUpPage = () => {
         </CardContent>
         <CardFooter className="flex justify-between">
           <Link
-            className="text-sm text-muted-foreground flex items-center"
-            href={homePath()}
-          >
-            <ArrowLeftIcon className="w-4 h-4" />
-            Home
-          </Link>
-
-          <Link
             className="text-sm text-muted-foreground"
             href={signInPath()}
           >
-            Or Sign In
+            Have an account? Sign In now.
           </Link>
         </CardFooter>
       </Card>
