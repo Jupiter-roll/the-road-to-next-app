@@ -1,96 +1,38 @@
-'use client';
-
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu';
-import { SignOutButton } from '@/features/auth/components/sign-out-buttom';
-import { getAuth } from '@/features/auth/queries/get-auth';
-import {
-  ticketsPath,
-  settingsPath,
-  homePath,
-  signInPath,
-  signUpPath,
-} from '@/utils/paths';
 import Link from 'next/link';
+import { homePath, ticketsPath } from '@/paths';
 import { buttonVariants } from './ui/button';
 import { KanbanIcon } from 'lucide-react';
 
-type NavItem = {
-  title: string;
-  href: string;
-};
-
-type NavigationItemProps = {
-  navItem: NavItem;
-};
-
-const NavigationItem = ({ navItem }: NavigationItemProps) => (
-  <NavigationMenuItem key={navItem.title}>
-    <Link href={navItem.href} legacyBehavior passHref>
-      <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-        {navItem.title}
-      </NavigationMenuLink>
-    </Link>
-  </NavigationMenuItem>
-);
-
-type NavigationProps = {
-  user: Awaited<ReturnType<typeof getAuth>>['user'];
-};
-
-const Navigation = async ({ user }: NavigationProps) => {
+const Navigation = () => {
   return (
-    <header className="sticky top-8 z-50 flex w-full px-8 justify-between">
-      {/* left side */}
-      {user ? (
-        <NavigationMenu>
-          <NavigationMenuList>
-            {[
-              { title: 'All Tickets', href: homePath() },
-              { title: 'My Tickets', href: ticketsPath() },
-              { title: 'Settings', href: settingsPath() },
-            ].map((item) => (
-              <NavigationItem key={item.title} navItem={item} />
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
-      ) : (
+    <nav
+      className="
+        fixed z-50 top-0
+        w-full flex py-2.5 px-3 justify-between
+        backdrop-blur-md bg-gray-900/50
+        border-b-1 border-slate-950
+      "
+    >
+      <div>
         <Link
           href={homePath()}
           className={buttonVariants({
-            size: 'icon',
             variant: 'link',
+            size: 'icon',
           })}
         >
           <KanbanIcon />
         </Link>
-      )}
-
-      {/* right side */}
-      {user ? (
-        <SignOutButton />
-      ) : (
-        <NavigationMenu>
-          <NavigationMenuList>
-            {[
-              {
-                title: 'Sign Up',
-                href: signUpPath(),
-                variant: 'default',
-              },
-              { title: 'Sign In', href: signInPath() },
-            ].map((item) => (
-              <NavigationItem key={item.title} navItem={item} />
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
-      )}
-    </header>
+      </div>
+      <div>
+        <Link
+          href={ticketsPath()}
+          className={buttonVariants({ variant: 'outline' })}
+        >
+          Tickets
+        </Link>
+      </div>
+    </nav>
   );
 };
 
