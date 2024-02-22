@@ -18,30 +18,34 @@ const CommentList = ({
   initialComments,
   initialHasNextPage,
 }: CommentListProps) => {
-  const [offset, setOffset] = useState(initialComments.length);
-  const [comments, setComments] = useState(initialComments);
-  const [hasNextPage, setHasNextPage] = useState(initialHasNextPage);
+  const [pagination, setPagination] = useState({
+    offset: initialComments.length,
+    hasNextPage: initialHasNextPage,
+    comments: initialComments,
+  });
 
   const loadMoreComments = async () => {
-    const { comments: newComments, metadata } = await getComments(
+    const { comments, metadata } = await getComments(
       ticketId,
-      offset
+      pagination.offset
     );
 
-    setOffset((state) => state + newComments.length);
-    setComments((state) => [...state, ...newComments]);
-    setHasNextPage(metadata.hasNextPage);
+    setPagination((state) => ({
+      offset: state.offset + comments.length,
+      comments: [...state.comments, ...comments],
+      hasNextPage: metadata.hasNextPage,
+    }));
   };
 
   return (
     <div className="flex flex-col gap-y-2">
       <div className="flex flex-col gap-y-2">
-        {comments.map((comment) => (
+        {pagination.comments.map((comment) => (
           <CommentItem key={comment.id} comment={comment} />
         ))}
       </div>
 
-      {hasNextPage && (
+      {pagination.hasNextPage && (
         <form action={loadMoreComments}>
           <SubmitButton
             label="Load More"

@@ -37,13 +37,6 @@ export const getComments = async (
     }),
   ]);
 
-  console.log(
-    count > offset + comments.length,
-    count,
-    offset,
-    comments.length
-  );
-
   return {
     metadata: {
       total: count,
