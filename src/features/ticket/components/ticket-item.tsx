@@ -22,7 +22,7 @@ type TicketItemProps = {
   isDetail?: boolean;
 };
 
-const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
+const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
   return (
     <div className="flex gap-x-1">
       <Card
