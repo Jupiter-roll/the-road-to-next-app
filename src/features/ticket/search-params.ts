@@ -22,6 +22,6 @@ export const searchParamsCache = createSearchParamsCache({
   ...sortParser,
 });
 
-export type SerliazedSearchParams = ReturnType<
+export type ParsedSearchParams = ReturnType<
   typeof searchParamsCache.parse
 >;

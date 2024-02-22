@@ -8,20 +8,23 @@ import React from 'react';
 type SubmitButtonProps = {
   label: string;
   suffixIcon?: React.ReactNode;
-  variant?: 'outline';
+  variant?: 'default' | 'outline' | 'ghost';
+  className?: string;
 };
 
 const SubmitButton = ({
   label,
   suffixIcon,
-  variant,
+  variant = 'default',
+  className,
 }: SubmitButtonProps) => {
   const { pending } = useFormStatus();
 
   return (
     <Button
       disabled={pending}
-      variant={variant ?? 'default'}
+      variant={variant}
+      className={className}
       type="submit"
     >
       {pending && (

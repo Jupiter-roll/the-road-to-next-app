@@ -1,7 +1,10 @@
+import { Spinner } from '@/components/spinner';
+import { Comments } from '@/features/comment/components/comments';
 import { TicketItem } from '@/features/ticket/components/ticket-item';
 import { getTicket } from '@/features/ticket/queries/get-ticket';
 import { prisma } from '@/services/prisma';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 type TicketPageProps = {
   params: {
@@ -18,7 +21,9 @@ const TicketPage = async ({ params }: TicketPageProps) => {
 
   return (
     <div className="w-96 flex flex-col gap-y-8">
-      <TicketItem ticket={ticket} isDetail />
+      <Suspense fallback={<Spinner />}>
+        <TicketItem ticket={ticket} isDetail />
+      </Suspense>
     </div>
   );
 };

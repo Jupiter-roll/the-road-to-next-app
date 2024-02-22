@@ -1,9 +1,9 @@
 import { prisma } from '@/services/prisma';
-import { SerliazedSearchParams } from '../search-params';
+import { ParsedSearchParams } from '../search-params';
 
 export const getTickets = async (
   userId: string | undefined,
-  searchParams: SerliazedSearchParams
+  searchParams: ParsedSearchParams
 ) => {
   return await prisma.ticket.findMany({
     where: {

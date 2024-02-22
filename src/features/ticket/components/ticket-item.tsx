@@ -6,15 +6,12 @@ import {
   FileTextIcon,
   GripHorizontalIcon,
   PencilIcon,
-  TrashIcon,
 } from 'lucide-react';
 import Link from 'next/link';
 import { Ticket } from '@prisma/client';
 import { displayCurrency } from '@/utils/currency';
 import { getAuth } from '@/features/auth/queries/get-auth';
 import { Comments } from '@/features/comment/components/comments';
-import { deleteTicket } from '../actions/delete-ticket';
-import { DeleteButton } from '@/components/delete-button';
 import { TicketDeleteButton } from './ticket-delete-button';
 
 const TICKET_ICONS = {
@@ -30,7 +27,6 @@ type TicketItemProps = {
 
 const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
   const { user } = await getAuth();
-  const deleteTicketAction = deleteTicket.bind(null, ticket.id);
 
   const isTicketByUser = user?.id === ticket.userId;
 

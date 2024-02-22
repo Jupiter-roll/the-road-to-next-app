@@ -1,19 +1,16 @@
 import { Card } from '@/components/ui/card';
 import dayjs from 'dayjs';
 import { getComments } from '../queries/get-comments';
-import { getAuth } from '@/features/auth/queries/get-auth';
 import { CommentDeleteButton } from './comment-delete-button';
 
 type CommentItemProps = {
   // comment: Comment (missed the includes)
-  comment: Awaited<ReturnType<typeof getComments>>[number];
+  comment: Awaited<
+    ReturnType<typeof getComments>
+  >['comments'][number];
 };
 
-const CommentItem = async ({ comment }: CommentItemProps) => {
-  const { user } = await getAuth();
-
-  const isCommentByUser = user?.id === comment.userId;
-
+const CommentItem = ({ comment }: CommentItemProps) => {
   return (
     <div className="flex gap-x-1">
       <Card className="p-4 flex-1 flex flex-col gap-y-1">
@@ -28,7 +25,7 @@ const CommentItem = async ({ comment }: CommentItemProps) => {
         <p className="whitespace-pre-line">{comment.content}</p>
       </Card>
 
-      {isCommentByUser && <CommentDeleteButton id={comment.id} />}
+      {comment.isOwner && <CommentDeleteButton id={comment.id} />}
     </div>
   );
 };
