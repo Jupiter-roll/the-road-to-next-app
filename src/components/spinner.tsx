@@ -1,6 +1,6 @@
 import { Loader2Icon } from 'lucide-react';
 
-export default function Loading() {
+const Spinner = () => {
   return (
     <div
       role="status"
@@ -9,4 +9,6 @@ export default function Loading() {
       <Loader2Icon className="h-16 w-16 animate-spin" />
     </div>
   );
-}
+};
+
+export { Spinner };

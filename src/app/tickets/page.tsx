@@ -1,14 +1,15 @@
-import { TicketItem } from '@/features/ticket/components/ticket-item';
-import { getTickets } from '@/features/ticket/queries/get-tickets';
+import { Spinner } from '@/components/spinner';
+import { TicketCreateForm } from '@/features/ticket/components/ticket-create-form';
+import { TicketList } from '@/features/ticket/components/ticket-list';
+import { Suspense } from 'react';
 
-const TicketsPage = async () => {
-  const tickets = await getTickets();
-
+const TicketsPage = () => {
   return (
-    <div className="w-96 flex flex-col gap-y-2 animate-fade-in-from-top">
-      {tickets.map((ticket) => (
-        <TicketItem key={ticket.id} ticket={ticket} />
-      ))}
+    <div className="w-96 flex-1 flex flex-col gap-y-8">
+      <TicketCreateForm />
+      <Suspense fallback={<Spinner />}>
+        <TicketList />
+      </Suspense>
     </div>
   );
 };
