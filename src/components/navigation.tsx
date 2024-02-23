@@ -8,7 +8,7 @@ const Navigation = () => {
     <nav
       className="
         fixed z-50 top-0
-        w-full flex py-2.5 px-3 justify-between
+        w-full flex py-2.5 px-5 justify-between
         backdrop-blur-md bg-gray-900/50
         border-b-1 border-slate-950
       "
@@ -27,7 +27,7 @@ const Navigation = () => {
       <div>
         <Link
           href={ticketsPath()}
-          className={buttonVariants({ variant: 'outline' })}
+          className={buttonVariants({ variant: 'ghost' })}
         >
           Tickets
         </Link>
