@@ -1,6 +1,8 @@
+import { Spinner } from '@/components/spinner';
 import { TicketItem } from '@/features/ticket/components/ticket-item';
 import { getTicket } from '@/features/ticket/queries/get-ticket';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 type TicketPageProps = {
   params: {
