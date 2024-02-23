@@ -17,7 +17,7 @@ const TicketPage = async ({ params }: TicketPageProps) => {
 
   return (
     <div className="w-96 flex-1 animate-fade-in-from-top">
-      <TicketItem key={ticket.id} ticket={ticket} isDetail />
+      <TicketItem ticket={ticket} isDetail />
     </div>
   );
 };

@@ -8,8 +8,9 @@ import {
   PencilIcon,
 } from 'lucide-react';
 import Link from 'next/link';
-import { Ticket } from '../type';
 import { Button } from '@/components/ui/button';
+import { getTickets } from '../queries/get-tickets';
+import { getTicket } from '../queries/get-ticket';
 
 const TICKET_ICONS = {
   OPEN: <FileTextIcon />,
@@ -18,11 +19,15 @@ const TICKET_ICONS = {
 };
 
 type TicketItemProps = {
-  ticket: Ticket;
+  ticket:
+    | Awaited<ReturnType<typeof getTickets>>[number]
+    | Awaited<ReturnType<typeof getTicket>>;
   isDetail?: boolean;
 };
 
 const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
+  if (!ticket) return null;
+
   return (
     <div className="flex gap-x-1">
       <Card
