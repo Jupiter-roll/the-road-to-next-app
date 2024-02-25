@@ -9,8 +9,8 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { getTickets } from '../queries/get-tickets';
 import { getTicket } from '../queries/get-ticket';
+import { getTickets } from '../queries/get-tickets';
 
 const TICKET_ICONS = {
   OPEN: <FileTextIcon />,
