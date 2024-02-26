@@ -1,25 +1,19 @@
-import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { SubmitButton } from '@/components/form/submit-button';
 import { createTicket } from '../actions/create-ticket';
 
 const TicketCreateForm = () => {
   return (
     <form action={createTicket} className="flex flex-col gap-y-2">
-      <label htmlFor="title">Title</label>
-      <input
-        id="title"
-        name="title"
-        type="text"
-        className="bg-background p-2 text-sm rounded-md"
-      />
+      <Label htmlFor="title">Title</Label>
+      <Input id="title" name="title" />
 
-      <label htmlFor="content">Content</label>
-      <textarea
-        id="content"
-        name="content"
-        className="bg-background p-2 text-sm rounded-md"
-      />
+      <Label htmlFor="content">Content</Label>
+      <Textarea id="content" name="content" />
 
-      <Button type="submit">Create</Button>
+      <SubmitButton />
     </form>
   );
 };
