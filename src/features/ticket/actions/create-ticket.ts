@@ -3,6 +3,11 @@
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import {
+  FormState,
+  fromErrorToFormState,
+  toFormState,
+} from '@/components/form/utils/to-form-state';
 
 const createTicketSchema = z.object({
   title: z.string().min(1).max(191),
@@ -10,7 +15,7 @@ const createTicketSchema = z.object({
 });
 
 export const createTicket = async (
-  _formState: { message: string },
+  _formState: FormState,
   formData: FormData
 ) => {
   try {
@@ -26,14 +31,10 @@ export const createTicket = async (
       },
     });
   } catch (error) {
-    return {
-      message: 'Something went wrong',
-    };
+    return fromErrorToFormState(error);
   }
 
   revalidatePath('/tickets');
 
-  return {
-    message: '',
-  };
+  return toFormState('SUCCESS', 'Ticket created successfully!');
 };
