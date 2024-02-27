@@ -36,5 +36,5 @@ export const createTicket = async (
 
   revalidatePath('/tickets');
 
-  return toFormState('SUCCESS', 'Ticket created successfully!');
+  return toFormState('SUCCESS', 'Ticket created');
 };
