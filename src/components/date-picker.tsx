@@ -14,10 +14,13 @@ import {
 type DatePickerProps = {
   id: string;
   name: string;
+  defaultValue?: string;
 };
 
-const DatePicker = ({ id, name }: DatePickerProps) => {
-  const [date, setDate] = useState<Date | undefined>(undefined);
+const DatePicker = ({ id, name, defaultValue }: DatePickerProps) => {
+  const [date, setDate] = useState<Date | undefined>(
+    defaultValue ? new Date(defaultValue) : undefined
+  );
 
   const formattedStringDate = date ? format(date, 'yyyy-MM-dd') : '';
 
@@ -29,7 +32,7 @@ const DatePicker = ({ id, name }: DatePickerProps) => {
           className="justify-start text-left font-normal"
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {formattedStringDate || <span>Pick a date</span>}
+          {formattedStringDate}
           <input
             type="hidden"
             name={name}

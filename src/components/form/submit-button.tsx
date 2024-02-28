@@ -16,7 +16,7 @@ const SubmitButton = ({ label }: SubmitButtonProps) => {
       {pending && (
         <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
       )}
-      Create
+      {label}
     </Button>
   );
 };

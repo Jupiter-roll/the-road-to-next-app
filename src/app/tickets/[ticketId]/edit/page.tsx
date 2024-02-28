@@ -1,14 +1,14 @@
 import { notFound } from 'next/navigation';
-import { TicketItem } from '@/features/ticket/components/ticket-item';
+import { TicketUpsertForm } from '@/features/ticket/components/ticket-upsert-form';
 import { getTicket } from '@/features/ticket/queries/get-ticket';
 
-type TicketPageProps = {
+type TicketEditPageProps = {
   params: {
     ticketId: string;
   };
 };
 
-const TicketPage = async ({ params }: TicketPageProps) => {
+const TicketEditPage = async ({ params }: TicketEditPageProps) => {
   const ticket = await getTicket(params.ticketId);
 
   if (!ticket) {
@@ -17,9 +17,9 @@ const TicketPage = async ({ params }: TicketPageProps) => {
 
   return (
     <div className="w-96 flex-1 animate-fade-in-from-top">
-      <TicketItem ticket={ticket} isDetail />
+      <TicketUpsertForm ticket={ticket} />
     </div>
   );
 };
 
-export default TicketPage;
+export default TicketEditPage;
