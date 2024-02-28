@@ -56,7 +56,7 @@ const TicketCreateForm = () => {
         </div>
       </div>
 
-      <SubmitButton />
+      <SubmitButton label="Create" />
 
       <noscript>
         {formState.status === 'ERROR' && (

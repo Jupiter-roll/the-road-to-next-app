@@ -4,7 +4,11 @@ import { Loader2Icon } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
 import { Button } from '../ui/button';
 
-const SubmitButton = () => {
+type SubmitButtonProps = {
+  label: string;
+};
+
+const SubmitButton = ({ label }: SubmitButtonProps) => {
   const { pending } = useFormStatus();
 
   return (
