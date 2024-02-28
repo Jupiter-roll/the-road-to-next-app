@@ -6,11 +6,9 @@ type OnArgs = {
   reset: () => void;
 };
 
-type OnFn = (onArgs: OnArgs) => void;
-
 type UseFormFeedbackOptions = {
-  onSuccess?: OnFn;
-  onError?: OnFn;
+  onSuccess?: (onArgs: OnArgs) => void;
+  onError?: (onArgs: OnArgs) => void;
 };
 
 const useFormFeedback = (
