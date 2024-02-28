@@ -42,6 +42,19 @@ const TicketCreateForm = () => {
       <Textarea id="content" name="content" />
       <FieldError formState={formState} name="content" />
 
+      <div className="flex gap-x-2">
+        <div className="w-1/2">
+          <Label htmlFor="deadline">Deadline</Label>
+          <Input type="date" id="deadline" name="deadline" />
+          <FieldError formState={formState} name="deadline" />
+        </div>
+        <div className="w-1/2">
+          <Label htmlFor="bounty">Bounty ($)</Label>
+          <Input type="number" step=".01" id="bounty" name="bounty" />
+          <FieldError formState={formState} name="bounty" />
+        </div>
+      </div>
+
       <SubmitButton />
 
       <noscript>

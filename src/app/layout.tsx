@@ -23,7 +23,7 @@ export default function RootLayout({
         <main
           className="
             min-h-screen
-            bg-gradient-to-b from-gray-900 to-emerald-900
+            bg-gradient-to-b from-slate-900 to-emerald-600
             flex flex-col items-center
             py-32
           "

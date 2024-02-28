@@ -8,10 +8,13 @@ import {
   fromErrorToFormState,
   toFormState,
 } from '@/components/form/utils/to-form-state';
+import { toCent } from '@/lib/big';
 
 const createTicketSchema = z.object({
   title: z.string().min(1).max(191),
-  content: z.string().min(1).max(191),
+  content: z.string().min(1).max(1024),
+  deadline: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Is required'),
+  bounty: z.coerce.number().positive(),
 });
 
 export const createTicket = async (
@@ -22,12 +25,14 @@ export const createTicket = async (
     const data = createTicketSchema.parse({
       title: formData.get('title'),
       content: formData.get('content'),
+      deadline: formData.get('deadline'),
+      bounty: formData.get('bounty'),
     });
 
     await prisma.ticket.create({
       data: {
-        title: data.title,
-        content: data.content,
+        ...data,
+        bounty: toCent(data.bounty),
       },
     });
   } catch (error) {
@@ -36,5 +41,5 @@ export const createTicket = async (
 
   revalidatePath('/tickets');
 
-  return { ...toFormState('SUCCESS', 'Ticket created'), foo: 'asd' };
+  return toFormState('SUCCESS', 'Ticket created');
 };
