@@ -10,6 +10,7 @@ import { FieldError } from '@/components/form/field-error';
 import { useFormFeedback } from '@/components/form/hooks/use-form-feedback';
 import { EMPTY_FORM_STATE } from '@/components/form/utils/to-form-state';
 import { createTicket } from '../actions/create-ticket';
+import { DatePicker } from '@/components/date-picker';
 
 const TicketCreateForm = () => {
   const [formState, action] = useFormState(
@@ -45,7 +46,7 @@ const TicketCreateForm = () => {
       <div className="flex gap-x-2">
         <div className="w-1/2">
           <Label htmlFor="deadline">Deadline</Label>
-          <Input type="date" id="deadline" name="deadline" />
+          <DatePicker id="deadline" name="deadline" />
           <FieldError formState={formState} name="deadline" />
         </div>
         <div className="w-1/2">
