@@ -1,15 +1,15 @@
 'use client';
 
 import { useFormState } from 'react-dom';
+import { toast } from 'sonner';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { createTicket } from '../actions/create-ticket';
 import { SubmitButton } from '@/components/form/submit-button';
-import { EMPTY_FORM_STATE } from '@/components/form/utils/to-form-state';
 import { FieldError } from '@/components/form/field-error';
-import { useToastMessage } from '@/components/form/hooks/use-toast-message';
-import { useFormReset } from '@/components/form/hooks/use-form-reset';
+import { useFormFeedback } from '@/components/form/hooks/use-form-feedback';
+import { EMPTY_FORM_STATE } from '@/components/form/utils/to-form-state';
+import { createTicket } from '../actions/create-ticket';
 
 const TicketCreateForm = () => {
   const [formState, action] = useFormState(
@@ -17,15 +17,23 @@ const TicketCreateForm = () => {
     EMPTY_FORM_STATE
   );
 
-  const noScriptFallback = useToastMessage(formState);
-  const formRef = useFormReset(formState);
+  const { ref } = useFormFeedback(formState, {
+    onSuccess: ({ formState, reset }) => {
+      if (formState.message) {
+        toast.success(formState.message);
+      }
+
+      reset();
+    },
+    onError: ({ formState }) => {
+      if (formState.message) {
+        toast.error(formState.message);
+      }
+    },
+  });
 
   return (
-    <form
-      action={action}
-      ref={formRef}
-      className="flex flex-col gap-y-2"
-    >
+    <form action={action} ref={ref} className="flex flex-col gap-y-2">
       <Label htmlFor="title">Title</Label>
       <Input id="title" name="title" />
       <FieldError formState={formState} name="title" />
@@ -36,7 +44,15 @@ const TicketCreateForm = () => {
 
       <SubmitButton />
 
-      {noScriptFallback}
+      <noscript>
+        {formState.status === 'ERROR' && (
+          <div style={{ color: 'red' }}>{formState.message}</div>
+        )}
+
+        {formState.status === 'SUCCESS' && (
+          <div style={{ color: 'green' }}>{formState.message}</div>
+        )}
+      </noscript>
     </form>
   );
 };

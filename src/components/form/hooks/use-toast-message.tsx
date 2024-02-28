@@ -25,11 +25,11 @@ const useToastMessage = (formState: FormState) => {
   return (
     <noscript>
       {formState.status === 'ERROR' && (
-        <div className="text-red-500">{formState.message}</div>
+        <div style={{ color: 'red' }}>{formState.message}</div>
       )}
 
       {formState.status === 'SUCCESS' && (
-        <div className="text-green-500">{formState.message}</div>
+        <div style={{ color: 'green' }}>{formState.message}</div>
       )}
     </noscript>
   );
