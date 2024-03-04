@@ -1,9 +1,53 @@
 import Link from 'next/link';
-import { homePath, ticketsPath } from '@/paths';
+import {
+  homePath,
+  signInPath,
+  signUpPath,
+  ticketsPath,
+} from '@/paths';
 import { buttonVariants } from './ui/button';
-import { KanbanIcon } from 'lucide-react';
+import { KanbanIcon, LogOutIcon } from 'lucide-react';
+import { SubmitButton } from './form/submit-button';
+import { signOut } from '@/features/auth/actions/sign-out';
+import { getAuth } from '@/features/auth/queries/get-auth';
 
-const Navigation = () => {
+const Navigation = async () => {
+  const { user } = await getAuth();
+
+  const maybeAuthenticatedLeftNavigation = user ? (
+    <Link
+      href={ticketsPath()}
+      className={buttonVariants({ variant: 'ghost' })}
+    >
+      Tickets
+    </Link>
+  ) : null;
+
+  const maybeAuthenticatedRightNavigation = user ? (
+    <form action={signOut}>
+      <SubmitButton
+        label="Sign Out"
+        suffixIcon={<LogOutIcon />}
+        variant="ghost"
+      />
+    </form>
+  ) : (
+    <>
+      <Link
+        href={signUpPath()}
+        className={buttonVariants({ variant: 'ghost' })}
+      >
+        Sign Up
+      </Link>
+      <Link
+        href={signInPath()}
+        className={buttonVariants({ variant: 'ghost' })}
+      >
+        Sign In
+      </Link>
+    </>
+  );
+
   return (
     <nav
       className="
@@ -13,7 +57,7 @@ const Navigation = () => {
         border-b-1 border-slate-950
       "
     >
-      <div>
+      <div className="flex align-items gap-x-2">
         <Link
           href={homePath()}
           className={buttonVariants({
@@ -23,14 +67,10 @@ const Navigation = () => {
         >
           <KanbanIcon />
         </Link>
+        {maybeAuthenticatedLeftNavigation}
       </div>
-      <div>
-        <Link
-          href={ticketsPath()}
-          className={buttonVariants({ variant: 'ghost' })}
-        >
-          Tickets
-        </Link>
+      <div className="flex align-items gap-x-2">
+        {maybeAuthenticatedRightNavigation}
       </div>
     </nav>
   );
