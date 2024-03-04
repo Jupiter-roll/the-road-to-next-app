@@ -10,6 +10,8 @@ import {
   toFormState,
 } from '@/components/form/utils/to-form-state';
 import { toCent } from '@/lib/big';
+import { cookies } from 'next/headers';
+import { ticketPath } from '@/paths';
 
 const upsertTicketSchema = z.object({
   title: z.string().min(1).max(191),
@@ -55,7 +57,9 @@ export const upsertTicket = async (
   revalidatePath('/tickets');
 
   if (id) {
-    redirect(`/tickets/${id}`);
+    cookies().set('toast', 'Ticket updated');
+
+    redirect(ticketPath(id));
   }
 
   return toFormState('SUCCESS', 'Ticket created');

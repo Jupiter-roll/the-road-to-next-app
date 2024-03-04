@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { TicketItem } from '@/features/ticket/components/ticket-item';
 import { getTicket } from '@/features/ticket/queries/get-ticket';
+import { RedirectToast } from '@/components/redirect-toast';
 
 type TicketPageProps = {
   params: {
@@ -16,9 +17,13 @@ const TicketPage = async ({ params }: TicketPageProps) => {
   }
 
   return (
-    <div className="w-96 flex-1 animate-fade-in-from-top">
-      <TicketItem ticket={ticket} isDetail />
-    </div>
+    <>
+      <div className="w-96 flex-1 animate-fade-in-from-top">
+        <TicketItem ticket={ticket} isDetail />
+      </div>
+
+      <RedirectToast />
+    </>
   );
 };
 
