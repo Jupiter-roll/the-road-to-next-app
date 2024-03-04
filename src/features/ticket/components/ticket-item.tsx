@@ -1,20 +1,18 @@
 import { Card } from '@/components/ui/card';
-import { ticketEditPath, ticketPath } from '@/paths';
+import { ticketPath } from '@/paths';
 import clsx from 'clsx';
 import {
   ArrowUpRightFromSquareIcon,
   CheckCircleIcon,
   FileTextIcon,
-  MoreVertical,
   MoreVerticalIcon,
   PencilIcon,
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { getTicket } from '../queries/get-ticket';
-import { getTickets } from '../queries/get-tickets';
 import { toCurrencyFromCent } from '@/lib/big';
 import { TicketMoreMenu } from './ticket-more-menu';
+import { Ticket } from '@prisma/client';
 
 const TICKET_ICONS = {
   OPEN: <FileTextIcon />,
@@ -23,15 +21,11 @@ const TICKET_ICONS = {
 };
 
 type TicketItemProps = {
-  ticket:
-    | Awaited<ReturnType<typeof getTickets>>[number]
-    | Awaited<ReturnType<typeof getTicket>>;
+  ticket: Ticket;
   isDetail?: boolean;
 };
 
 const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
-  if (!ticket) return null;
-
   return (
     <div className="flex gap-x-1">
       <Card
@@ -68,7 +62,7 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
       {isDetail ? (
         <div className="flex flex-col gap-y-1">
           <TicketMoreMenu
-            id={ticket.id}
+            ticket={ticket}
             trigger={
               <Button variant="outline" size="icon">
                 <MoreVerticalIcon className="h-4 w-4" />

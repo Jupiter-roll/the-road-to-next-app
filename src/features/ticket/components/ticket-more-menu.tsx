@@ -7,18 +7,26 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useDeleteButton } from '@/components/use-delete-button';
 import { deleteTicket } from '../actions/delete-ticket';
+import { Ticket, TicketStatus } from '@prisma/client';
+import { TICKET_STATUS_TO_LABEL } from '../constants';
+import { updateTicketStatus } from '../actions/update-ticket-status';
+import { toast } from 'sonner';
+import { useRef } from 'react';
 
 type TicketMoreMenuProps = {
-  id: string;
+  ticket: Ticket;
   trigger: React.ReactNode;
 };
 
-const TicketMoreMenu = ({ id, trigger }: TicketMoreMenuProps) => {
-  const deleteTicketAction = deleteTicket.bind(null, id);
+const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
+  const deleteTicketAction = deleteTicket.bind(null, ticket.id);
 
   const [deleteTrigger, deleteDialog] = useDeleteButton({
     action: deleteTicketAction,
@@ -31,6 +39,25 @@ const TicketMoreMenu = ({ id, trigger }: TicketMoreMenuProps) => {
     ),
   });
 
+  const handleUpdateTicketStatus = async (value: string) => {
+    const promise = updateTicketStatus(
+      ticket.id,
+      value as TicketStatus
+    );
+
+    toast.promise(promise, {
+      loading: 'Updating status...',
+    });
+
+    const result = await promise;
+
+    if (result.status === 'ERROR') {
+      toast.error(result.message);
+    } else {
+      toast.success(result.message);
+    }
+  };
+
   return (
     <>
       {deleteDialog}
@@ -38,14 +65,31 @@ const TicketMoreMenu = ({ id, trigger }: TicketMoreMenuProps) => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" side="right">
-          <Link href={ticketEditPath(id)}>
-            <DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href={ticketEditPath(ticket.id)}>
               <PencilIcon className="mr-2 h-4 w-4" />
               <span>Edit</span>
-            </DropdownMenuItem>
-          </Link>
+            </Link>
+          </DropdownMenuItem>
 
           {deleteTrigger}
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuRadioGroup
+            value={ticket.status}
+            onValueChange={handleUpdateTicketStatus}
+          >
+            {(
+              Object.keys(
+                TICKET_STATUS_TO_LABEL
+              ) as Array<TicketStatus>
+            ).map((key) => (
+              <DropdownMenuRadioItem key={key} value={key}>
+                {TICKET_STATUS_TO_LABEL[key]}
+              </DropdownMenuRadioItem>
+            ))}
+          </DropdownMenuRadioGroup>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
