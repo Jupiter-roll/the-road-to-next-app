@@ -10,6 +10,7 @@ import { KanbanIcon, LogOutIcon } from 'lucide-react';
 import { SubmitButton } from './form/submit-button';
 import { signOut } from '@/features/auth/actions/sign-out';
 import { getAuth } from '@/features/auth/queries/get-auth';
+import { ThemeSwitcher } from './theme/theme-switcher';
 
 const Navigation = async () => {
   const { user } = await getAuth();
@@ -28,20 +29,20 @@ const Navigation = async () => {
       <SubmitButton
         label="Sign Out"
         suffixIcon={<LogOutIcon />}
-        variant="ghost"
+        variant="outline"
       />
     </form>
   ) : (
     <>
       <Link
         href={signUpPath()}
-        className={buttonVariants({ variant: 'ghost' })}
+        className={buttonVariants({ variant: 'outline' })}
       >
         Sign Up
       </Link>
       <Link
         href={signInPath()}
-        className={buttonVariants({ variant: 'ghost' })}
+        className={buttonVariants({ variant: 'default' })}
       >
         Sign In
       </Link>
@@ -51,10 +52,10 @@ const Navigation = async () => {
   return (
     <nav
       className="
-        fixed z-50 top-0
+        supports-backdrop-blur:bg-background/60
+        fixed left-0 right-0 top-0 z-20
+        border-b bg-background/95 backdrop-blur
         w-full flex py-2.5 px-5 justify-between
-        backdrop-blur-md bg-gray-900/50
-        border-b-1 border-slate-950
       "
     >
       <div className="flex align-items gap-x-2">
@@ -70,6 +71,7 @@ const Navigation = async () => {
         {maybeAuthenticatedLeftNavigation}
       </div>
       <div className="flex align-items gap-x-2">
+        <ThemeSwitcher />
         {maybeAuthenticatedRightNavigation}
       </div>
     </nav>

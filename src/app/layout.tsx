@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Navigation } from '@/components/navigation';
 import { Toaster } from '@/components/ui/sonner';
+import { ThemeProvider } from '@/components/theme/theme-provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,20 +18,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html suppressHydrationWarning lang="en">
       <body className={inter.className}>
-        <Navigation />
-        <main
-          className="
-            min-h-screen
-            bg-gradient-to-b from-slate-900 to-emerald-600
-            flex flex-col items-center
-            py-32
-          "
-        >
-          {children}
-        </main>
-        <Toaster richColors />
+        <ThemeProvider>
+          <Navigation />
+          <main
+            className="
+              min-h-screen flex-1
+              overflow-y-auto overflow-x-hidden
+              py-24 px-8
+              flex flex-col items-center
+            "
+          >
+            {children}
+          </main>
+          <Toaster richColors />
+        </ThemeProvider>
       </body>
     </html>
   );
