@@ -1,10 +1,12 @@
 import { Card } from '@/components/ui/card';
-import { ticketPath } from '@/paths';
+import { ticketEditPath, ticketPath } from '@/paths';
 import clsx from 'clsx';
 import {
   ArrowUpRightFromSquareIcon,
   CheckCircleIcon,
   FileTextIcon,
+  MoreVertical,
+  MoreVerticalIcon,
   PencilIcon,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -12,7 +14,7 @@ import { Button } from '@/components/ui/button';
 import { getTicket } from '../queries/get-ticket';
 import { getTickets } from '../queries/get-tickets';
 import { toCurrencyFromCent } from '@/lib/big';
-import { TicketDeleteButton } from './ticket-delete-button';
+import { TicketMoreMenu } from './ticket-more-menu';
 
 const TICKET_ICONS = {
   OPEN: <FileTextIcon />,
@@ -65,12 +67,14 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
 
       {isDetail ? (
         <div className="flex flex-col gap-y-1">
-          <Button variant="outline" size="icon" asChild>
-            <Link href={`/tickets/${ticket.id}/edit`}>
-              <PencilIcon className="h-4 w-4" />
-            </Link>
-          </Button>
-          <TicketDeleteButton id={ticket.id} />
+          <TicketMoreMenu
+            id={ticket.id}
+            trigger={
+              <Button variant="outline" size="icon">
+                <MoreVerticalIcon className="h-4 w-4" />
+              </Button>
+            }
+          />
         </div>
       ) : (
         <div className="flex flex-col gap-y-1">
