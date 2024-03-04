@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { getTicket } from '../queries/get-ticket';
 import { getTickets } from '../queries/get-tickets';
 import { toCurrencyFromCent } from '@/lib/big';
+import { TicketDeleteButton } from './ticket-delete-button';
 
 const TICKET_ICONS = {
   OPEN: <FileTextIcon />,
@@ -69,6 +70,7 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
               <PencilIcon className="h-4 w-4" />
             </Link>
           </Button>
+          <TicketDeleteButton id={ticket.id} />
         </div>
       ) : (
         <div className="flex flex-col gap-y-1">
