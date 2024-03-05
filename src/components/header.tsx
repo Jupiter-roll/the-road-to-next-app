@@ -12,7 +12,7 @@ import { signOut } from '@/features/auth/actions/sign-out';
 import { getAuth } from '@/features/auth/queries/get-auth';
 import { ThemeSwitcher } from './theme/theme-switcher';
 
-const Navigation = async () => {
+const Header = async () => {
   const { user } = await getAuth();
 
   const maybeAuthenticatedLeftNavigation = user ? (
@@ -76,4 +76,4 @@ const Navigation = async () => {
   );
 };
 
-export { Navigation };
+export { Header };
