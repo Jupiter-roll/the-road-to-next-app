@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import clsx from 'clsx';
 import {
   Card,
   CardHeader,
@@ -19,7 +20,12 @@ type TicketItemProps = {
 const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
   return (
     <div className="flex gap-x-1">
-      <Card className="w-[350px]">
+      <Card
+        className={clsx({
+          'w-[580px]': isDetail,
+          'w-[380px]': !isDetail,
+        })}
+      >
         <CardHeader>
           <CardTitle className="flex gap-x-2">
             <span>{TICKET_ICONS[ticket.status]}</span>
@@ -27,7 +33,13 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <span className="line-clamp-3">{ticket.content}</span>
+          <span
+            className={clsx({
+              'line-clamp-3': !isDetail,
+            })}
+          >
+            {ticket.content}
+          </span>
         </CardContent>
       </Card>
 
