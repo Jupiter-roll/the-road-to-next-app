@@ -61,12 +61,10 @@ const Navigation = async () => {
       <div className="flex align-items gap-x-2">
         <Link
           href={homePath()}
-          className={buttonVariants({
-            variant: 'link',
-            size: 'icon',
-          })}
+          className={buttonVariants({ variant: 'ghost' })}
         >
           <KanbanIcon />
+          <h1 className="text-lg font-semibold">TicketBounty</h1>
         </Link>
         {maybeAuthenticatedLeftNavigation}
       </div>
