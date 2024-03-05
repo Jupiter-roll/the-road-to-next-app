@@ -1,12 +1,6 @@
-import type { Metadata } from 'next';
-import { signInPath } from '@/utils/paths';
-import { getAuth } from '@/features/auth/queries/get-auth';
 import { redirect } from 'next/navigation';
-
-export const metadata: Metadata = {
-  title: 'The Road to Next - Dashboard',
-  description: 'The Dashboard',
-};
+import { signInPath } from '@/paths';
+import { getAuth } from '@/features/auth/queries/get-auth';
 
 export default async function AuthenticatedLayout({
   children,

@@ -1,6 +1,8 @@
 'use client';
 
-import dayjs from 'dayjs';
+import { useState } from 'react';
+import { format } from 'date-fns';
+import { CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -8,45 +10,41 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { CalendarIcon } from 'lucide-react';
-import { useState } from 'react';
 
 type DatePickerProps = {
+  id: string;
   name: string;
   defaultValue?: string;
 };
 
-const DatePicker = ({ name, defaultValue }: DatePickerProps) => {
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-
-  const [date, setDate] = useState<string>(
-    defaultValue ?? dayjs(new Date()).format('YYYY-MM-DD')
+const DatePicker = ({ id, name, defaultValue }: DatePickerProps) => {
+  const [date, setDate] = useState<Date | undefined>(
+    defaultValue ? new Date(defaultValue) : undefined
   );
 
-  const handleDate = (date: Date | undefined) => {
-    if (!date) return;
-
-    setIsCalendarOpen(false);
-    setDate(dayjs(date).format('YYYY-MM-DD'));
-  };
+  const formattedStringDate = date ? format(date, 'yyyy-MM-dd') : '';
 
   return (
-    <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-      <PopoverTrigger className="w-full" asChild>
+    <Popover>
+      <PopoverTrigger id={id} className="w-full" asChild>
         <Button
           variant="outline"
           className="justify-start text-left font-normal"
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? date : <span>Pick a date</span>}
-          <input type="hidden" name={name} value={date} />
+          {formattedStringDate}
+          <input
+            type="hidden"
+            name={name}
+            value={formattedStringDate}
+          />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
           mode="single"
-          selected={date ? new Date(date) : undefined}
-          onSelect={handleDate}
+          selected={date}
+          onSelect={setDate}
           initialFocus
         />
       </PopoverContent>

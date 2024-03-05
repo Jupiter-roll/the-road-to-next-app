@@ -1,6 +1,6 @@
-import { DeleteButton } from '@/components/delete-button';
-import { Button } from '@/components/ui/button';
 import { TrashIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { DeleteButton } from '@/components/delete-button';
 import { deleteTicket } from '../actions/delete-ticket';
 
 type TicketDeleteButtonProps = {

@@ -4,38 +4,40 @@ const prisma = new PrismaClient();
 
 const initialTickets = [
   {
-    userId: '1',
     title: 'Ticket 1',
-    content: 'This is the first ticket.',
-    deadline: new Date().toISOString().split('T')[0],
-    bounty: 399,
-  },
-  {
-    userId: '1',
-    title: 'Ticket 2',
-    content: 'This is the second ticket.',
+    content: 'First ticket from DB.',
+    status: 'DONE' as const,
     deadline: new Date().toISOString().split('T')[0],
     bounty: 499,
   },
   {
-    userId: '1',
+    title: 'Ticket 2',
+    content: 'Second ticket from DB.',
+    status: 'OPEN' as const,
+    deadline: new Date().toISOString().split('T')[0],
+    bounty: 399,
+  },
+  {
     title: 'Ticket 3',
-    content: 'This is the third ticket.',
+    content: 'Third ticket from DB.',
+    status: 'IN_PROGRESS' as const,
     deadline: new Date().toISOString().split('T')[0],
     bounty: 599,
   },
 ];
 
 const seed = async () => {
+  const t0 = performance.now();
+  console.log('Seed: Started ...');
+
   await prisma.ticket.deleteMany();
 
-  const promises = initialTickets.map((ticket) => {
-    return prisma.ticket.create({
-      data: ticket,
-    });
+  await prisma.ticket.createMany({
+    data: initialTickets,
   });
 
-  await Promise.all(promises);
+  const t1 = performance.now();
+  console.log(`Seed: Finished (${t1 - t0}ms)`);
 };
 
 seed();

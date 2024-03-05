@@ -1,4 +1,4 @@
-import React from 'react';
+import { cloneElement } from 'react';
 import { MessageSquareWarningIcon } from 'lucide-react';
 
 type PlaceholderProps = {
@@ -14,7 +14,7 @@ const Placeholder = ({
 }: PlaceholderProps) => {
   return (
     <div className="flex-1 self-center flex flex-col items-center justify-center gap-y-4">
-      {React.cloneElement(icon as React.ReactElement, {
+      {cloneElement(icon as React.ReactElement, {
         className: 'w-16 h-16',
       })}
 

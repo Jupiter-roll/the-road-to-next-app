@@ -1,13 +1,13 @@
 'use client';
 
-import { Loader2Icon } from 'lucide-react';
+import { ReactElement, cloneElement } from 'react';
 import { useFormStatus } from 'react-dom';
+import { Loader2Icon } from 'lucide-react';
 import { Button } from '../ui/button';
-import React from 'react';
 
 type SubmitButtonProps = {
   label: string;
-  suffixIcon?: React.ReactNode;
+  suffixIcon?: ReactElement;
   variant?: 'default' | 'outline' | 'ghost';
   className?: string;
 };
@@ -31,9 +31,9 @@ const SubmitButton = ({
         <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
       )}
       {label}
-      {suffixIcon && React.isValidElement(suffixIcon) && (
+      {suffixIcon && (
         <span className="ml-2">
-          {React.cloneElement(suffixIcon as React.ReactElement, {
+          {cloneElement(suffixIcon, {
             className: 'w-4 h-4',
           })}
         </span>

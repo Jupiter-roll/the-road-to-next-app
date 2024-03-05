@@ -1,24 +1,22 @@
 'use server';
 
-import currency from 'currency.js';
-import { z } from 'zod';
-import { prisma } from '@/services/prisma';
 import { revalidatePath } from 'next/cache';
-import { FormState, transformError } from '@/utils/transform-error';
 import { redirect } from 'next/navigation';
-import { signInPath, ticketPath, ticketsPath } from '@/utils/paths';
-import { getAuth } from '@/features/auth/queries/get-auth';
-import { getCurrentUserOrRedirect } from '@/features/auth/queries/get-current-user-or-redirect';
+import { z } from 'zod';
+import { prisma } from '@/lib/prisma';
+import {
+  FormState,
+  fromErrorToFormState,
+  toFormState,
+} from '@/components/form/utils/to-form-state';
+import { toCent } from '@/lib/big';
+import { cookies } from 'next/headers';
+import { ticketPath } from '@/paths';
 
 const upsertTicketSchema = z.object({
   title: z.string().min(1).max(191),
-  content: z.string().min(1).max(191),
-  deadline: z
-    .string({
-      required_error: 'Is required',
-      invalid_type_error: 'Is required',
-    })
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Is required'),
+  content: z.string().min(1).max(1024),
+  deadline: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Is required'),
   bounty: z.coerce.number().positive(),
 });
 
@@ -28,50 +26,41 @@ export const upsertTicket = async (
   formData: FormData
 ) => {
   try {
-    const { user } = await getCurrentUserOrRedirect();
-
-    const rawFormData = upsertTicketSchema.parse({
+    const data = upsertTicketSchema.parse({
       title: formData.get('title'),
       content: formData.get('content'),
       deadline: formData.get('deadline'),
       bounty: formData.get('bounty'),
     });
 
-    const dbData = {
-      ...rawFormData,
-      bounty: currency(rawFormData.bounty).intValue,
+    const sharedData = {
+      ...data,
+      bounty: toCent(data.bounty),
     };
 
     if (id) {
       await prisma.ticket.update({
         where: {
-          userId: user.id,
           id,
         },
-        data: dbData,
+        data: sharedData,
       });
     } else {
       await prisma.ticket.create({
-        data: {
-          userId: user.id,
-          ...dbData,
-        },
+        data: sharedData,
       });
     }
   } catch (error) {
-    return transformError(error);
+    return fromErrorToFormState(error);
   }
 
-  revalidatePath(ticketsPath());
+  revalidatePath('/tickets');
 
   if (id) {
+    cookies().set('toast', 'Ticket updated');
+
     redirect(ticketPath(id));
   }
 
-  return {
-    status: 'SUCCESS' as const,
-    fieldErrors: {},
-    message: `Ticket ${id ? 'updated' : 'created'} successfully!`,
-    timestamp: Date.now(),
-  };
+  return toFormState('SUCCESS', 'Ticket created');
 };

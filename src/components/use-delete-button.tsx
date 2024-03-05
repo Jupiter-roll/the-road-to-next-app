@@ -13,21 +13,33 @@ import {
 } from '@/components/ui/alert-dialog';
 import { FormState } from '@/components/form/utils/to-form-state';
 import { Button } from './ui/button';
+import React, { useState } from 'react';
 
-type DeleteButtonProps = {
+type useDeleteButtonProps = {
   action: () => Promise<FormState>;
   subject?: string;
-  trigger: React.ReactNode;
+  trigger: React.ReactElement;
 };
 
-const DeleteButton = ({
+const useDeleteButton = ({
   action,
   subject = 'item',
   trigger,
-}: DeleteButtonProps) => {
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
+}: useDeleteButtonProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const triggerWithClickHandler = React.cloneElement(
+    trigger as React.ReactElement,
+    {
+      onClick: () => {
+        setIsOpen((state) => !state);
+      },
+    }
+  );
+
+  const dialog = (
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+      {/* <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger> */}
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
@@ -49,6 +61,8 @@ const DeleteButton = ({
       </AlertDialogContent>
     </AlertDialog>
   );
+
+  return [triggerWithClickHandler, dialog] as const;
 };
 
-export { DeleteButton };
+export { useDeleteButton };

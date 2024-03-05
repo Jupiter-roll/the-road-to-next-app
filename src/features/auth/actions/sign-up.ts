@@ -1,15 +1,17 @@
 'use server';
 
 import { z } from 'zod';
-import { prisma } from '@/services/prisma';
-import { FormState, transformError } from '@/utils/transform-error';
+import { prisma } from '@/lib/prisma';
+import {
+  FormState,
+  fromErrorToFormState,
+} from '@/components/form/utils/to-form-state';
 import { Argon2id } from 'oslo/password';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { generateId } from 'lucia';
-import { lucia } from '@/services/lucia';
-import { ticketsPath } from '@/utils/paths';
-import { Prisma } from '@prisma/client';
+import { lucia } from '@/lib/lucia';
+import { ticketsPath } from '@/paths';
 
 const signUpSchema = z
   .object({
@@ -72,19 +74,7 @@ export const signUp = async (
       sessionCookie.attributes
     );
   } catch (error) {
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === 'P2002'
-    ) {
-      return {
-        status: 'ERROR' as const,
-        fieldErrors: {},
-        message: 'Either email or username is already in use',
-        timestamp: Date.now(),
-      };
-    }
-
-    return transformError(error);
+    return fromErrorToFormState(error);
   }
 
   redirect(ticketsPath());

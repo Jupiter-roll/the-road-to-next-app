@@ -1,13 +1,16 @@
 'use server';
 
-import { z } from 'zod';
-import { prisma } from '@/services/prisma';
-import { FormState, transformError } from '@/utils/transform-error';
-import { Argon2id } from 'oslo/password';
+import {
+  FormState,
+  fromErrorToFormState,
+} from '@/components/form/utils/to-form-state';
+import { lucia } from '@/lib/lucia';
+import { prisma } from '@/lib/prisma';
+import { ticketsPath } from '@/paths';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { lucia } from '@/services/lucia';
-import { ticketsPath } from '@/utils/paths';
+import { Argon2id } from 'oslo/password';
+import { z } from 'zod';
 
 const signInSchema = z.object({
   email: z
@@ -64,7 +67,7 @@ export const signIn = async (
       sessionCookie.attributes
     );
   } catch (error) {
-    return transformError(error);
+    return fromErrorToFormState(error);
   }
 
   redirect(ticketsPath());

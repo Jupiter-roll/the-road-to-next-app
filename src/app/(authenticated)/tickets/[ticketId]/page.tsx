@@ -1,10 +1,8 @@
-import { Spinner } from '@/components/spinner';
-import { Comments } from '@/features/comment/components/comments';
+import { notFound } from 'next/navigation';
+import { prisma } from '@/lib/prisma';
 import { TicketItem } from '@/features/ticket/components/ticket-item';
 import { getTicket } from '@/features/ticket/queries/get-ticket';
-import { prisma } from '@/services/prisma';
-import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
+import { RedirectToast } from '@/components/redirect-toast';
 
 type TicketPageProps = {
   params: {
@@ -20,18 +18,15 @@ const TicketPage = async ({ params }: TicketPageProps) => {
   }
 
   return (
-    <div className="w-96 flex flex-col gap-y-8">
-      <Suspense fallback={<Spinner />}>
+    <>
+      <div className="w-96 flex-1 animate-fade-in-from-top">
         <TicketItem ticket={ticket} isDetail />
-      </Suspense>
-    </div>
+      </div>
+
+      <RedirectToast />
+    </>
   );
 };
-
-export default TicketPage;
-
-// https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamicparams
-// export const dynamicParams = false;
 
 export async function generateStaticParams() {
   const tickets = await prisma.ticket.findMany();
@@ -40,3 +35,5 @@ export async function generateStaticParams() {
     ticketId: ticket.id,
   }));
 }
+
+export default TicketPage;

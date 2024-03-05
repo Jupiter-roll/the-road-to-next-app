@@ -1,4 +1,4 @@
-import { FormState } from '@/utils/transform-error';
+import { FormState } from '@/components/form/utils/to-form-state';
 
 type FieldErrorProps = {
   formState: FormState;
@@ -7,7 +7,7 @@ type FieldErrorProps = {
 
 const FieldError = ({ formState, name }: FieldErrorProps) => {
   return (
-    <span className="text-xs text-red-400">
+    <span className="text-xs text-red-500">
       {formState.fieldErrors[name]?.[0]}
     </span>
   );

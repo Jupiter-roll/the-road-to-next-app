@@ -3,37 +3,37 @@
 import { Input } from '@/components/ui/input';
 import { SubmitButton } from '@/components/form/submit-button';
 import { useFormState } from 'react-dom';
-import { EMPTY_FORM_STATE } from '@/utils/transform-error';
+import { EMPTY_FORM_STATE } from '@/components/form/utils/to-form-state';
 import { FieldError } from '@/components/form/field-error';
-import { useToastMessage } from '@/components/form/use-toast-message';
-import { useFormReset } from '@/components/form/use-form-reset';
 import { signIn } from '../actions/sign-in';
+import { useFormFeedback } from '@/components/form/hooks/use-form-feedback';
+import { toast } from 'sonner';
 
 const SignInForm = () => {
   const [formState, action] = useFormState(signIn, EMPTY_FORM_STATE);
 
-  const formRef = useFormReset(formState);
-  useToastMessage(formState);
+  const { ref } = useFormFeedback(formState, {
+    onSuccess: ({ formState, reset }) => {
+      if (formState.message) {
+        toast.success(formState.message);
+      }
+
+      reset();
+    },
+    onError: ({ formState }) => {
+      if (formState.message) {
+        toast.error(formState.message);
+      }
+    },
+  });
 
   return (
-    <form
-      action={action}
-      ref={formRef}
-      className="flex flex-col gap-y-2"
-    >
-      <div>
-        <Input name="email" placeholder="Email" />
-        <FieldError formState={formState} name="email" />
-      </div>
+    <form action={action} ref={ref} className="flex flex-col gap-y-2">
+      <Input name="email" placeholder="Email" />
+      <FieldError formState={formState} name="email" />
 
-      <div>
-        <Input
-          type="password"
-          name="password"
-          placeholder="Password"
-        />
-        <FieldError formState={formState} name="password" />
-      </div>
+      <Input type="password" name="password" placeholder="Password" />
+      <FieldError formState={formState} name="password" />
 
       <SubmitButton label="Sign In" />
     </form>
