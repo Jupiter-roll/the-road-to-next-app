@@ -40,7 +40,7 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
 
           {isDetail ? (
             <p
-              className={clsx('text-sm text-slate-400 truncate', {
+              className={clsx('text-sm text-slate-500 truncate', {
                 'line-through': ticket.status === 'DONE',
               })}
             >
@@ -49,10 +49,10 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
           ) : null}
 
           <div className="flex-1 flex justify-between">
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-slate-500">
               {toCurrencyFromCent(ticket.bounty)}
             </p>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-slate-500">
               {ticket.deadline}
             </p>
           </div>
