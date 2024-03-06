@@ -9,8 +9,11 @@ import { EMPTY_FORM_STATE } from '@/components/form/utils/to-form-state';
 import { SubmitButton } from '@/components/form/submit-button';
 import { FieldError } from '@/components/form/field-error';
 import { Ticket } from '@prisma/client';
-import { upsertTicket } from '../actions/upsert-ticket';
 import { useFormFeedback } from '@/components/form/hooks/use-form-feedback';
+import { DatePicker } from '@/components/date-picker';
+import { fromCent } from '@/utils/currency';
+import { upsertTicket } from '../actions/upsert-ticket';
+import { useRef } from 'react';
 
 type TicketUpsertFormProps = {
   ticket?: Ticket;
@@ -24,6 +27,10 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
     EMPTY_FORM_STATE
   );
 
+  const datePickerImperativeHandleRef = useRef<{
+    reset: () => void;
+  }>(null);
+
   const { ref } = useFormFeedback(formState, {
     onSuccess: ({ formState, reset }) => {
       if (formState.message) {
@@ -31,6 +38,7 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
       }
 
       reset();
+      datePickerImperativeHandleRef.current?.reset();
     },
     onError: ({ formState }) => {
       if (formState.message) {
@@ -53,7 +61,43 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
       />
       <FieldError formState={formState} name="content" />
 
+      <div className="flex gap-x-2 mb-1">
+        <div className="w-1/2">
+          <Label htmlFor="deadline">Deadline</Label>
+          <DatePicker
+            id="deadline"
+            name="deadline"
+            defaultValue={ticket?.deadline}
+            imperativeHandleRef={datePickerImperativeHandleRef}
+          />
+          <FieldError formState={formState} name="deadline" />
+        </div>
+        <div className="w-1/2">
+          <Label htmlFor="bounty">Bounty ($)</Label>
+          <Input
+            type="number"
+            id="bounty"
+            name="bounty"
+            step=".01"
+            defaultValue={
+              ticket?.bounty ? fromCent(ticket.bounty) : ''
+            }
+          />
+          <FieldError formState={formState} name="bounty" />
+        </div>
+      </div>
+
       <SubmitButton label={ticket ? 'Edit' : 'Create'} />
+
+      <noscript>
+        {formState.status === 'ERROR' && (
+          <div style={{ color: 'red' }}>{formState.message}</div>
+        )}
+
+        {formState.status === 'SUCCESS' && (
+          <div style={{ color: 'green' }}>{formState.message}</div>
+        )}
+      </noscript>
     </form>
   );
 };

@@ -1,6 +1,3 @@
-'use client';
-
-import { cloneElement } from 'react';
 import { Ticket } from '@prisma/client';
 import { deleteTicket } from '../actions/delete-ticket';
 
@@ -13,13 +10,9 @@ const TicketDeleteButton = ({
   ticket,
   trigger,
 }: TicketDeleteButtonProps) => {
-  const handleDeleteTicket = async () => {
-    await deleteTicket(ticket.id);
-  };
+  const deleteTicketAction = deleteTicket.bind(null, ticket.id);
 
-  return cloneElement(trigger, {
-    onClick: handleDeleteTicket,
-  });
+  return <form action={deleteTicketAction}>{trigger}</form>;
 };
 
 export { TicketDeleteButton };

@@ -13,14 +13,18 @@
   "dependencies": {
     "@prisma/client": "^5.10.2",
     "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
+    "big.js": "^6.2.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "date-fns": "^3.3.1",
     "lucide-react": "^0.344.0",
     "next": "14.1.2",
     "next-themes": "^0.2.1",
     "react": "^18",
+    "react-day-picker": "^8.10.0",
     "react-dom": "^18",
     "sonner": "^1.4.3",
     "sqlite3": "^5.1.7",
@@ -29,6 +33,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/big.js": "^6.2.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
