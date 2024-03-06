@@ -7,9 +7,13 @@ import {
   CardContent,
   CardHeader,
 } from '@/components/ui/card';
-import { ArrowUpRightFromSquareIcon, TrashIcon } from 'lucide-react';
+import {
+  ArrowUpRightFromSquareIcon,
+  PencilIcon,
+  TrashIcon,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ticketPath } from '@/paths';
+import { ticketEditPath, ticketPath } from '@/paths';
 import { TICKET_ICONS } from '../constants';
 import { TicketDeleteButton } from './ticket-delete-button';
 
@@ -20,13 +24,13 @@ type TicketItemProps = {
 
 const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
   return (
-    <div className="flex gap-x-1">
-      <Card
-        className={clsx({
-          'w-[580px]': isDetail,
-          'w-[380px]': !isDetail,
-        })}
-      >
+    <div
+      className={clsx('flex gap-x-1', {
+        'w-[580px]': isDetail,
+        'w-[380px]': !isDetail,
+      })}
+    >
+      <Card className="w-full">
         <CardHeader>
           <CardTitle className="flex gap-x-2">
             <span>{TICKET_ICONS[ticket.status]}</span>
@@ -46,6 +50,11 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
 
       {isDetail ? (
         <div className="flex flex-col gap-y-1">
+          <Button variant="outline" size="icon" asChild>
+            <Link href={ticketEditPath(ticket.id)}>
+              <PencilIcon className="h-4 w-4" />
+            </Link>
+          </Button>
           <TicketDeleteButton
             ticket={ticket}
             trigger={

@@ -12,6 +12,6 @@ export const deleteTicket = async (id: string) => {
     },
   });
 
-  // revalidatePath(ticketsPath());
+  revalidatePath(ticketsPath());
   redirect(ticketsPath());
 };

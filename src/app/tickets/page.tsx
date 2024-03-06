@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { Heading } from '@/components/heading';
 import { TicketList } from '@/features/tickets/components/ticket-list';
 import { Spinner } from '@/components/spinner';
+import { TicketUpsertForm } from '@/features/tickets/components/ticket-upsert-form';
 
 const TicketsPage = async () => {
   return (
@@ -10,6 +11,10 @@ const TicketsPage = async () => {
         title="Tickets"
         description="All your tickets at one place"
       />
+
+      <div className="mx-auto w-[380px]">
+        <TicketUpsertForm />
+      </div>
 
       <Suspense fallback={<Spinner />}>
         <div className="mx-auto animate-fade-in-from-top">
