@@ -27,7 +27,7 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
     <div
       className={clsx('flex gap-x-1', {
         'w-[580px]': isDetail,
-        'w-[380px]': !isDetail,
+        'w-[420px]': !isDetail,
       })}
     >
       <Card className="w-full">
@@ -39,7 +39,7 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
         </CardHeader>
         <CardContent>
           <span
-            className={clsx({
+            className={clsx('whitespace-break-spaces', {
               'line-clamp-3': !isDetail,
             })}
           >

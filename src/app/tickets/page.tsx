@@ -12,7 +12,7 @@ const TicketsPage = async () => {
         description="All your tickets at one place"
       />
 
-      <div className="mx-auto w-[380px]">
+      <div className="mx-auto w-[420px]">
         <TicketUpsertForm />
       </div>
 
