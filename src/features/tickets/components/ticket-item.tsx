@@ -7,10 +7,11 @@ import {
   CardContent,
   CardHeader,
 } from '@/components/ui/card';
-import { ArrowUpRightFromSquareIcon } from 'lucide-react';
+import { ArrowUpRightFromSquareIcon, TrashIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ticketPath } from '@/paths';
 import { TICKET_ICONS } from '../constants';
+import { TicketDeleteButton } from './ticket-delete-button';
 
 type TicketItemProps = {
   ticket: Ticket;
@@ -43,7 +44,18 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
         </CardContent>
       </Card>
 
-      {isDetail ? null : (
+      {isDetail ? (
+        <div className="flex flex-col gap-y-1">
+          <TicketDeleteButton
+            ticket={ticket}
+            trigger={
+              <Button variant="outline" size="icon">
+                <TrashIcon className="h-4 w-4" />
+              </Button>
+            }
+          />
+        </div>
+      ) : (
         <div className="flex flex-col gap-y-1">
           <Button variant="outline" size="icon" asChild>
             <Link href={ticketPath(ticket.id)}>
