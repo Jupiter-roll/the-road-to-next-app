@@ -1,8 +1,10 @@
-import { initialTickets } from '@/data';
 import { Heading } from '@/components/heading';
 import { TicketItem } from '@/features/tickets/components/ticket-item';
+import { getTickets } from '@/features/tickets/queries/get-tickets';
 
-const TicketsPage = () => {
+const TicketsPage = async () => {
+  const tickets = await getTickets();
+
   return (
     <div className="flex flex-col gap-y-8">
       <Heading
@@ -11,7 +13,7 @@ const TicketsPage = () => {
       />
 
       <div className="mx-auto space-y-4 animate-fade-in-from-top">
-        {initialTickets.map((ticket) => (
+        {tickets.map((ticket) => (
           <TicketItem key={ticket.id} ticket={ticket} />
         ))}
       </div>

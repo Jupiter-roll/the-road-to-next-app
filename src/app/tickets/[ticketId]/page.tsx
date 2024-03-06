@@ -1,5 +1,6 @@
-import { initialTickets } from '@/data';
+import { notFound } from 'next/navigation';
 import { TicketItem } from '@/features/tickets/components/ticket-item';
+import { getTicket } from '@/features/tickets/queries/get-ticket';
 
 type TicketPageProps = {
   params: {
@@ -7,13 +8,11 @@ type TicketPageProps = {
   };
 };
 
-const TicketPage = ({ params }: TicketPageProps) => {
-  const ticket = initialTickets.find(
-    (ticket) => ticket.id === params.ticketId
-  );
+const TicketPage = async ({ params }: TicketPageProps) => {
+  const ticket = await getTicket(params.ticketId);
 
   if (!ticket) {
-    return <div>Ticket not found</div>;
+    notFound();
   }
 
   return (
