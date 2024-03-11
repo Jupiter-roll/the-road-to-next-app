@@ -10,14 +10,14 @@ import {
 } from '@/components/ui/card';
 import {
   ArrowUpRightFromSquareIcon,
+  MoreVerticalIcon,
   PencilIcon,
-  TrashIcon,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toCurrencyFromCent } from '@/utils/currency';
 import { ticketEditPath, ticketPath } from '@/paths';
 import { TICKET_ICONS } from '../constants';
-import { TicketDeleteButton } from './ticket-delete-button';
+import { TicketMoreMenu } from './ticket-more-menu';
 
 type TicketItemProps = {
   ticket: Ticket;
@@ -41,12 +41,12 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
     </Button>
   );
 
-  const deleteButton = (
-    <TicketDeleteButton
+  const moreMenu = (
+    <TicketMoreMenu
       ticket={ticket}
       trigger={
         <Button variant="outline" size="icon">
-          <TrashIcon className="h-4 w-4" />
+          <MoreVerticalIcon className="h-4 w-4" />
         </Button>
       }
     />
@@ -88,7 +88,7 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
       {isDetail ? (
         <div className="flex flex-col gap-y-1">
           {editButton}
-          {deleteButton}
+          {moreMenu}
         </div>
       ) : (
         <div className="flex flex-col gap-y-1">
