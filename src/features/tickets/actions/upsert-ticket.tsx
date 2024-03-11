@@ -10,7 +10,7 @@ import {
   toFormState,
 } from '@/components/form/utils/to-form-state';
 import { toCent } from '@/utils/currency';
-import { cookies } from 'next/headers';
+import { setCookieByKey } from '@/actions/cookies';
 
 const upsertTicketSchema = z.object({
   title: z.string().min(1).max(191),
@@ -49,7 +49,7 @@ export const upsertTicket = async (
   }
 
   if (id) {
-    cookies().set('toast', 'Ticket updated');
+    setCookieByKey('toast', 'Ticket updated');
     redirect(ticketPath(id));
   }
 

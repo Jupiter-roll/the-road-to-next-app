@@ -3,6 +3,7 @@ import { Toaster } from 'sonner';
 import { Inter } from 'next/font/google';
 import { Header } from '@/components/header';
 import { ThemeProvider } from '@/components/theme/theme-provider';
+import { RedirectToast } from '@/components/redirect-toast';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -34,6 +35,7 @@ export default function RootLayout({
             {children}
           </main>
           <Toaster />
+          {/* <RedirectToast key={new Date().getTime()} /> */}
         </ThemeProvider>
       </body>
     </html>

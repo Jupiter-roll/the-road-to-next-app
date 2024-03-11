@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import { TicketItem } from '@/features/tickets/components/ticket-item';
 import { getTicket } from '@/features/tickets/queries/get-ticket';
-import { RedirectToast } from '@/components/redirect-toast';
 
 type TicketPageProps = {
   params: {
@@ -17,15 +16,11 @@ const TicketPage = async ({ params }: TicketPageProps) => {
   }
 
   return (
-    <>
-      <div className="flex flex-col gap-y-8">
-        <div className="mx-auto animate-fade-in-from-top">
-          <TicketItem ticket={ticket} isDetail />
-        </div>
+    <div className="flex flex-col gap-y-8">
+      <div className="mx-auto animate-fade-in-from-top">
+        <TicketItem ticket={ticket} isDetail />
       </div>
-
-      <RedirectToast />
-    </>
+    </div>
   );
 };
 

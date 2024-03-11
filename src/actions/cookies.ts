@@ -12,6 +12,10 @@ export const getCookieByKey = async (key: string) => {
   return cookie.value;
 };
 
+export const setCookieByKey = (key: string, value: string) => {
+  cookies().set(key, value);
+};
+
 export const deleteCookieByKey = (key: string) => {
   cookies().delete(key);
 };
