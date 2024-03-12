@@ -11,7 +11,10 @@ import {
   CardContent,
   CardDescription,
 } from '@/components/ui/card';
-import { SearchParams } from '@/features/tickets/search-params';
+import {
+  SearchParams,
+  searchParamsCache,
+} from '@/features/tickets/search-params';
 
 type TicketsPageProps = {
   searchParams: SearchParams;
@@ -43,7 +46,10 @@ const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
 
       <Suspense fallback={<Spinner />}>
         <div className="mx-auto animate-fade-in-from-top">
-          <TicketList userId={user?.id} searchParams={searchParams} />
+          <TicketList
+            userId={user?.id}
+            searchParams={searchParamsCache.parse(searchParams)}
+          />
         </div>
       </Suspense>
     </div>
