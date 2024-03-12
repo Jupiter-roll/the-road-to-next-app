@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { signInPath } from '@/paths';
 import { getAuth } from '@/features/auth/queries/get-auth';
 
-export default async function TicketsLayout({
+export default async function AuthenticatedLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
