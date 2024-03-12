@@ -11,11 +11,10 @@ import {
   CardContent,
   CardDescription,
 } from '@/components/ui/card';
+import { SearchParams } from '@/features/tickets/search-params';
 
 type TicketsPageProps = {
-  searchParams: {
-    search: string;
-  };
+  searchParams: SearchParams;
 };
 
 const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
@@ -44,10 +43,7 @@ const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
 
       <Suspense fallback={<Spinner />}>
         <div className="mx-auto animate-fade-in-from-top">
-          <TicketList
-            userId={user?.id}
-            search={searchParams.search}
-          />
+          <TicketList userId={user?.id} searchParams={searchParams} />
         </div>
       </Suspense>
     </div>

@@ -2,11 +2,10 @@ import { Suspense } from 'react';
 import { Heading } from '@/components/heading';
 import { Spinner } from '@/components/spinner';
 import { TicketList } from '@/features/tickets/components/ticket-list';
+import { SearchParams } from '@/features/tickets/search-params';
 
 type HomePageProps = {
-  searchParams: {
-    search: string;
-  };
+  searchParams: SearchParams;
 };
 
 const HomePage = async ({ searchParams }: HomePageProps) => {
@@ -19,7 +18,7 @@ const HomePage = async ({ searchParams }: HomePageProps) => {
 
       <Suspense fallback={<Spinner />}>
         <div className="mx-auto animate-fade-in-from-top">
-          <TicketList search={searchParams.search} />
+          <TicketList searchParams={searchParams} />
         </div>
       </Suspense>
     </div>

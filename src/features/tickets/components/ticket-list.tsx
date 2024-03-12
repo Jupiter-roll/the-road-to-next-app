@@ -1,14 +1,18 @@
 import { SearchInput } from '@/components/search-input';
+import { SearchParams } from '../search-params';
 import { getTickets } from '../queries/get-tickets';
 import { TicketItem } from './ticket-item';
 
 type TicketListProps = {
   userId?: string;
-  search: string;
+  searchParams: SearchParams;
 };
 
-const TicketList = async ({ userId, search }: TicketListProps) => {
-  const tickets = await getTickets(userId, search);
+const TicketList = async ({
+  userId,
+  searchParams,
+}: TicketListProps) => {
+  const tickets = await getTickets(userId, searchParams);
 
   return (
     <div className="space-y-4">
