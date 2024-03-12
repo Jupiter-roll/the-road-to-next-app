@@ -25,7 +25,7 @@ export default function RootLayout({
           <Header />
           <div className="flex h-screen overflow-hidden border-collapse">
             <AuthenticatedSidebar />
-            <main className="flex flex-col flex-1 min-h-screen px-8 py-24 overflow-x-hidden overflow-y-auto bg-secondary/10">
+            <main className="flex flex-col flex-1 min-h-screen px-8 py-24 overflow-x-hidden overflow-y-auto bg-secondary/20">
               {children}
             </main>
           </div>

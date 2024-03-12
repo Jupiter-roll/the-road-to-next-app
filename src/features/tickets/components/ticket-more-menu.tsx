@@ -18,21 +18,16 @@ import { updateTicketStatus } from '../actions/update-ticket-status';
 import { deleteTicket } from '../actions/delete-ticket';
 
 type TicketMoreMenuProps = {
-  isTicketOwner: boolean;
   ticket: Ticket;
   trigger: React.ReactElement;
 };
 
-const TicketMoreMenu = ({
-  isTicketOwner,
-  ticket,
-  trigger,
-}: TicketMoreMenuProps) => {
+const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
   const [deleteButton, deleteDialog] = useConfirmDialog({
     action: deleteTicket.bind(null, ticket.id),
     trigger: (
       <DropdownMenuItem>
-        <TrashIcon className="mr-2 h-4 w-4" />
+        <TrashIcon className="w-4 h-4 mr-2" />
         <span>Delete</span>
       </DropdownMenuItem>
     ),
@@ -79,9 +74,9 @@ const TicketMoreMenu = ({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" side="right">
-          {isTicketOwner && deleteButton}
-          {isTicketOwner && <DropdownMenuSeparator />}
-          {isTicketOwner && ticketStatusRadioGroupItems}
+          {deleteButton}
+          <DropdownMenuSeparator />
+          {ticketStatusRadioGroupItems}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

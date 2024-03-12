@@ -9,7 +9,7 @@ type HeadingProps = {
 const Heading = ({ title, description, actions }: HeadingProps) => {
   return (
     <>
-      <div className="flex justify-between items-center px-8">
+      <div className="flex items-center justify-between px-8">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">
             {title}

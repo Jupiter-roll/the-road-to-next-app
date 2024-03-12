@@ -40,7 +40,7 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
   const detailButton = (
     <Button variant="outline" size="icon" asChild>
       <Link href={ticketPath(ticket.id)}>
-        <ArrowUpRightFromSquareIcon className="h-4 w-4" />
+        <ArrowUpRightFromSquareIcon className="w-4 h-4" />
       </Link>
     </Button>
   );
@@ -48,22 +48,21 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
   const editButton = isTicketOwner ? (
     <Button variant="outline" size="icon" asChild>
       <Link href={ticketEditPath(ticket.id)}>
-        <PencilIcon className="h-4 w-4" />
+        <PencilIcon className="w-4 h-4" />
       </Link>
     </Button>
   ) : null;
 
-  const moreMenu = (
+  const moreMenu = isTicketOwner ? (
     <TicketMoreMenu
-      isTicketOwner={isTicketOwner}
       ticket={ticket}
       trigger={
         <Button variant="outline" size="icon">
-          <MoreVerticalIcon className="h-4 w-4" />
+          <MoreVerticalIcon className="w-4 h-4" />
         </Button>
       }
     />
-  );
+  ) : null;
 
   return (
     <div
