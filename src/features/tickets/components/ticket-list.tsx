@@ -18,8 +18,8 @@ const TicketList = async ({
   return (
     <div className="space-y-4">
       <div className="flex gap-x-2 mb-1">
-        <SearchInput placeholder="Search tickets ..." />
-        <SortSelect
+        <TicketSearchInput placeholder="Search tickets ..." />
+        <TicketSortSelect
           options={[
             {
               sortKey: 'createdAt',

@@ -6,6 +6,8 @@ import { searchParser } from '@/features/tickets/search-params';
 import { Input } from './ui/input';
 
 type SearchInputProps = {
+  value: string;
+  onChange: (value: string) => void;
   placeholder: string;
 };
 
