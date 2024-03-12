@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { changePasswordPath, forgotPasswordPath } from '@/paths';
+import { profilePath, passwordPath } from '@/paths';
 
 const AccountTabs = () => {
   const pathName = usePathname();
@@ -11,11 +11,11 @@ const AccountTabs = () => {
   return (
     <Tabs value={pathName.split('/').at(-1)}>
       <TabsList>
-        <TabsTrigger value="change-password" asChild>
-          <Link href={changePasswordPath()}>Change Password</Link>
+        <TabsTrigger value="profile" asChild>
+          <Link href={profilePath()}>Profile</Link>
         </TabsTrigger>
-        <TabsTrigger value="forgot-password" asChild>
-          <Link href={forgotPasswordPath()}>Forgot Password</Link>
+        <TabsTrigger value="password" asChild>
+          <Link href={passwordPath()}>Password</Link>
         </TabsTrigger>
       </TabsList>
     </Tabs>
