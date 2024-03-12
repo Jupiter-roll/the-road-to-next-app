@@ -5,11 +5,17 @@ import { Spinner } from '@/components/spinner';
 import { TicketUpsertForm } from '@/features/tickets/components/ticket-upsert-form';
 import { getAuth } from '@/features/auth/queries/get-auth';
 
-const TicketsPage = async () => {
+type TicketsPageProps = {
+  searchParams: {
+    search: string;
+  };
+};
+
+const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
   const { user } = await getAuth();
 
   return (
-    <div className="flex-1 flex flex-col gap-y-8">
+    <div className="flex flex-col flex-1 gap-y-8">
       <Heading
         title="Tickets"
         description="All your tickets at one place"
@@ -21,7 +27,10 @@ const TicketsPage = async () => {
 
       <Suspense fallback={<Spinner />}>
         <div className="mx-auto animate-fade-in-from-top">
-          <TicketList userId={user?.id} />
+          <TicketList
+            userId={user?.id}
+            search={searchParams.search}
+          />
         </div>
       </Suspense>
     </div>
