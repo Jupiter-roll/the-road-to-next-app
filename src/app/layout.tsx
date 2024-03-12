@@ -3,7 +3,7 @@ import { Toaster } from 'sonner';
 import { Inter } from 'next/font/google';
 import { Header } from '@/components/header';
 import { ThemeProvider } from '@/components/theme/theme-provider';
-import { RedirectToast } from '@/components/redirect-toast';
+import { AuthenticatedSidebar } from '@/components/sidebar/components/authenticated-sidebar';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -23,19 +23,13 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider>
           <Header />
-          <main
-            className="
-              min-h-screen flex-1
-              overflow-y-auto overflow-x-hidden
-              py-24 px-8
-              bg-secondary/10
-              flex flex-col
-            "
-          >
-            {children}
-          </main>
+          <div className="flex h-screen overflow-hidden border-collapse">
+            <AuthenticatedSidebar />
+            <main className="flex flex-col flex-1 min-h-screen px-8 py-24 overflow-x-hidden overflow-y-auto bg-secondary/10">
+              {children}
+            </main>
+          </div>
           <Toaster />
-          {/* <RedirectToast key={new Date().getTime()} /> */}
         </ThemeProvider>
       </body>
     </html>

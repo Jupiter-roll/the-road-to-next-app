@@ -1,11 +1,6 @@
 import Link from 'next/link';
 import { KanbanIcon, LogOutIcon } from 'lucide-react';
-import {
-  homePath,
-  signInPath,
-  signUpPath,
-  ticketsPath,
-} from '@/paths';
+import { homePath, signInPath, signUpPath } from '@/paths';
 import { signOut } from '@/features/auth/actions/sign-out';
 import { buttonVariants } from './ui/button';
 import { ThemeSwitcher } from './theme/theme-switcher';
@@ -16,17 +11,9 @@ const Header = async () => {
   const { user } = await getAuth();
 
   const navItems = user ? (
-    <>
-      <Link
-        href={ticketsPath()}
-        className={buttonVariants({ variant: 'outline' })}
-      >
-        Tickets
-      </Link>
-      <form action={signOut}>
-        <SubmitButton label="Sign Out" suffixIcon={<LogOutIcon />} />
-      </form>
-    </>
+    <form action={signOut}>
+      <SubmitButton label="Sign Out" suffixIcon={<LogOutIcon />} />
+    </form>
   ) : (
     <>
       <Link

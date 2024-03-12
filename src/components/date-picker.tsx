@@ -47,9 +47,9 @@ const DatePicker = ({
       <PopoverTrigger id={id} className="w-full" asChild>
         <Button
           variant="outline"
-          className="justify-start text-left font-normal"
+          className="justify-start font-normal text-left"
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
+          <CalendarIcon className="w-4 h-4 mr-2" />
           {formattedStringDate}
           <input
             type="hidden"
