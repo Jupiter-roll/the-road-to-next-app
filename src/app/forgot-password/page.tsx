@@ -1,4 +1,5 @@
 import { Heading } from '@/components/heading';
+import { AccountTabs } from '@/features/account/components/account-tabs';
 
 const ForgotPasswordPage = () => {
   return (
@@ -6,6 +7,7 @@ const ForgotPasswordPage = () => {
       <Heading
         title="Forgot Password"
         description="Forgot your password? No worries, we got you!"
+        actions={<AccountTabs />}
       />
     </div>
   );

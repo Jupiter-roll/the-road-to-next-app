@@ -1,4 +1,5 @@
 import { Heading } from '@/components/heading';
+import { AccountTabs } from '@/features/account/components/account-tabs';
 
 const ChangePasswordPage = () => {
   return (
@@ -6,6 +7,7 @@ const ChangePasswordPage = () => {
       <Heading
         title="Change Password"
         description="Change your password to keep your account secure"
+        actions={<AccountTabs />}
       />
     </div>
   );

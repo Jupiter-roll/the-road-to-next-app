@@ -3,7 +3,7 @@ import { Separator } from './ui/separator';
 type HeadingProps = {
   title: string;
   description?: string;
-  actions?: React.ReactNode;
+  actions?: React.ReactElement;
 };
 
 const Heading = ({ title, description, actions }: HeadingProps) => {
@@ -20,7 +20,6 @@ const Heading = ({ title, description, actions }: HeadingProps) => {
             </p>
           )}
         </div>
-
         <div>{actions}</div>
       </div>
 
