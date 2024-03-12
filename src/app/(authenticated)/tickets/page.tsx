@@ -4,6 +4,13 @@ import { TicketList } from '@/features/tickets/components/ticket-list';
 import { Spinner } from '@/components/spinner';
 import { TicketUpsertForm } from '@/features/tickets/components/ticket-upsert-form';
 import { getAuth } from '@/features/auth/queries/get-auth';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from '@/components/ui/card';
 
 type TicketsPageProps = {
   searchParams: {
@@ -22,7 +29,17 @@ const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
       />
 
       <div className="mx-auto w-[420px]">
-        <TicketUpsertForm />
+        <Card>
+          <CardHeader>
+            <CardTitle>Create Ticket</CardTitle>
+            <CardDescription>
+              A new ticket will be created
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <TicketUpsertForm />
+          </CardContent>
+        </Card>
       </div>
 
       <Suspense fallback={<Spinner />}>

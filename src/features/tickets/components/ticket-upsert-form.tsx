@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef } from 'react';
 import { useFormState } from 'react-dom';
 import { toast } from 'sonner';
 import { Textarea } from '@/components/ui/textarea';
@@ -13,7 +14,6 @@ import { useFormFeedback } from '@/components/form/hooks/use-form-feedback';
 import { DatePicker } from '@/components/date-picker';
 import { fromCent } from '@/utils/currency';
 import { upsertTicket } from '../actions/upsert-ticket';
-import { useRef } from 'react';
 
 type TicketUpsertFormProps = {
   ticket?: Ticket;
@@ -61,7 +61,7 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
       />
       <FieldError formState={formState} name="content" />
 
-      <div className="flex gap-x-2 mb-1">
+      <div className="flex mb-1 gap-x-2">
         <div className="w-1/2">
           <Label htmlFor="deadline">Deadline</Label>
           <DatePicker
