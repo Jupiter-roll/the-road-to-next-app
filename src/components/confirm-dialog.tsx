@@ -1,5 +1,8 @@
 'use client';
 
+import { useState, cloneElement } from 'react';
+import { useFormState } from 'react-dom';
+import { toast } from 'sonner';
 import {
   AlertDialogHeader,
   AlertDialogFooter,
@@ -10,9 +13,12 @@ import {
   AlertDialogAction,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { FormState } from '@/components/form/utils/to-form-state';
+import {
+  EMPTY_FORM_STATE,
+  FormState,
+} from '@/components/form/utils/to-form-state';
 import { Button } from './ui/button';
-import { useState, cloneElement } from 'react';
+import { useFormFeedback } from './form/hooks/use-form-feedback';
 
 type useConfirmDialogArgs = {
   action: () => Promise<FormState>;
@@ -24,6 +30,26 @@ const useConfirmDialog = ({
   trigger,
 }: useConfirmDialogArgs) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const [formState, formAction] = useFormState(
+    action,
+    EMPTY_FORM_STATE
+  );
+
+  const { ref } = useFormFeedback(formState, {
+    onSuccess: ({ formState, reset }) => {
+      if (formState.message) {
+        toast.success(formState.message);
+      }
+
+      reset();
+    },
+    onError: ({ formState }) => {
+      if (formState.message) {
+        toast.error(formState.message);
+      }
+    },
+  });
 
   const dialogTriggerWithClickHandler = cloneElement(trigger, {
     onClick: () => setIsOpen((state) => !state),
@@ -44,7 +70,7 @@ const useConfirmDialog = ({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
-            <form action={action}>
+            <form action={formAction}>
               <Button type="submit">Confirm</Button>
             </form>
           </AlertDialogAction>

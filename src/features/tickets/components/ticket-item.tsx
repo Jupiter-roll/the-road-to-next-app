@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import clsx from 'clsx';
-import { Ticket } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import {
   Card,
   CardTitle,
@@ -16,15 +16,27 @@ import {
 import { Button } from '@/components/ui/button';
 import { toCurrencyFromCent } from '@/utils/currency';
 import { ticketEditPath, ticketPath } from '@/paths';
+import { getAuth } from '@/features/auth/queries/get-auth';
+import { isOwner } from '@/features/auth/utils/is-owner';
 import { TICKET_ICONS } from '../constants';
 import { TicketMoreMenu } from './ticket-more-menu';
 
 type TicketItemProps = {
-  ticket: Ticket;
+  ticket: Prisma.TicketGetPayload<{
+    include: {
+      user: {
+        select: { username: true };
+      };
+    };
+  }>;
   isDetail?: boolean;
 };
 
-const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
+const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
+  const { user } = await getAuth();
+
+  const isTicketOwner = isOwner(user, ticket);
+
   const detailButton = (
     <Button variant="outline" size="icon" asChild>
       <Link href={ticketPath(ticket.id)}>
@@ -33,16 +45,17 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
     </Button>
   );
 
-  const editButton = (
+  const editButton = isTicketOwner ? (
     <Button variant="outline" size="icon" asChild>
       <Link href={ticketEditPath(ticket.id)}>
         <PencilIcon className="h-4 w-4" />
       </Link>
     </Button>
-  );
+  ) : null;
 
   const moreMenu = (
     <TicketMoreMenu
+      isTicketOwner={isTicketOwner}
       ticket={ticket}
       trigger={
         <Button variant="outline" size="icon">
@@ -77,7 +90,7 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
         </CardContent>
         <CardFooter className="flex justify-between">
           <p className="text-sm text-muted-foreground">
-            {ticket.deadline}
+            {ticket.deadline} by {ticket.user.username}
           </p>
           <p className="text-sm text-muted-foreground">
             {toCurrencyFromCent(ticket.bounty)}

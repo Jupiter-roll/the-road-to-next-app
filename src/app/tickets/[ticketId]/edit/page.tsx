@@ -8,6 +8,8 @@ import {
 } from '@/components/ui/card';
 import { TicketUpsertForm } from '@/features/tickets/components/ticket-upsert-form';
 import { getTicket } from '@/features/tickets/queries/get-ticket';
+import { getAuth } from '@/features/auth/queries/get-auth';
+import { isOwner } from '@/features/auth/utils/is-owner';
 
 type TicketEditPageProps = {
   params: {
@@ -17,8 +19,12 @@ type TicketEditPageProps = {
 
 const TicketEditPage = async ({ params }: TicketEditPageProps) => {
   const ticket = await getTicket(params.ticketId);
+  const { user } = await getAuth();
 
-  if (!ticket) {
+  const isTicketFound = !!ticket;
+  const isTicketOwner = isOwner(user, ticket);
+
+  if (!isTicketFound || !isTicketOwner) {
     notFound();
   }
 

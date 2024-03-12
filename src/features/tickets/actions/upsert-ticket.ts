@@ -11,6 +11,7 @@ import {
 } from '@/components/form/utils/to-form-state';
 import { toCent } from '@/utils/currency';
 import { setCookieByKey } from '@/actions/cookies';
+import { getCurrentUserOrRedirect } from '@/features/auth/queries/get-current-user-or-redirect';
 
 const upsertTicketSchema = z.object({
   title: z.string().min(1).max(191),
@@ -24,7 +25,18 @@ export const upsertTicket = async (
   _formState: { message: string },
   formData: FormData
 ) => {
+  const user = await getCurrentUserOrRedirect();
+
   try {
+    if (id) {
+      await prisma.ticket.findUniqueOrThrow({
+        where: {
+          id,
+          userId: user.id,
+        },
+      });
+    }
+
     const data = upsertTicketSchema.parse({
       title: formData.get('title'),
       content: formData.get('content'),
@@ -34,6 +46,7 @@ export const upsertTicket = async (
 
     const dbData = {
       ...data,
+      userId: user.id,
       bounty: toCent(data.bounty),
     };
 
