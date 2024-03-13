@@ -1,7 +1,7 @@
 import { User as AuthUser } from 'lucia';
 
 type Entity = {
-  userId: string;
+  userId: string | null;
 };
 
 export const isOwner = (
@@ -9,6 +9,10 @@ export const isOwner = (
   entity: Entity | null | undefined
 ) => {
   if (!authUser || !entity) {
+    return false;
+  }
+
+  if (!entity.userId) {
     return false;
   }
 
