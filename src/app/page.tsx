@@ -1,11 +1,9 @@
 import { Suspense } from 'react';
+import { SearchParams } from 'nuqs/server';
 import { Heading } from '@/components/heading';
 import { Spinner } from '@/components/spinner';
 import { TicketList } from '@/features/tickets/components/ticket-list';
-import {
-  SearchParams,
-  searchParamsCache,
-} from '@/features/tickets/search-params';
+import { searchParamsCache } from '@/features/tickets/search-params';
 
 type HomePageProps = {
   searchParams: SearchParams;

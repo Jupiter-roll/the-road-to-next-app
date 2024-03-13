@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { SearchParams } from 'nuqs/server';
 import { Heading } from '@/components/heading';
 import { TicketList } from '@/features/tickets/components/ticket-list';
 import { Spinner } from '@/components/spinner';
@@ -11,10 +12,7 @@ import {
   CardContent,
   CardDescription,
 } from '@/components/ui/card';
-import {
-  SearchParams,
-  searchParamsCache,
-} from '@/features/tickets/search-params';
+import { searchParamsCache } from '@/features/tickets/search-params';
 
 type TicketsPageProps = {
   searchParams: SearchParams;

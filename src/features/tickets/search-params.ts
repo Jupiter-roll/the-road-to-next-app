@@ -4,11 +4,6 @@ import {
   parseAsInteger,
 } from 'nuqs/server';
 
-export type SearchParams = {
-  search: string | string[] | undefined;
-  sort: string | string[] | undefined;
-};
-
 export const searchParser = parseAsString
   .withDefault('')
   .withOptions({
