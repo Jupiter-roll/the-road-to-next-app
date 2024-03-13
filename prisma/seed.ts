@@ -39,10 +39,17 @@ const users = [
   },
 ];
 
+const comments = [
+  { content: 'First comment from DB.' },
+  { content: 'Second comment from DB.' },
+  { content: 'Third comment from DB.' },
+];
+
 const seed = async () => {
   const t0 = performance.now();
   console.log('Seed: Started ...');
 
+  await prisma.comment.deleteMany();
   await prisma.ticket.deleteMany();
   await prisma.user.deleteMany();
 
@@ -60,12 +67,23 @@ const seed = async () => {
     })
   );
 
-  await prisma.ticket.createMany({
-    data: initialTickets.map((ticket) => ({
-      ...ticket,
-      userId: dbUsers[0].id,
-    })),
-  });
+  // https://github.com/prisma/prisma/issues/5455
+  await Promise.all(
+    initialTickets.map(async (ticket) => {
+      return prisma.ticket.create({
+        data: {
+          ...ticket,
+          userId: dbUsers[0].id,
+          comments: {
+            create: comments.map((comment) => ({
+              ...comment,
+              userId: dbUsers[0].id,
+            })),
+          },
+        },
+      });
+    })
+  );
 
   const t1 = performance.now();
   console.log(`Seed: Finished (${t1 - t0}ms)`);

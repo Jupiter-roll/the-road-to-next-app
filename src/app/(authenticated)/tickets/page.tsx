@@ -1,9 +1,9 @@
 import { Suspense } from 'react';
 import { SearchParams } from 'nuqs/server';
 import { Heading } from '@/components/heading';
-import { TicketList } from '@/features/tickets/components/ticket-list';
+import { TicketList } from '@/features/ticket/components/ticket-list';
 import { Spinner } from '@/components/spinner';
-import { TicketUpsertForm } from '@/features/tickets/components/ticket-upsert-form';
+import { TicketUpsertForm } from '@/features/ticket/components/ticket-upsert-form';
 import { getAuth } from '@/features/auth/queries/get-auth';
 import {
   Card,
@@ -12,7 +12,7 @@ import {
   CardContent,
   CardDescription,
 } from '@/components/ui/card';
-import { searchParamsCache } from '@/features/tickets/search-params';
+import { searchParamsCache } from '@/features/ticket/search-params';
 
 type TicketsPageProps = {
   searchParams: SearchParams;

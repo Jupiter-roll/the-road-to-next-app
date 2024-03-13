@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
-import { TicketItem } from '@/features/tickets/components/ticket-item';
-import { getTicket } from '@/features/tickets/queries/get-ticket';
+import { TicketItem } from '@/features/ticket/components/ticket-item';
+import { getTicket } from '@/features/ticket/queries/get-ticket';
 import { Separator } from '@/components/ui/separator';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { homePath } from '@/paths';
