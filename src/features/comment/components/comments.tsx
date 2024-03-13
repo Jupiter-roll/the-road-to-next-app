@@ -15,8 +15,6 @@ type CommentsProps = {
 const Comments = ({ ticketId }: CommentsProps) => {
   return (
     <>
-      <CommentList ticketId={ticketId} />
-
       <Card>
         <CardHeader>
           <CardTitle>Create Comment</CardTitle>
@@ -28,6 +26,8 @@ const Comments = ({ ticketId }: CommentsProps) => {
           <CommentCreateForm ticketId={ticketId} />
         </CardContent>
       </Card>
+
+      <CommentList ticketId={ticketId} />
     </>
   );
 };
