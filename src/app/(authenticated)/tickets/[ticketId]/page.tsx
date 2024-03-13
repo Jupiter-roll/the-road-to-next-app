@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
 import { TicketItem } from '@/features/ticket/components/ticket-item';
 import { getTicket } from '@/features/ticket/queries/get-ticket';
-import { RedirectToast } from '@/components/redirect-toast';
+import { Separator } from '@/components/ui/separator';
+import { Breadcrumbs } from '@/components/breadcrumbs';
+import { homePath } from '@/paths';
 
 type TicketPageProps = {
   params: {
@@ -18,22 +19,23 @@ const TicketPage = async ({ params }: TicketPageProps) => {
   }
 
   return (
-    <>
-      <div className="w-96 flex-1 animate-fade-in-from-top">
-        <TicketItem ticket={ticket} isDetail />
-      </div>
+    <div className="flex flex-col flex-1 gap-y-8">
+      <Breadcrumbs
+        breadcrumbs={[
+          { title: 'Tickets', href: homePath() },
+          { title: ticket.title },
+        ]}
+      />
 
-      <RedirectToast />
-    </>
+      <Separator />
+
+      <div className="flex flex-col gap-y-8">
+        <div className="mx-auto animate-fade-in-from-top">
+          <TicketItem ticket={ticket} isDetail />
+        </div>
+      </div>
+    </div>
   );
 };
-
-export async function generateStaticParams() {
-  const tickets = await prisma.ticket.findMany();
-
-  return tickets.map((ticket) => ({
-    ticketId: ticket.id,
-  }));
-}
 
 export default TicketPage;

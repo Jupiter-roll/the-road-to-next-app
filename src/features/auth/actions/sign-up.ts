@@ -1,6 +1,7 @@
 'use server';
 
 import { z } from 'zod';
+import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import {
   FormState,
@@ -74,6 +75,18 @@ export const signUp = async (
       sessionCookie.attributes
     );
   } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === 'P2002'
+    ) {
+      return {
+        status: 'ERROR' as const,
+        fieldErrors: {},
+        message: 'Either email or username is already in use',
+        timestamp: Date.now(),
+      };
+    }
+
     return fromErrorToFormState(error);
   }
 

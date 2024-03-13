@@ -1,14 +1,54 @@
+import { Suspense } from 'react';
+import { SearchParams } from 'nuqs/server';
+import { Heading } from '@/components/heading';
+import { TicketList } from '@/features/ticket/components/ticket-list';
 import { Spinner } from '@/components/spinner';
 import { TicketUpsertForm } from '@/features/ticket/components/ticket-upsert-form';
-import { TicketList } from '@/features/ticket/components/ticket-list';
-import { Suspense } from 'react';
+import { getAuth } from '@/features/auth/queries/get-auth';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from '@/components/ui/card';
+import { searchParamsCache } from '@/features/ticket/search-params';
 
-const TicketsPage = () => {
+type TicketsPageProps = {
+  searchParams: SearchParams;
+};
+
+const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
+  const { user } = await getAuth();
+
   return (
-    <div className="w-96 flex-1 flex flex-col gap-y-8">
-      <TicketUpsertForm />
+    <div className="flex flex-col flex-1 gap-y-8">
+      <Heading
+        title="My Tickets"
+        description="All your tickets at one place"
+      />
+
+      <div className="mx-auto w-[420px]">
+        <Card>
+          <CardHeader>
+            <CardTitle>Create Ticket</CardTitle>
+            <CardDescription>
+              A new ticket will be created
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <TicketUpsertForm />
+          </CardContent>
+        </Card>
+      </div>
+
       <Suspense fallback={<Spinner />}>
-        <TicketList />
+        <div className="mx-auto animate-fade-in-from-top">
+          <TicketList
+            userId={user?.id}
+            searchParams={searchParamsCache.parse(searchParams)}
+          />
+        </div>
       </Suspense>
     </div>
   );

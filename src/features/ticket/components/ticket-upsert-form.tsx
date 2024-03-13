@@ -1,28 +1,35 @@
 'use client';
 
+import { useRef } from 'react';
 import { useFormState } from 'react-dom';
 import { toast } from 'sonner';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { EMPTY_FORM_STATE } from '@/components/form/utils/to-form-state';
 import { SubmitButton } from '@/components/form/submit-button';
 import { FieldError } from '@/components/form/field-error';
+import { Ticket } from '@prisma/client';
 import { useFormFeedback } from '@/components/form/hooks/use-form-feedback';
-import { EMPTY_FORM_STATE } from '@/components/form/utils/to-form-state';
 import { DatePicker } from '@/components/date-picker';
+import { fromCent } from '@/utils/currency';
 import { upsertTicket } from '../actions/upsert-ticket';
-import { getTicket } from '../queries/get-ticket';
-import { fromCent } from '@/lib/big';
 
 type TicketUpsertFormProps = {
-  ticket?: Awaited<ReturnType<typeof getTicket>>;
+  ticket?: Ticket;
 };
 
 const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
+  const upsertTicketWithId = upsertTicket.bind(null, ticket?.id);
+
   const [formState, action] = useFormState(
-    upsertTicket.bind(null, ticket?.id),
+    upsertTicketWithId,
     EMPTY_FORM_STATE
   );
+
+  const datePickerImperativeHandleRef = useRef<{
+    reset: () => void;
+  }>(null);
 
   const { ref } = useFormFeedback(formState, {
     onSuccess: ({ formState, reset }) => {
@@ -31,6 +38,7 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
       }
 
       reset();
+      datePickerImperativeHandleRef.current?.reset();
     },
     onError: ({ formState }) => {
       if (formState.message) {
@@ -53,13 +61,14 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
       />
       <FieldError formState={formState} name="content" />
 
-      <div className="flex gap-x-2">
+      <div className="flex mb-1 gap-x-2">
         <div className="w-1/2">
           <Label htmlFor="deadline">Deadline</Label>
           <DatePicker
             id="deadline"
             name="deadline"
             defaultValue={ticket?.deadline}
+            imperativeHandleRef={datePickerImperativeHandleRef}
           />
           <FieldError formState={formState} name="deadline" />
         </div>
@@ -67,11 +76,11 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
           <Label htmlFor="bounty">Bounty ($)</Label>
           <Input
             type="number"
-            step=".01"
             id="bounty"
             name="bounty"
+            step=".01"
             defaultValue={
-              ticket?.bounty ? fromCent(ticket.bounty) : undefined
+              ticket?.bounty ? fromCent(ticket.bounty) : ''
             }
           />
           <FieldError formState={formState} name="bounty" />

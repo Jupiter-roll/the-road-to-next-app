@@ -12,8 +12,8 @@ import { signInPath } from '@/paths';
 
 const SignUpPage = () => {
   return (
-    <div className="flex-1 flex flex-col justify-center">
-      <Card className="w-[350px] animate-fade-in-from-top">
+    <div className="flex-1 flex flex-col justify-center items-center">
+      <Card className="w-[420px] animate-fade-in-from-top">
         <CardHeader>
           <CardTitle>Sign Up</CardTitle>
           <CardDescription>

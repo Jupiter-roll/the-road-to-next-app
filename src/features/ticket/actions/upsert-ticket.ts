@@ -1,17 +1,17 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { z } from 'zod';
+import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
+import { ticketPath, ticketsPath } from '@/paths';
 import { prisma } from '@/lib/prisma';
 import {
-  FormState,
   fromErrorToFormState,
   toFormState,
 } from '@/components/form/utils/to-form-state';
-import { toCent } from '@/lib/big';
-import { cookies } from 'next/headers';
-import { ticketPath } from '@/paths';
+import { toCent } from '@/utils/currency';
+import { setCookieByKey } from '@/actions/cookies';
+import { getCurrentUserOrRedirect } from '@/features/auth/queries/get-current-user-or-redirect';
 
 const upsertTicketSchema = z.object({
   title: z.string().min(1).max(191),
@@ -22,10 +22,21 @@ const upsertTicketSchema = z.object({
 
 export const upsertTicket = async (
   id: string | undefined,
-  _formState: FormState,
+  _formState: { message: string },
   formData: FormData
 ) => {
+  const user = await getCurrentUserOrRedirect();
+
   try {
+    if (id) {
+      await prisma.ticket.findUniqueOrThrow({
+        where: {
+          id,
+          userId: user.id,
+        },
+      });
+    }
+
     const data = upsertTicketSchema.parse({
       title: formData.get('title'),
       content: formData.get('content'),
@@ -33,34 +44,29 @@ export const upsertTicket = async (
       bounty: formData.get('bounty'),
     });
 
-    const sharedData = {
+    const dbData = {
       ...data,
+      userId: user.id,
       bounty: toCent(data.bounty),
     };
 
-    if (id) {
-      await prisma.ticket.update({
-        where: {
-          id,
-        },
-        data: sharedData,
-      });
-    } else {
-      await prisma.ticket.create({
-        data: sharedData,
-      });
-    }
+    await prisma.ticket.upsert({
+      where: {
+        id: id || '',
+      },
+      update: dbData,
+      create: dbData,
+    });
   } catch (error) {
     return fromErrorToFormState(error);
   }
 
-  revalidatePath('/tickets');
-
   if (id) {
-    cookies().set('toast', 'Ticket updated');
-
+    setCookieByKey('toast', 'Ticket updated');
     redirect(ticketPath(id));
   }
+
+  revalidatePath(ticketsPath());
 
   return toFormState('SUCCESS', 'Ticket created');
 };

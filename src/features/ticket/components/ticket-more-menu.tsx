@@ -1,8 +1,8 @@
 'use client';
 
-import Link from 'next/link';
-import { PencilIcon, TrashIcon } from 'lucide-react';
-import { ticketEditPath } from '@/paths';
+import { toast } from 'sonner';
+import { TrashIcon } from 'lucide-react';
+import { Ticket, TicketStatus } from '@prisma/client';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,28 +12,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useDeleteButton } from '@/components/use-delete-button';
-import { deleteTicket } from '../actions/delete-ticket';
-import { Ticket, TicketStatus } from '@prisma/client';
-import { TICKET_STATUS_TO_LABEL } from '../constants';
+import { useConfirmDialog } from '@/components/confirm-dialog';
+import { TICKET_STATUS_LABELS } from '../constants';
 import { updateTicketStatus } from '../actions/update-ticket-status';
-import { toast } from 'sonner';
-import { useRef } from 'react';
+import { deleteTicket } from '../actions/delete-ticket';
 
 type TicketMoreMenuProps = {
   ticket: Ticket;
-  trigger: React.ReactNode;
+  trigger: React.ReactElement;
 };
 
 const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
-  const deleteTicketAction = deleteTicket.bind(null, ticket.id);
-
-  const [deleteTrigger, deleteDialog] = useDeleteButton({
-    action: deleteTicketAction,
-    subject: 'ticket',
+  const [deleteButton, deleteDialog] = useConfirmDialog({
+    action: deleteTicket.bind(null, ticket.id),
     trigger: (
       <DropdownMenuItem>
-        <TrashIcon className="mr-2 h-4 w-4" />
+        <TrashIcon className="w-4 h-4 mr-2" />
         <span>Delete</span>
       </DropdownMenuItem>
     ),
@@ -58,6 +52,21 @@ const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
     }
   };
 
+  const ticketStatusRadioGroupItems = (
+    <DropdownMenuRadioGroup
+      value={ticket.status}
+      onValueChange={handleUpdateTicketStatus}
+    >
+      {(Object.keys(TICKET_STATUS_LABELS) as Array<TicketStatus>).map(
+        (key) => (
+          <DropdownMenuRadioItem key={key} value={key}>
+            {TICKET_STATUS_LABELS[key]}
+          </DropdownMenuRadioItem>
+        )
+      )}
+    </DropdownMenuRadioGroup>
+  );
+
   return (
     <>
       {deleteDialog}
@@ -65,31 +74,9 @@ const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" side="right">
-          <DropdownMenuItem asChild>
-            <Link href={ticketEditPath(ticket.id)}>
-              <PencilIcon className="mr-2 h-4 w-4" />
-              <span>Edit</span>
-            </Link>
-          </DropdownMenuItem>
-
-          {deleteTrigger}
-
+          {deleteButton}
           <DropdownMenuSeparator />
-
-          <DropdownMenuRadioGroup
-            value={ticket.status}
-            onValueChange={handleUpdateTicketStatus}
-          >
-            {(
-              Object.keys(
-                TICKET_STATUS_TO_LABEL
-              ) as Array<TicketStatus>
-            ).map((key) => (
-              <DropdownMenuRadioItem key={key} value={key}>
-                {TICKET_STATUS_TO_LABEL[key]}
-              </DropdownMenuRadioItem>
-            ))}
-          </DropdownMenuRadioGroup>
+          {ticketStatusRadioGroupItems}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

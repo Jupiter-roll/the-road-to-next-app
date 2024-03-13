@@ -1,84 +1,118 @@
-import { Card } from '@/components/ui/card';
-import { ticketPath } from '@/paths';
+import Link from 'next/link';
 import clsx from 'clsx';
+import { Prisma } from '@prisma/client';
+import {
+  Card,
+  CardTitle,
+  CardContent,
+  CardHeader,
+  CardFooter,
+} from '@/components/ui/card';
 import {
   ArrowUpRightFromSquareIcon,
-  CheckCircleIcon,
-  FileTextIcon,
   MoreVerticalIcon,
   PencilIcon,
 } from 'lucide-react';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { toCurrencyFromCent } from '@/lib/big';
+import { toCurrencyFromCent } from '@/utils/currency';
+import { ticketEditPath, ticketPath } from '@/paths';
+import { getAuth } from '@/features/auth/queries/get-auth';
+import { isOwner } from '@/features/auth/utils/is-owner';
+import { Comments } from '@/features/comment/components/comments';
+import { TICKET_ICONS } from '../constants';
 import { TicketMoreMenu } from './ticket-more-menu';
-import { Ticket } from '@prisma/client';
-
-const TICKET_ICONS = {
-  OPEN: <FileTextIcon />,
-  DONE: <CheckCircleIcon />,
-  IN_PROGRESS: <PencilIcon />,
-};
 
 type TicketItemProps = {
-  ticket: Ticket;
+  ticket: Prisma.TicketGetPayload<{
+    include: {
+      user: {
+        select: { username: true };
+      };
+    };
+  }>;
   isDetail?: boolean;
 };
 
 const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
-  return (
-    <div className="flex gap-x-1">
-      <Card
-        key={ticket.id}
-        className="flex-1 min-w-0 p-4 flex gap-x-4"
-      >
-        <div>{TICKET_ICONS[ticket.status]}</div>
-        <div className="min-w-0 flex-1 flex flex-col gap-y-1">
-          <h2 className="text-lg font-semibold truncate">
-            {ticket.title}
-          </h2>
+  const { user } = await getAuth();
 
-          {isDetail ? (
-            <p
-              className={clsx('text-sm text-slate-500 truncate', {
-                'line-through': ticket.status === 'DONE',
+  const isTicketOwner = isOwner(user, ticket);
+
+  const detailButton = (
+    <Button variant="outline" size="icon" asChild>
+      <Link href={ticketPath(ticket.id)}>
+        <ArrowUpRightFromSquareIcon className="w-4 h-4" />
+      </Link>
+    </Button>
+  );
+
+  const editButton = isTicketOwner ? (
+    <Button variant="outline" size="icon" asChild>
+      <Link href={ticketEditPath(ticket.id)}>
+        <PencilIcon className="w-4 h-4" />
+      </Link>
+    </Button>
+  ) : null;
+
+  const moreMenu = isTicketOwner ? (
+    <TicketMoreMenu
+      ticket={ticket}
+      trigger={
+        <Button variant="outline" size="icon">
+          <MoreVerticalIcon className="w-4 h-4" />
+        </Button>
+      }
+    />
+  ) : null;
+
+  return (
+    <div className="space-y-4">
+      <div
+        className={clsx('flex gap-x-1', {
+          'w-[580px]': isDetail,
+          'w-[420px]': !isDetail,
+        })}
+      >
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle className="flex gap-x-2">
+              <span>{TICKET_ICONS[ticket.status]}</span>
+              <span className="truncate">{ticket.title}</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <span
+              className={clsx('whitespace-break-spaces', {
+                'line-clamp-3': !isDetail,
               })}
             >
               {ticket.content}
+            </span>
+          </CardContent>
+          <CardFooter className="flex justify-between">
+            <p className="text-sm text-muted-foreground">
+              {ticket.deadline} by {ticket.user.username}
             </p>
-          ) : null}
-
-          <div className="flex-1 flex justify-between">
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-muted-foreground">
               {toCurrencyFromCent(ticket.bounty)}
             </p>
-            <p className="text-sm text-slate-500">
-              {ticket.deadline}
-            </p>
-          </div>
-        </div>
-      </Card>
+          </CardFooter>
+        </Card>
 
-      {isDetail ? (
-        <div className="flex flex-col gap-y-1">
-          <TicketMoreMenu
-            ticket={ticket}
-            trigger={
-              <Button variant="outline" size="icon">
-                <MoreVerticalIcon className="h-4 w-4" />
-              </Button>
-            }
-          />
-        </div>
-      ) : (
-        <div className="flex flex-col gap-y-1">
-          <Button variant="outline" size="icon" asChild>
-            <Link href={ticketPath(ticket.id)}>
-              <ArrowUpRightFromSquareIcon className="h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-      )}
+        {isDetail ? (
+          <div className="flex flex-col gap-y-1">
+            {editButton}
+            {moreMenu}
+          </div>
+        ) : (
+          <div className="flex flex-col gap-y-1">
+            {detailButton}
+            {editButton}
+          </div>
+        )}
+      </div>
+
+      {isDetail ? <Comments ticketId={ticket.id} /> : null}
     </div>
   );
 };

@@ -1,36 +1,18 @@
 import Link from 'next/link';
-import {
-  homePath,
-  signInPath,
-  signUpPath,
-  ticketsPath,
-} from '@/paths';
-import { buttonVariants } from './ui/button';
 import { KanbanIcon, LogOutIcon } from 'lucide-react';
-import { SubmitButton } from './form/submit-button';
+import { homePath, signInPath, signUpPath } from '@/paths';
 import { signOut } from '@/features/auth/actions/sign-out';
-import { getAuth } from '@/features/auth/queries/get-auth';
+import { buttonVariants } from './ui/button';
 import { ThemeSwitcher } from './theme/theme-switcher';
+import { SubmitButton } from './form/submit-button';
+import { getAuth } from '@/features/auth/queries/get-auth';
 
 const Header = async () => {
   const { user } = await getAuth();
 
-  const maybeAuthenticatedLeftNavigation = user ? (
-    <Link
-      href={ticketsPath()}
-      className={buttonVariants({ variant: 'ghost' })}
-    >
-      Tickets
-    </Link>
-  ) : null;
-
-  const maybeAuthenticatedRightNavigation = user ? (
+  const navItems = user ? (
     <form action={signOut}>
-      <SubmitButton
-        label="Sign Out"
-        suffixIcon={<LogOutIcon />}
-        variant="outline"
-      />
+      <SubmitButton label="Sign Out" suffixIcon={<LogOutIcon />} />
     </form>
   ) : (
     <>
@@ -64,13 +46,12 @@ const Header = async () => {
           className={buttonVariants({ variant: 'ghost' })}
         >
           <KanbanIcon />
-          <h1 className="text-lg font-semibold">TicketBounty</h1>
+          <h1 className="ml-2 text-lg font-semibold">TicketBounty</h1>
         </Link>
-        {maybeAuthenticatedLeftNavigation}
       </div>
       <div className="flex align-items gap-x-2">
         <ThemeSwitcher />
-        {maybeAuthenticatedRightNavigation}
+        {navItems}
       </div>
     </nav>
   );

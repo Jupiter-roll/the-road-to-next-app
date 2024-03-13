@@ -3,19 +3,19 @@ import {
   BookIcon,
   UserIcon,
   LockIcon,
-  KeyIcon,
+  BookUserIcon,
 } from 'lucide-react';
 import { NavItem } from './types';
 import {
-  changePasswordPath,
-  forgotPasswordPath,
+  passwordPath,
   homePath,
+  profilePath,
   ticketsPath,
 } from '@/paths';
 
 export const navItems: NavItem[] = [
   {
-    title: 'Tickets',
+    title: 'All Tickets',
     icon: LibraryIcon,
     href: homePath(),
     color: 'text-sky-500',
@@ -33,17 +33,20 @@ export const navItems: NavItem[] = [
     color: 'text-orange-500',
     children: [
       {
-        title: 'Change Password',
-        icon: LockIcon,
+        title: 'Profile',
+        icon: BookUserIcon,
         color: 'text-red-500',
-        href: changePasswordPath(),
+        href: profilePath(),
       },
       {
-        title: 'Forgot Password',
-        icon: KeyIcon,
+        title: 'Password',
+        icon: LockIcon,
         color: 'text-red-500',
-        href: forgotPasswordPath(),
+        href: passwordPath(),
       },
     ],
   },
 ];
+
+export const closedClassName =
+  'text-background opacity-0 transition-all duration-300 group-hover:z-50 group-hover:ml-4 group-hover:rounded group-hover:bg-foreground group-hover:p-2 group-hover:opacity-100';

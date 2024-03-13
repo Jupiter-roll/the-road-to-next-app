@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import { generateId } from 'lucia';
+import { Argon2id } from 'oslo/password';
 
 const prisma = new PrismaClient();
 
@@ -26,15 +28,62 @@ const initialTickets = [
   },
 ];
 
+const users = [
+  {
+    username: 'admin',
+    email: 'admin@admin.com',
+  },
+  {
+    username: 'user',
+    email: 'user@user.com',
+  },
+];
+
+const comments = [
+  { content: 'First comment from DB.' },
+  { content: 'Second comment from DB.' },
+  { content: 'Third comment from DB.' },
+];
+
 const seed = async () => {
   const t0 = performance.now();
   console.log('Seed: Started ...');
 
+  await prisma.comment.deleteMany();
   await prisma.ticket.deleteMany();
+  await prisma.user.deleteMany();
 
-  await prisma.ticket.createMany({
-    data: initialTickets,
-  });
+  const dbUsers = await Promise.all(
+    users.map(async (user) => {
+      const hashedPassword = await new Argon2id().hash('geheimnis');
+
+      return prisma.user.create({
+        data: {
+          ...user,
+          id: generateId(15),
+          hashedPassword,
+        },
+      });
+    })
+  );
+
+  // https://github.com/prisma/prisma/issues/5455
+  await Promise.all(
+    initialTickets.map(async (ticket) => {
+      return prisma.ticket.create({
+        data: {
+          ...ticket,
+          userId: dbUsers[0].id,
+          comments: {
+            create: comments.map((comment) => ({
+              ...comment,
+              userId: dbUsers[0].id,
+            })),
+          },
+        },
+      });
+    })
+  );
 
   const t1 = performance.now();
   console.log(`Seed: Finished (${t1 - t0}ms)`);

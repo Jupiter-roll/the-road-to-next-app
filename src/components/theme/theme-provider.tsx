@@ -12,7 +12,7 @@ const ThemeProvider = ({ children }: ThemeProviderProps) => {
       attribute="class"
       defaultTheme="system"
       enableSystem
-      disableTransitionOnChange
+      // disableTransitionOnChange
     >
       {children}
     </BaseThemeProvider>

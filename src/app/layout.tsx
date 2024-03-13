@@ -1,11 +1,10 @@
 import type { Metadata } from 'next';
+import { Toaster } from 'sonner';
 import { Inter } from 'next/font/google';
-import './globals.css';
 import { Header } from '@/components/header';
-import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/components/theme/theme-provider';
-import { AuthenticatedSidebar } from '@/components/sidebar/authenticated-sidebar';
-import { Suspense } from 'react';
+import { AuthenticatedSidebar } from '@/components/sidebar/components/authenticated-sidebar';
+import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,19 +23,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider>
           <Header />
-          <div className="flex h-screen border-collapse overflow-hidden">
-            <Suspense>
-              <AuthenticatedSidebar />
-            </Suspense>
-            <main
-              className="
-                min-h-screen flex-1
-                overflow-y-auto overflow-x-hidden
-                py-24 px-8
-                flex flex-col items-center
-                bg-secondary/10
-              "
-            >
+          <div className="flex h-screen overflow-hidden border-collapse">
+            <AuthenticatedSidebar />
+            <main className="flex flex-col flex-1 min-h-screen px-8 py-24 overflow-x-hidden overflow-y-auto bg-secondary/20">
               {children}
             </main>
           </div>

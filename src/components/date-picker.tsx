@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useImperativeHandle, useState } from 'react';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -14,12 +14,30 @@ import {
 type DatePickerProps = {
   id: string;
   name: string;
-  defaultValue?: string;
+  defaultValue?: string | undefined;
+  imperativeHandleRef: React.RefObject<{
+    reset: () => void;
+  }>;
 };
 
-const DatePicker = ({ id, name, defaultValue }: DatePickerProps) => {
+const DatePicker = ({
+  id,
+  name,
+  defaultValue,
+  imperativeHandleRef,
+}: DatePickerProps) => {
   const [date, setDate] = useState<Date | undefined>(
     defaultValue ? new Date(defaultValue) : undefined
+  );
+
+  useImperativeHandle(
+    imperativeHandleRef,
+    () => ({
+      reset() {
+        setDate(undefined);
+      },
+    }),
+    []
   );
 
   const formattedStringDate = date ? format(date, 'yyyy-MM-dd') : '';
@@ -29,9 +47,9 @@ const DatePicker = ({ id, name, defaultValue }: DatePickerProps) => {
       <PopoverTrigger id={id} className="w-full" asChild>
         <Button
           variant="outline"
-          className="justify-start text-left font-normal"
+          className="justify-start font-normal text-left"
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
+          <CalendarIcon className="w-4 h-4 mr-2" />
           {formattedStringDate}
           <input
             type="hidden"
