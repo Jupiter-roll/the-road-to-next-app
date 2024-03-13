@@ -1,8 +1,8 @@
-import { SearchInput } from '@/components/search-input';
-import { SortSelect } from '@/components/sort-select';
 import { ParsedSearchParams } from '../search-params';
 import { getTickets } from '../queries/get-tickets';
 import { TicketItem } from './ticket-item';
+import { TicketSearchInput } from './ticket-search-input';
+import { TicketSortSelect } from './ticket-sort-select';
 
 type TicketListProps = {
   userId?: string;

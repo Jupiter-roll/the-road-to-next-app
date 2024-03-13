@@ -26,7 +26,7 @@ const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
   return (
     <div className="flex flex-col flex-1 gap-y-8">
       <Heading
-        title="Tickets"
+        title="My Tickets"
         description="All your tickets at one place"
       />
 
