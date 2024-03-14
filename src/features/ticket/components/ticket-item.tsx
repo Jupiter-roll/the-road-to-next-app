@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import clsx from 'clsx';
 import { Prisma } from '@prisma/client';
@@ -16,27 +18,29 @@ import {
 import { Button } from '@/components/ui/button';
 import { toCurrencyFromCent } from '@/utils/currency';
 import { ticketEditPath, ticketPath } from '@/paths';
-import { getAuth } from '@/features/auth/queries/get-auth';
-import { isOwner } from '@/features/auth/utils/is-owner';
-import { Comments } from '@/features/comment/components/comments';
 import { TICKET_ICONS } from '../constants';
 import { TicketMoreMenu } from './ticket-more-menu';
 
-type TicketItemProps = {
-  ticket: Prisma.TicketGetPayload<{
-    include: {
-      user: {
-        select: { username: true };
-      };
+type TicketWithUser = Prisma.TicketGetPayload<{
+  include: {
+    user: {
+      select: { username: true };
     };
-  }>;
+  };
+}>;
+
+type TicketItemProps = {
+  ticket: TicketWithUser & { isOwner: boolean };
   isDetail?: boolean;
+  comments?: React.ReactNode;
 };
 
-const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
-  const { user } = await getAuth();
-
-  const isTicketOwner = isOwner(user, ticket);
+const TicketItem = ({
+  ticket,
+  isDetail,
+  comments,
+}: TicketItemProps) => {
+  const isTicketOwner = ticket.isOwner;
 
   const detailButton = (
     <Button variant="outline" size="icon" asChild>
@@ -112,7 +116,7 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
         )}
       </div>
 
-      {isDetail ? <Comments ticketId={ticket.id} /> : null}
+      {comments}
     </div>
   );
 };

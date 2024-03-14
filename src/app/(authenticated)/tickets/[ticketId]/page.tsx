@@ -4,6 +4,7 @@ import { getTicket } from '@/features/ticket/queries/get-ticket';
 import { Separator } from '@/components/ui/separator';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { homePath } from '@/paths';
+import { Comments } from '@/features/comment/components/comments';
 
 type TicketPageProps = {
   params: {
@@ -31,7 +32,11 @@ const TicketPage = async ({ params }: TicketPageProps) => {
 
       <div className="flex flex-col gap-y-8">
         <div className="mx-auto animate-fade-in-from-top">
-          <TicketItem ticket={ticket} isDetail />
+          <TicketItem
+            ticket={ticket}
+            isDetail
+            comments={<Comments ticketId={ticket.id} />}
+          />
         </div>
       </div>
     </div>
