@@ -6,7 +6,7 @@ type FieldErrorProps = {
 };
 
 const FieldError = ({ formState, name }: FieldErrorProps) => {
-  const message = formState?.fieldErrors[name]?.[0];
+  const message = formState.fieldErrors[name]?.[0];
 
   if (!message) return null;
 

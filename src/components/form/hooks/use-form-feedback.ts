@@ -9,6 +9,7 @@ type OnArgs = {
 type UseFormFeedbackOptions = {
   onSuccess?: (onArgs: OnArgs) => void;
   onError?: (onArgs: OnArgs) => void;
+  onSettled?: (onArgs: OnArgs) => void;
 };
 
 const useFormFeedback = (
@@ -22,11 +23,10 @@ const useFormFeedback = (
     ref.current.reset();
   };
 
-  const prevUpdate = useRef(formState?.timestamp);
-  const isUpdate = formState?.timestamp !== prevUpdate.current;
+  const prevUpdate = useRef(formState.timestamp);
+  const isUpdate = formState.timestamp !== prevUpdate.current;
 
   useEffect(() => {
-    if (!formState) return;
     if (isUpdate) {
       if (options?.onSuccess && formState.status === 'SUCCESS') {
         options.onSuccess({
@@ -41,6 +41,11 @@ const useFormFeedback = (
           reset: handleReset,
         });
       }
+
+      options?.onSettled?.({
+        formState,
+        reset: handleReset,
+      });
 
       prevUpdate.current = formState.timestamp;
     }

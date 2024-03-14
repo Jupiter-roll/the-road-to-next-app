@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, cloneElement } from 'react';
+import { useState, cloneElement, useRef } from 'react';
 import { useFormState } from 'react-dom';
 import { toast } from 'sonner';
 import {
@@ -38,6 +38,8 @@ const useConfirmDialog = ({
     EMPTY_FORM_STATE
   );
 
+  const toastRef = useRef<string | number | null>(null);
+
   useFormFeedback(formState, {
     onSuccess: ({ formState, reset }) => {
       if (formState.message) {
@@ -50,6 +52,11 @@ const useConfirmDialog = ({
     onError: ({ formState }) => {
       if (formState.message) {
         toast.error(formState.message);
+      }
+    },
+    onSettled: () => {
+      if (toastRef.current) {
+        toast.dismiss(toastRef.current);
       }
     },
   });
@@ -73,7 +80,12 @@ const useConfirmDialog = ({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
-            <form action={formAction}>
+            <form
+              action={async () => {
+                toastRef.current = toast.loading('Deleting ...');
+                formAction();
+              }}
+            >
               <Button type="submit">Confirm</Button>
             </form>
           </AlertDialogAction>
