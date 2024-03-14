@@ -5,6 +5,7 @@ import {
   CardDescription,
   CardContent,
 } from '@/components/ui/card';
+import { getComments } from '../queries/get-comments';
 import { CommentCreateForm } from './comment-create-form';
 import { CommentList } from './comment-list';
 
@@ -12,7 +13,9 @@ type CommentsProps = {
   ticketId: string;
 };
 
-const Comments = ({ ticketId }: CommentsProps) => {
+const Comments = async ({ ticketId }: CommentsProps) => {
+  const comments = await getComments(ticketId);
+
   return (
     <>
       <Card>
@@ -27,7 +30,7 @@ const Comments = ({ ticketId }: CommentsProps) => {
         </CardContent>
       </Card>
 
-      <CommentList ticketId={ticketId} />
+      <CommentList initialComments={comments} />
     </>
   );
 };

@@ -1,23 +1,21 @@
 import { Prisma } from '@prisma/client';
 import { Card } from '@/components/ui/card';
-import { getAuth } from '@/features/auth/queries/get-auth';
-import { isOwner } from '@/features/auth/utils/is-owner';
 import { CommentDeleteButton } from './comment-delete-button';
+import { format } from 'date-fns';
+
+type CommentWithUser = Prisma.CommentGetPayload<{
+  include: {
+    user: {
+      select: { username: true };
+    };
+  };
+}>;
 
 type CommentItemProps = {
-  comment: Prisma.CommentGetPayload<{
-    include: {
-      user: {
-        select: { username: true };
-      };
-    };
-  }>;
+  comment: CommentWithUser & { isOwner: boolean };
 };
 
-const CommentItem = async ({ comment }: CommentItemProps) => {
-  const { user } = await getAuth();
-  const isCommentOwner = isOwner(user, comment);
-
+const CommentItem = ({ comment }: CommentItemProps) => {
   return (
     <div className="flex gap-x-1">
       <Card className="p-4 flex-1 flex flex-col gap-y-1">
@@ -26,13 +24,14 @@ const CommentItem = async ({ comment }: CommentItemProps) => {
             {comment.user?.username ?? 'Deleted User'}
           </p>
           <p className="text-sm text-muted-foreground">
-            {comment.createdAt.toLocaleString()}
+            {/* {comment.createdAt.toLocaleString()} */}
+            {format(comment.createdAt, 'yyyy-MM-dd, HH:mm:ss')}
           </p>
         </div>
         <p className="whitespace-pre-line">{comment.content}</p>
       </Card>
 
-      {isCommentOwner && <CommentDeleteButton id={comment.id} />}
+      {comment.isOwner && <CommentDeleteButton id={comment.id} />}
     </div>
   );
 };
