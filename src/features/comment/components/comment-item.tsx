@@ -13,9 +13,13 @@ type CommentWithUser = Prisma.CommentGetPayload<{
 
 type CommentItemProps = {
   comment: CommentWithUser & { isOwner: boolean };
+  onRemoveComment: (id: string) => void;
 };
 
-const CommentItem = ({ comment }: CommentItemProps) => {
+const CommentItem = ({
+  comment,
+  onRemoveComment,
+}: CommentItemProps) => {
   return (
     <div className="flex gap-x-1">
       <Card className="p-4 flex-1 flex flex-col gap-y-1">
@@ -24,14 +28,18 @@ const CommentItem = ({ comment }: CommentItemProps) => {
             {comment.user?.username ?? 'Deleted User'}
           </p>
           <p className="text-sm text-muted-foreground">
-            {/* {comment.createdAt.toLocaleString()} */}
             {format(comment.createdAt, 'yyyy-MM-dd, HH:mm:ss')}
           </p>
         </div>
         <p className="whitespace-pre-line">{comment.content}</p>
       </Card>
 
-      {comment.isOwner && <CommentDeleteButton id={comment.id} />}
+      {comment.isOwner && (
+        <CommentDeleteButton
+          id={comment.id}
+          onRemoveComment={onRemoveComment}
+        />
+      )}
     </div>
   );
 };

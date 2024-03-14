@@ -43,10 +43,21 @@ const CommentList = ({
     }));
   };
 
+  const handleRemoveComment = (id: string) => {
+    setCommentData((prev) => ({
+      ...prev,
+      comments: prev.comments.filter((comment) => comment.id !== id),
+    }));
+  };
+
   return (
     <div className="space-y-2">
       {comments.map((comment) => (
-        <CommentItem key={comment.id} comment={comment} />
+        <CommentItem
+          key={comment.id}
+          comment={comment}
+          onRemoveComment={handleRemoveComment}
+        />
       ))}
 
       <div className="flex flex-col justify-center">
