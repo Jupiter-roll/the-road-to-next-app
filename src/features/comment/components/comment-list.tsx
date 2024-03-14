@@ -32,10 +32,7 @@ const CommentList = ({
 
   const handleMore = async () => {
     const { list: moreComments, metadata: moreCommentsMetadata } =
-      await getComments(ticketId, {
-        skip: comments.length,
-        take: 2,
-      });
+      await getComments(ticketId, comments.length);
 
     setCommentData((prev) => ({
       comments: [...prev.comments, ...moreComments],

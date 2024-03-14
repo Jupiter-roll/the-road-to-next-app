@@ -23,7 +23,7 @@ import { useFormFeedback } from './form/hooks/use-form-feedback';
 type useConfirmDialogArgs = {
   action: () => Promise<FormState>;
   trigger: React.ReactElement;
-  onSuccess: () => void;
+  onSuccess?: () => void;
 };
 
 const useConfirmDialog = ({
@@ -47,7 +47,7 @@ const useConfirmDialog = ({
       }
 
       reset();
-      onSuccess();
+      onSuccess?.();
     },
     onError: ({ formState }) => {
       if (formState.message) {

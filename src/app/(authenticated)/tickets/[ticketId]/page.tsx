@@ -5,6 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { homePath } from '@/paths';
 import { Comments } from '@/features/comment/components/comments';
+import { getComments } from '@/features/comment/queries/get-comments';
 
 type TicketPageProps = {
   params: {
@@ -14,6 +15,12 @@ type TicketPageProps = {
 
 const TicketPage = async ({ params }: TicketPageProps) => {
   const ticket = await getTicket(params.ticketId);
+
+  // const { list: comments, metadata: commentMetadata } =
+  //   await getComments(params.ticketId, {
+  //     skip: 0,
+  //     take: 2,
+  //   });
 
   if (!ticket) {
     notFound();

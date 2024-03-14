@@ -15,10 +15,7 @@ type CommentsProps = {
 
 const Comments = async ({ ticketId }: CommentsProps) => {
   const { list: comments, metadata: commentMetadata } =
-    await getComments(ticketId, {
-      skip: 0,
-      take: 2,
-    });
+    await getComments(ticketId);
 
   return (
     <>

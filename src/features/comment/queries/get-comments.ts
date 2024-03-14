@@ -6,13 +6,16 @@ import { isOwner } from '@/features/auth/utils/is-owner';
 
 export const getComments = async (
   ticketId: string,
-  { skip, take }: { skip: number; take: number }
+  offset?: number
 ) => {
   const { user } = await getAuth();
 
   const where = {
     ticketId,
   };
+
+  const skip = offset ?? 0;
+  const take = 2;
 
   const [comments, count] = await prisma.$transaction([
     prisma.comment.findMany({
