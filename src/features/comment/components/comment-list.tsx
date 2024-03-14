@@ -1,10 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { Prisma } from '@prisma/client';
-import { Button } from '@/components/ui/button';
 import { CommentItem } from './comment-item';
-import { getComments } from '../queries/get-comments';
 
 type CommentWithUser = Prisma.CommentGetPayload<{
   include: {
@@ -15,57 +12,27 @@ type CommentWithUser = Prisma.CommentGetPayload<{
 }>;
 
 type CommentListProps = {
-  ticketId: string;
-  initialComments: (CommentWithUser & { isOwner: boolean })[];
-  hasNextPage: boolean;
+  comments: (CommentWithUser & { isOwner: boolean })[];
+  onMoreButton: React.ReactNode;
+  onRemoveComment: (id: string) => void;
 };
 
 const CommentList = ({
-  ticketId,
-  initialComments,
-  hasNextPage: initialHasNextPage,
+  comments,
+  onMoreButton,
+  onRemoveComment,
 }: CommentListProps) => {
-  const [{ comments, hasNextPage }, setCommentData] = useState({
-    comments: initialComments,
-    hasNextPage: initialHasNextPage,
-  });
-
-  const handleMore = async () => {
-    const { list: moreComments, metadata: moreCommentsMetadata } =
-      await getComments(ticketId, comments.length);
-
-    setCommentData((prev) => ({
-      comments: [...prev.comments, ...moreComments],
-      hasNextPage: moreCommentsMetadata.hasNextPage,
-    }));
-  };
-
-  const handleRemoveComment = (id: string) => {
-    setCommentData((prev) => ({
-      ...prev,
-      comments: prev.comments.filter((comment) => comment.id !== id),
-    }));
-  };
-
   return (
     <div className="space-y-2">
       {comments.map((comment) => (
         <CommentItem
           key={comment.id}
           comment={comment}
-          onRemoveComment={handleRemoveComment}
+          onRemoveComment={onRemoveComment}
         />
       ))}
 
-      <div className="flex flex-col justify-center">
-        <Button
-          variant="ghost"
-          disabled={!hasNextPage}
-          onClick={handleMore}
-        >
-          More
-        </Button>
-      </div>
+      {onMoreButton}
     </div>
   );
 };

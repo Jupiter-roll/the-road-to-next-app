@@ -16,11 +16,8 @@ type TicketPageProps = {
 const TicketPage = async ({ params }: TicketPageProps) => {
   const ticket = await getTicket(params.ticketId);
 
-  // const { list: comments, metadata: commentMetadata } =
-  //   await getComments(params.ticketId, {
-  //     skip: 0,
-  //     take: 2,
-  //   });
+  const { list: comments, metadata: commentMetadata } =
+    await getComments(params.ticketId);
 
   if (!ticket) {
     notFound();
@@ -42,7 +39,13 @@ const TicketPage = async ({ params }: TicketPageProps) => {
           <TicketItem
             ticket={ticket}
             isDetail
-            comments={<Comments ticketId={ticket.id} />}
+            comments={
+              <Comments
+                ticketId={ticket.id}
+                initialComments={comments}
+                {...commentMetadata}
+              />
+            }
           />
         </div>
       </div>
