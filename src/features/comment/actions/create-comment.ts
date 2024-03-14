@@ -9,6 +9,7 @@ import {
 } from '@/components/form/utils/to-form-state';
 import { ticketPath } from '@/paths';
 import { getCurrentUserOrRedirect } from '@/features/auth/queries/get-current-user-or-redirect';
+import { redirect } from 'next/navigation';
 
 const createCommentSchema = z.object({
   content: z.string().min(1).max(1024),
@@ -39,10 +40,12 @@ export const createComment = async (
 
   revalidatePath(ticketPath(ticketId));
 
-  return {
-    status: 'SUCCESS' as const,
-    fieldErrors: {},
-    message: `Comment created!`,
-    timestamp: Date.now(),
-  };
+  redirect(ticketPath(ticketId));
+
+  // return {
+  //   status: 'SUCCESS' as const,
+  //   fieldErrors: {},
+  //   message: `Comment created!`,
+  //   timestamp: Date.now(),
+  // };
 };

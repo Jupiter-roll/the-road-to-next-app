@@ -36,7 +36,7 @@ const useConfirmDialog = ({
     EMPTY_FORM_STATE
   );
 
-  const { ref } = useFormFeedback(formState, {
+  useFormFeedback(formState, {
     onSuccess: ({ formState, reset }) => {
       if (formState.message) {
         toast.success(formState.message);

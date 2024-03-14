@@ -14,7 +14,11 @@ type CommentsProps = {
 };
 
 const Comments = async ({ ticketId }: CommentsProps) => {
-  const comments = await getComments(ticketId);
+  const { list: comments, metadata: commentMetadata } =
+    await getComments(ticketId, {
+      skip: 0,
+      take: 2,
+    });
 
   return (
     <>
@@ -30,7 +34,11 @@ const Comments = async ({ ticketId }: CommentsProps) => {
         </CardContent>
       </Card>
 
-      <CommentList initialComments={comments} />
+      <CommentList
+        ticketId={ticketId}
+        initialComments={comments}
+        {...commentMetadata}
+      />
     </>
   );
 };

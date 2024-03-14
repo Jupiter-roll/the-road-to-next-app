@@ -22,10 +22,11 @@ const useFormFeedback = (
     ref.current.reset();
   };
 
-  const prevUpdate = useRef(formState.timestamp);
-  const isUpdate = formState.timestamp !== prevUpdate.current;
+  const prevUpdate = useRef(formState?.timestamp);
+  const isUpdate = formState?.timestamp !== prevUpdate.current;
 
   useEffect(() => {
+    if (!formState) return;
     if (isUpdate) {
       if (options?.onSuccess && formState.status === 'SUCCESS') {
         options.onSuccess({
