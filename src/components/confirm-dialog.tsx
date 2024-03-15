@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, cloneElement, useRef } from 'react';
+import { useState, cloneElement, useRef, useTransition } from 'react';
 import { useFormState } from 'react-dom';
 import { toast } from 'sonner';
 import {
@@ -22,7 +22,9 @@ import { useFormFeedback } from './form/hooks/use-form-feedback';
 
 type useConfirmDialogArgs = {
   action: () => Promise<FormState>;
-  trigger: React.ReactElement;
+  trigger:
+    | React.ReactElement
+    | ((isLoading: boolean) => React.ReactElement);
   onSuccess?: () => void;
 };
 
@@ -61,15 +63,21 @@ const useConfirmDialog = ({
     },
   });
 
-  const dialogTriggerWithClickHandler = cloneElement(trigger, {
-    onClick: () => setIsOpen((state) => !state),
-  });
+  const [isPending, startTransition] = useTransition();
+
+  const dialogTriggerWithClickHandler = cloneElement(
+    typeof trigger === 'function' ? trigger(isPending) : trigger,
+    {
+      onClick: () => setIsOpen((state) => !state),
+    }
+  );
 
   const handleAction = () => {
     toastRef.current = toast.loading('Deleting ...');
-    formAction();
 
-    console.log('Will not run if formAction throws an error.');
+    startTransition(() => {
+      formAction();
+    });
   };
 
   const dialog = (
