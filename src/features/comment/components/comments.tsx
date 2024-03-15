@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { Spinner } from '@/components/spinner';
 import {
   Card,
   CardHeader,
@@ -8,7 +10,6 @@ import {
   CardDescription,
   CardContent,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { CommentWithUser } from '../types';
 import { CommentCreateForm } from './comment-create-form';
 import { CommentItem } from './comment-item';
@@ -28,15 +29,35 @@ const Comments = ({
   const [comments, setComments] = useState(initialComments);
   const [hasNextPage, setHasNextPage] = useState(initialHasNextPage);
 
-  const handleMore = async () => {
-    const { list: newComments, metadata } = await getComments(
-      ticketId,
-      comments.length
-    );
+  const { ref, inView } = useInView();
+  const [isPending, startTransition] = useTransition();
+  const isFetching = useRef(false);
 
-    setComments((prevComments) => [...prevComments, ...newComments]);
-    setHasNextPage(metadata.hasNextPage);
-  };
+  useEffect(() => {
+    const handleMore = async () => {
+      if (!hasNextPage) return;
+
+      if (isFetching.current) return;
+      isFetching.current = true;
+
+      const { list: newComments, metadata } = await getComments(
+        ticketId,
+        comments.length
+      );
+
+      setComments((prevComments) => [
+        ...prevComments,
+        ...newComments,
+      ]);
+      setHasNextPage(metadata.hasNextPage);
+
+      isFetching.current = false;
+    };
+
+    startTransition(() => {
+      handleMore();
+    });
+  }, [inView, comments, hasNextPage, ticketId]);
 
   const handleRemoveComment = (id: string) => {
     setComments((prevComments) =>
@@ -78,14 +99,8 @@ const Comments = ({
         ))}
       </div>
 
-      <div className="flex flex-col justify-center">
-        <Button
-          variant="ghost"
-          disabled={!hasNextPage}
-          onClick={handleMore}
-        >
-          More
-        </Button>
+      <div className="flex flex-col justify-center" ref={ref}>
+        {isPending && <Spinner />}
       </div>
     </>
   );
