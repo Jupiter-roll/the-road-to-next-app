@@ -6,9 +6,11 @@ import { prisma } from '@/lib/prisma';
 import {
   FormState,
   fromErrorToFormState,
+  toFormState,
 } from '@/components/form/utils/to-form-state';
 import { ticketPath } from '@/paths';
 import { getCurrentUserOrRedirect } from '@/features/auth/queries/get-current-user-or-redirect';
+import { CommentWithUser } from '../types';
 
 const createCommentSchema = z.object({
   content: z.string().min(1).max(1024),
@@ -21,16 +23,25 @@ export const createComment = async (
 ) => {
   const user = await getCurrentUserOrRedirect();
 
+  let comment;
+
   try {
     const data = createCommentSchema.parse({
       content: formData.get('content'),
     });
 
-    await prisma.comment.create({
+    comment = await prisma.comment.create({
       data: {
         userId: user.id,
         ticketId: ticketId,
         ...data,
+      },
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
+        },
       },
     });
   } catch (error) {
@@ -39,10 +50,5 @@ export const createComment = async (
 
   revalidatePath(ticketPath(ticketId));
 
-  return {
-    status: 'SUCCESS' as const,
-    fieldErrors: {},
-    message: `Comment created!`,
-    timestamp: Date.now(),
-  };
+  return toFormState('SUCCESS', 'Comment created', comment);
 };

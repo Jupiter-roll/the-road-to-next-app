@@ -3,12 +3,13 @@
 import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { ticketPath } from '@/paths';
-import { fromErrorToFormState } from '@/components/form/utils/to-form-state';
+import {
+  fromErrorToFormState,
+  toFormState,
+} from '@/components/form/utils/to-form-state';
 import { getCurrentUserOrRedirect } from '@/features/auth/queries/get-current-user-or-redirect';
 
 export const deleteComment = async (id: string) => {
-  await new Promise((resolve) => setTimeout(resolve, 4000));
-
   const user = await getCurrentUserOrRedirect();
 
   try {
@@ -24,10 +25,5 @@ export const deleteComment = async (id: string) => {
 
   revalidatePath(ticketPath(id));
 
-  return {
-    status: 'SUCCESS' as const,
-    message: 'Comment deleted',
-    fieldErrors: {},
-    timestamp: Date.now(),
-  };
+  return toFormState('SUCCESS', 'Comment deleted');
 };

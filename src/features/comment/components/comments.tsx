@@ -13,7 +13,6 @@ import { CommentWithUser } from '../types';
 import { CommentCreateForm } from './comment-create-form';
 import { CommentItem } from './comment-item';
 import { getComments } from '../queries/get-comments';
-import { comment } from 'postcss';
 
 type CommentsProps = {
   ticketId: string;
@@ -45,6 +44,13 @@ const Comments = ({
     );
   };
 
+  const handleCreateComment = (comment: CommentWithUser) => {
+    setComments((prevComments) => [
+      { ...comment, isOwner: true },
+      ...prevComments,
+    ]);
+  };
+
   return (
     <>
       <Card>
@@ -55,7 +61,10 @@ const Comments = ({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <CommentCreateForm ticketId={ticketId} />
+          <CommentCreateForm
+            ticketId={ticketId}
+            onCreateComment={handleCreateComment}
+          />
         </CardContent>
       </Card>
 

@@ -3,6 +3,7 @@
 import {
   FormState,
   fromErrorToFormState,
+  toFormState,
 } from '@/components/form/utils/to-form-state';
 import { lucia } from '@/lib/lucia';
 import { prisma } from '@/lib/prisma';
@@ -36,12 +37,7 @@ export const signIn = async (
     });
 
     if (!user) {
-      return {
-        status: 'ERROR' as const,
-        fieldErrors: {},
-        message: 'Incorrect email or password',
-        timestamp: Date.now(),
-      };
+      return toFormState('ERROR', 'Incorrect email or password');
     }
 
     const validPassword = await new Argon2id().verify(
@@ -50,12 +46,7 @@ export const signIn = async (
     );
 
     if (!validPassword) {
-      return {
-        status: 'ERROR' as const,
-        fieldErrors: {},
-        message: 'Incorrect email or password',
-        timestamp: Date.now(),
-      };
+      return toFormState('ERROR', 'Incorrect email or password');
     }
 
     const session = await lucia.createSession(user.id, {});

@@ -6,6 +6,7 @@ import { prisma } from '@/lib/prisma';
 import {
   FormState,
   fromErrorToFormState,
+  toFormState,
 } from '@/components/form/utils/to-form-state';
 import { Argon2id } from 'oslo/password';
 import { cookies } from 'next/headers';
@@ -79,12 +80,10 @@ export const signUp = async (
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === 'P2002'
     ) {
-      return {
-        status: 'ERROR' as const,
-        fieldErrors: {},
-        message: 'Either email or username is already in use',
-        timestamp: Date.now(),
-      };
+      return toFormState(
+        'ERROR',
+        'Either email or username is already in use'
+      );
     }
 
     return fromErrorToFormState(error);
