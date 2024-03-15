@@ -7,7 +7,7 @@ import { fromErrorToFormState } from '@/components/form/utils/to-form-state';
 import { getCurrentUserOrRedirect } from '@/features/auth/queries/get-current-user-or-redirect';
 
 export const deleteComment = async (id: string) => {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  await new Promise((resolve) => setTimeout(resolve, 4000));
 
   const user = await getCurrentUserOrRedirect();
 

@@ -65,6 +65,13 @@ const useConfirmDialog = ({
     onClick: () => setIsOpen((state) => !state),
   });
 
+  const handleAction = () => {
+    toastRef.current = toast.loading('Deleting ...');
+    formAction();
+
+    console.log('Will not run if formAction throws an error.');
+  };
+
   const dialog = (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
@@ -80,12 +87,7 @@ const useConfirmDialog = ({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
-            <form
-              action={() => {
-                toastRef.current = toast.loading('Deleting ...');
-                formAction();
-              }}
-            >
+            <form action={handleAction}>
               <Button type="submit">Confirm</Button>
             </form>
           </AlertDialogAction>
