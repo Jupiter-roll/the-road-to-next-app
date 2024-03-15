@@ -81,7 +81,7 @@ const useConfirmDialog = ({
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
             <form
-              action={async () => {
+              action={() => {
                 toastRef.current = toast.loading('Deleting ...');
                 formAction();
               }}

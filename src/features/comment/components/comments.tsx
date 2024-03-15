@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { Prisma } from '@prisma/client';
 import {
   Card,
   CardHeader,
@@ -10,17 +9,11 @@ import {
   CardContent,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { getComments } from '../queries/get-comments';
+import { CommentWithUser } from '../types';
 import { CommentCreateForm } from './comment-create-form';
-import { CommentList } from './comment-list';
-
-type CommentWithUser = Prisma.CommentGetPayload<{
-  include: {
-    user: {
-      select: { username: true };
-    };
-  };
-}>;
+import { CommentItem } from './comment-item';
+import { getComments } from '../queries/get-comments';
+import { comment } from 'postcss';
 
 type CommentsProps = {
   ticketId: string;
@@ -33,26 +26,23 @@ const Comments = ({
   initialComments,
   hasNextPage: initialHasNextPage,
 }: CommentsProps) => {
-  const [{ comments, hasNextPage }, setCommentData] = useState({
-    comments: initialComments,
-    hasNextPage: initialHasNextPage,
-  });
+  const [comments, setComments] = useState(initialComments);
+  const [hasNextPage, setHasNextPage] = useState(initialHasNextPage);
 
   const handleMore = async () => {
-    const { list: moreComments, metadata: moreCommentsMetadata } =
-      await getComments(ticketId, comments.length);
+    const { list: newComments, metadata } = await getComments(
+      ticketId,
+      comments.length
+    );
 
-    setCommentData((prev) => ({
-      comments: [...prev.comments, ...moreComments],
-      hasNextPage: moreCommentsMetadata.hasNextPage,
-    }));
+    setComments((prevComments) => [...prevComments, ...newComments]);
+    setHasNextPage(metadata.hasNextPage);
   };
 
   const handleRemoveComment = (id: string) => {
-    setCommentData((prev) => ({
-      ...prev,
-      comments: prev.comments.filter((comment) => comment.id !== id),
-    }));
+    setComments((prevComments) =>
+      prevComments.filter((comment) => comment.id !== id)
+    );
   };
 
   return (
@@ -69,21 +59,25 @@ const Comments = ({
         </CardContent>
       </Card>
 
-      <CommentList
-        comments={comments}
-        onRemoveComment={handleRemoveComment}
-        onMoreButton={
-          <div className="flex flex-col justify-center">
-            <Button
-              variant="ghost"
-              disabled={!hasNextPage}
-              onClick={handleMore}
-            >
-              More
-            </Button>
-          </div>
-        }
-      />
+      <div className="space-y-2">
+        {comments.map((comment) => (
+          <CommentItem
+            key={comment.id}
+            comment={comment}
+            onRemoveComment={handleRemoveComment}
+          />
+        ))}
+      </div>
+
+      <div className="flex flex-col justify-center">
+        <Button
+          variant="ghost"
+          disabled={!hasNextPage}
+          onClick={handleMore}
+        >
+          More
+        </Button>
+      </div>
     </>
   );
 };

@@ -1,8 +1,5 @@
-'use client';
-
 import Link from 'next/link';
 import clsx from 'clsx';
-import { Prisma } from '@prisma/client';
 import {
   Card,
   CardTitle,
@@ -18,16 +15,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { toCurrencyFromCent } from '@/utils/currency';
 import { ticketEditPath, ticketPath } from '@/paths';
+import { TicketWithUser } from '../types';
 import { TICKET_ICONS } from '../constants';
 import { TicketMoreMenu } from './ticket-more-menu';
-
-type TicketWithUser = Prisma.TicketGetPayload<{
-  include: {
-    user: {
-      select: { username: true };
-    };
-  };
-}>;
 
 type TicketItemProps = {
   ticket: TicketWithUser & { isOwner: boolean };

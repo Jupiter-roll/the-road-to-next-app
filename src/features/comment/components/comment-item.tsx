@@ -1,15 +1,9 @@
-import { Prisma } from '@prisma/client';
-import { Card } from '@/components/ui/card';
-import { CommentDeleteButton } from './comment-delete-button';
-import { format } from 'date-fns';
+'use client';
 
-type CommentWithUser = Prisma.CommentGetPayload<{
-  include: {
-    user: {
-      select: { username: true };
-    };
-  };
-}>;
+import { format } from 'date-fns';
+import { Card } from '@/components/ui/card';
+import { CommentWithUser } from '../types';
+import { CommentDeleteButton } from './comment-delete-button';
 
 type CommentItemProps = {
   comment: CommentWithUser & { isOwner: boolean };
@@ -28,7 +22,7 @@ const CommentItem = ({
             {comment.user?.username ?? 'Deleted User'}
           </p>
           <p className="text-sm text-muted-foreground">
-            {format(comment.createdAt, 'yyyy-MM-dd, HH:mm:ss')}
+            {format(comment.createdAt, 'yyyy-MM-dd, HH:mm')}
           </p>
         </div>
         <p className="whitespace-pre-line">{comment.content}</p>
