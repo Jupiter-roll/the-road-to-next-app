@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { Spinner } from '@/components/spinner';
 import {
   Card,
   CardHeader,
@@ -30,7 +29,6 @@ const Comments = ({
   const [hasNextPage, setHasNextPage] = useState(initialHasNextPage);
 
   const { ref, inView } = useInView();
-  const [isPending, startTransition] = useTransition();
   const isFetching = useRef(false);
 
   useEffect(() => {
@@ -54,9 +52,7 @@ const Comments = ({
       isFetching.current = false;
     };
 
-    startTransition(() => {
-      handleMore();
-    });
+    handleMore();
   }, [inView, comments, hasNextPage, ticketId]);
 
   const handleRemoveComment = (id: string) => {
@@ -99,9 +95,7 @@ const Comments = ({
         ))}
       </div>
 
-      <div className="flex flex-col justify-center" ref={ref}>
-        {isPending && <Spinner />}
-      </div>
+      <div className="flex flex-col justify-center" ref={ref} />
     </>
   );
 };
