@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
+
 import { buttonVariants } from '@/components/ui/button';
-import { NavItem } from '../types';
+import { cn } from '@/lib/utils';
+
 import { closedClassName } from '../constants';
+import { NavItem } from '../types';
 
 type SidebarItemProps = {
   isOpen: boolean;

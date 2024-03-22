@@ -1,10 +1,10 @@
 import { Button } from './ui/button';
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from './ui/select';
 
 type PageAndSize = {

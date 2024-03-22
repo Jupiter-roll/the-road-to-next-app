@@ -1,17 +1,18 @@
-import { Suspense } from 'react';
 import { SearchParams } from 'nuqs/server';
+import { Suspense } from 'react';
+
 import { Heading } from '@/components/heading';
-import { TicketList } from '@/features/ticket/components/ticket-list';
 import { Spinner } from '@/components/spinner';
-import { TicketUpsertForm } from '@/features/ticket/components/ticket-upsert-form';
-import { getAuth } from '@/features/auth/queries/get-auth';
 import {
   Card,
-  CardHeader,
-  CardTitle,
   CardContent,
   CardDescription,
+  CardHeader,
+  CardTitle,
 } from '@/components/ui/card';
+import { getAuth } from '@/features/auth/queries/get-auth';
+import { TicketList } from '@/features/ticket/components/ticket-list';
+import { TicketUpsertForm } from '@/features/ticket/components/ticket-upsert-form';
 import { searchParamsCache } from '@/features/ticket/search-params';
 
 type TicketsPageProps = {

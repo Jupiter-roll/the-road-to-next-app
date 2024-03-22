@@ -1,7 +1,7 @@
 import {
   createSearchParamsCache,
-  parseAsString,
   parseAsInteger,
+  parseAsString,
 } from 'nuqs/server';
 
 export const searchParser = parseAsString

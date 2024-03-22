@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
-import { signInPath } from '@/paths';
+
 import { getAuth } from '@/features/auth/queries/get-auth';
+import { signInPath } from '@/paths';
 
 export default async function AuthenticatedLayout({
   children,

@@ -2,7 +2,8 @@
 
 import { useEffect } from 'react';
 import { toast } from 'sonner';
-import { getCookieByKey, deleteCookieByKey } from '@/actions/cookies';
+
+import { deleteCookieByKey,getCookieByKey } from '@/actions/cookies';
 
 const RedirectToast = () => {
   useEffect(() => {

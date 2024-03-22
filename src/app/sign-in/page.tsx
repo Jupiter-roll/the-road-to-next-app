@@ -1,4 +1,5 @@
 import Link from 'next/link';
+
 import {
   Card,
   CardContent,
@@ -8,7 +9,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { SignInForm } from '@/features/auth/components/sign-in-form';
-import { signUpPath, forgotPasswordPath } from '@/paths';
+import { passwordForgotPath, signUpPath } from '@/paths';
 
 const SignInPage = () => {
   return (
@@ -31,9 +32,9 @@ const SignInPage = () => {
 
           <Link
             className="text-sm text-muted-foreground"
-            href={forgotPasswordPath()}
+            href={passwordForgotPath()}
           >
-            Forgot Password
+            Forgot Password?
           </Link>
         </CardFooter>
       </Card>

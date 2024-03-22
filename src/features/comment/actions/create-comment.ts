@@ -1,15 +1,17 @@
 'use server';
 
-import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
-import { prisma } from '@/lib/prisma';
+import { z } from 'zod';
+
 import {
   FormState,
   fromErrorToFormState,
   toFormState,
 } from '@/components/form/utils/to-form-state';
-import { ticketPath } from '@/paths';
 import { getCurrentUserOrRedirect } from '@/features/auth/queries/get-current-user-or-redirect';
+import { prisma } from '@/lib/prisma';
+import { ticketPath } from '@/paths';
+
 import { CommentWithUser } from '../types';
 
 const createCommentSchema = z.object({

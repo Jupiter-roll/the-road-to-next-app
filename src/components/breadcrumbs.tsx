@@ -1,12 +1,13 @@
-import { Fragment } from 'react';
 import Link from 'next/link';
+import { Fragment } from 'react';
+
 import {
   Breadcrumb,
-  BreadcrumbList,
   BreadcrumbItem,
   BreadcrumbLink,
-  BreadcrumbSeparator,
+  BreadcrumbList,
   BreadcrumbPage,
+  BreadcrumbSeparator,
 } from './ui/breadcrumb';
 
 type BreadcrumbsProps = {

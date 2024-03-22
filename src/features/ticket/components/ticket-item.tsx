@@ -1,22 +1,24 @@
-import Link from 'next/link';
 import clsx from 'clsx';
-import {
-  Card,
-  CardTitle,
-  CardContent,
-  CardHeader,
-  CardFooter,
-} from '@/components/ui/card';
 import {
   ArrowUpRightFromSquareIcon,
   MoreVerticalIcon,
   PencilIcon,
 } from 'lucide-react';
+import Link from 'next/link';
+
 import { Button } from '@/components/ui/button';
-import { toCurrencyFromCent } from '@/utils/currency';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { ticketEditPath, ticketPath } from '@/paths';
-import { TicketWithUser } from '../types';
+import { toCurrencyFromCent } from '@/utils/currency';
+
 import { TICKET_ICONS } from '../constants';
+import { TicketWithUser } from '../types';
 import { TicketMoreMenu } from './ticket-more-menu';
 
 type TicketItemProps = {

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+
 import { Placeholder } from '@/components/placeholder';
 import { Button } from '@/components/ui/button';
 import { ticketsPath } from '@/paths';

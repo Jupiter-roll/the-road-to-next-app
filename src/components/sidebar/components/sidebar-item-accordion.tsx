@@ -1,14 +1,16 @@
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
 import { ChevronDownIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
 import {
   Accordion,
+  AccordionContent,
   AccordionItem,
   AccordionTrigger,
-  AccordionContent,
 } from '@/components/ui/accordion';
 import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
 import { closedClassName } from '../constants';
 import { NavItem } from '../types';
 

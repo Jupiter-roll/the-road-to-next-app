@@ -1,11 +1,13 @@
-import Link from 'next/link';
 import { KanbanIcon, LogOutIcon } from 'lucide-react';
-import { homePath, signInPath, signUpPath } from '@/paths';
+import Link from 'next/link';
+
 import { signOut } from '@/features/auth/actions/sign-out';
-import { buttonVariants } from './ui/button';
-import { ThemeSwitcher } from './theme/theme-switcher';
-import { SubmitButton } from './form/submit-button';
 import { getAuth } from '@/features/auth/queries/get-auth';
+import { homePath, signInPath, signUpPath } from '@/paths';
+
+import { SubmitButton } from './form/submit-button';
+import { ThemeSwitcher } from './theme/theme-switcher';
+import { buttonVariants } from './ui/button';
 
 const Header = async () => {
   const { user } = await getAuth();

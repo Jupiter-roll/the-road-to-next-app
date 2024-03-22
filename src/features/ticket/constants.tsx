@@ -1,8 +1,8 @@
 import { TicketStatus } from '@prisma/client';
 import {
+  CheckCircleIcon,
   FileTextIcon,
   PencilIcon,
-  CheckCircleIcon,
 } from 'lucide-react';
 
 export const TICKET_ICONS = {

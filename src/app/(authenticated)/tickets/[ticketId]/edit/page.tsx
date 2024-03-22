@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+
 import {
   Card,
   CardContent,
@@ -6,10 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { TicketUpsertForm } from '@/features/ticket/components/ticket-upsert-form';
-import { getTicket } from '@/features/ticket/queries/get-ticket';
 import { getAuth } from '@/features/auth/queries/get-auth';
 import { isOwner } from '@/features/auth/utils/is-owner';
+import { TicketUpsertForm } from '@/features/ticket/components/ticket-upsert-form';
+import { getTicket } from '@/features/ticket/queries/get-ticket';
 
 type TicketEditPageProps = {
   params: {

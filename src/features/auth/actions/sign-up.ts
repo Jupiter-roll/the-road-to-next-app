@@ -1,18 +1,19 @@
 'use server';
 
-import { z } from 'zod';
 import { Prisma } from '@prisma/client';
-import { prisma } from '@/lib/prisma';
+import { generateId } from 'lucia';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { Argon2id } from 'oslo/password';
+import { z } from 'zod';
+
 import {
   FormState,
   fromErrorToFormState,
   toFormState,
 } from '@/components/form/utils/to-form-state';
-import { Argon2id } from 'oslo/password';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { generateId } from 'lucia';
 import { lucia } from '@/lib/lucia';
+import { prisma } from '@/lib/prisma';
 import { ticketsPath } from '@/paths';
 
 const signUpSchema = z

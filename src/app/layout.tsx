@@ -1,10 +1,12 @@
-import type { Metadata } from 'next';
-import { Toaster } from 'sonner';
-import { Inter } from 'next/font/google';
-import { Header } from '@/components/header';
-import { ThemeProvider } from '@/components/theme/theme-provider';
-import { AuthenticatedSidebar } from '@/components/sidebar/components/authenticated-sidebar';
 import './globals.css';
+
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import { Toaster } from 'sonner';
+
+import { Header } from '@/components/header';
+import { AuthenticatedSidebar } from '@/components/sidebar/components/authenticated-sidebar';
+import { ThemeProvider } from '@/components/theme/theme-provider';
 
 const inter = Inter({ subsets: ['latin'] });
 

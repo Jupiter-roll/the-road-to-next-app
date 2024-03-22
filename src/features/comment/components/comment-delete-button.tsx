@@ -1,8 +1,10 @@
 'use client';
 
 import { Loader2Icon, TrashIcon } from 'lucide-react';
+
 import { useConfirmDialog } from '@/components/confirm-dialog';
 import { Button } from '@/components/ui/button';
+
 import { deleteComment } from '../actions/delete-comment';
 
 type CommentDeleteButtonProps = {

@@ -1,17 +1,19 @@
 import {
-  LibraryIcon,
   BookIcon,
-  UserIcon,
-  LockIcon,
   BookUserIcon,
+  LibraryIcon,
+  LockIcon,
+  UserIcon,
 } from 'lucide-react';
-import { NavItem } from './types';
+
 import {
-  passwordPath,
   homePath,
+  passwordPath,
   profilePath,
   ticketsPath,
 } from '@/paths';
+
+import { NavItem } from './types';
 
 export const navItems: NavItem[] = [
   {

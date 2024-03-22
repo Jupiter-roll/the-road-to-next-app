@@ -2,17 +2,19 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+
 import {
   Card,
+  CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
 } from '@/components/ui/card';
+
+import { getComments } from '../queries/get-comments';
 import { CommentWithUser } from '../types';
 import { CommentCreateForm } from './comment-create-form';
 import { CommentItem } from './comment-item';
-import { getComments } from '../queries/get-comments';
 
 type CommentsProps = {
   ticketId: string;

@@ -2,10 +2,10 @@
 
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from './ui/select';
 
 export type SortSelectOption = {
