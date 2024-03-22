@@ -1,5 +1,4 @@
 import { Placeholder } from '@/components/placeholder';
-
 import { getTickets } from '../queries/get-tickets';
 import { ParsedSearchParams } from '../search-params';
 import { TicketItem } from './ticket-item';

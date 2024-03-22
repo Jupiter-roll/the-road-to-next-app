@@ -3,7 +3,6 @@
 import { Loader2Icon } from 'lucide-react';
 import { cloneElement } from 'react';
 import { useFormStatus } from 'react-dom';
-
 import { Button } from '../ui/button';
 
 type SubmitButtonProps = {

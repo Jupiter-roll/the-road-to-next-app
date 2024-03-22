@@ -2,9 +2,7 @@
 
 import { ArrowLeftIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-
 import { cn } from '@/lib/utils';
-
 import { navItems } from '../constants';
 import { SidebarItem } from './sidebar-item';
 import { SidebarItemAccordion } from './sidebar-item-accordion';

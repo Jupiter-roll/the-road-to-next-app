@@ -1,5 +1,6 @@
 'use server';
 
+import { Argon2id } from 'oslo/password';
 import { z } from 'zod';
 import {
   FormState,
@@ -7,31 +8,40 @@ import {
   toFormState,
 } from '@/components/form/utils/to-form-state';
 import { prisma } from '@/lib/prisma';
+import { getCurrentUserOrRedirect } from '../queries/get-current-user-or-redirect';
 import { createPasswordResetLink } from '../services/password';
 
-const passwordForgotSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: 'Is required' })
-    .max(191)
-    .email(),
+const passwordChangeSchema = z.object({
+  password: z.string().min(6),
 });
 
-export const passwordForgot = async (
+export const passwordChange = async (
   _formState: FormState,
   formData: FormData
 ) => {
+  const authUser = await getCurrentUserOrRedirect();
+
   try {
-    const { email } = passwordForgotSchema.parse({
-      email: formData.get('email'),
+    const { password } = passwordChangeSchema.parse({
+      password: formData.get('password'),
     });
 
     const user = await prisma.user.findUnique({
-      where: { email },
+      where: { email: authUser.email },
     });
 
     if (!user) {
-      return toFormState('ERROR', 'Incorrect email');
+      // we should never reach this return statement
+      return toFormState('ERROR', 'Invalid request');
+    }
+
+    const validPassword = await new Argon2id().verify(
+      user.hashedPassword,
+      password
+    );
+
+    if (!validPassword) {
+      return toFormState('ERROR', 'Incorrect password');
     }
 
     const passwordResetLink = await createPasswordResetLink(user.id);

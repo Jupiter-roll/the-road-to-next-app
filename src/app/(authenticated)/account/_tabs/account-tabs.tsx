@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { passwordPath,profilePath } from '@/paths';
 

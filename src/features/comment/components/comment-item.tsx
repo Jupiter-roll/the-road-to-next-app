@@ -1,9 +1,7 @@
 'use client';
 
 import { format } from 'date-fns';
-
 import { Card } from '@/components/ui/card';
-
 import { CommentWithUser } from '../types';
 import { CommentDeleteButton } from './comment-delete-button';
 

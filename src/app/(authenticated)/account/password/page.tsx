@@ -1,6 +1,4 @@
-import { Link } from 'lucide-react';
 import { Heading } from '@/components/heading';
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -8,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { passwordForgotPath } from '@/paths';
+import { PasswordChangeForm } from '@/features/auth/components/password-change-form';
 import { AccountTabs } from '../_tabs/account-tabs';
 
 const PasswordPage = () => {
@@ -23,15 +21,13 @@ const PasswordPage = () => {
       <div className="flex-1 flex flex-col justify-center items-center">
         <Card className="w-[420px] animate-fade-in-from-top">
           <CardHeader>
-            <CardTitle>New Password</CardTitle>
+            <CardTitle>Change Password</CardTitle>
             <CardDescription>
-              Enter a new password for your account
+              Enter your current password
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {/* <Button asChild>
-              <Link href={passwordForgotPath()}>Change Password</Link>
-            </Button> */}
+            <PasswordChangeForm />
           </CardContent>
         </Card>
       </div>

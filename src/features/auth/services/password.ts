@@ -3,8 +3,10 @@ import { createDate, TimeSpan } from 'oslo';
 import { sha256 } from 'oslo/crypto';
 import { encodeHex } from 'oslo/encoding';
 import { prisma } from '@/lib/prisma';
+import { passwordResetPath } from '@/paths';
+import { getBaseUrl } from '@/utils/url';
 
-export const createPasswordResetToken = async (userId: string) => {
+export const createPasswordResetLink = async (userId: string) => {
   await prisma.resetToken.deleteMany({
     where: {
       userId,
@@ -24,5 +26,8 @@ export const createPasswordResetToken = async (userId: string) => {
     },
   });
 
-  return tokenId;
+  const pageUrl = getBaseUrl() + passwordResetPath();
+  const passwordResetLink = pageUrl + `/${tokenId}`;
+
+  return passwordResetLink;
 };

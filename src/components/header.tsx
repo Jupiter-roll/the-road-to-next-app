@@ -1,10 +1,8 @@
 import { KanbanIcon, LogOutIcon } from 'lucide-react';
 import Link from 'next/link';
-
 import { signOut } from '@/features/auth/actions/sign-out';
 import { getAuth } from '@/features/auth/queries/get-auth';
 import { homePath, signInPath, signUpPath } from '@/paths';
-
 import { SubmitButton } from './form/submit-button';
 import { ThemeSwitcher } from './theme/theme-switcher';
 import { buttonVariants } from './ui/button';

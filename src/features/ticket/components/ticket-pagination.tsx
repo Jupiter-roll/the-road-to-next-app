@@ -2,9 +2,7 @@
 
 import { useQueryState, useQueryStates } from 'nuqs';
 import { useEffect, useRef } from 'react';
-
 import { Pagination } from '@/components/pagination';
-
 import {
   paginationParser,
   pagionationOptions,

@@ -5,7 +5,6 @@ import {
   PencilIcon,
 } from 'lucide-react';
 import Link from 'next/link';
-
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -16,7 +15,6 @@ import {
 } from '@/components/ui/card';
 import { ticketEditPath, ticketPath } from '@/paths';
 import { toCurrencyFromCent } from '@/utils/currency';
-
 import { TICKET_ICONS } from '../constants';
 import { TicketWithUser } from '../types';
 import { TicketMoreMenu } from './ticket-more-menu';

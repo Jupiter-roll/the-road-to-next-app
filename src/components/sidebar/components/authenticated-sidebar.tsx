@@ -1,6 +1,5 @@
 import { getCookieByKey, setCookieByKey } from '@/actions/cookies';
 import { getAuth } from '@/features/auth/queries/get-auth';
-
 import { Sidebar } from './sidebar';
 
 const AuthenticatedSidebar = async () => {

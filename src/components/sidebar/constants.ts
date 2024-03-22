@@ -5,14 +5,12 @@ import {
   LockIcon,
   UserIcon,
 } from 'lucide-react';
-
 import {
   homePath,
   passwordPath,
   profilePath,
   ticketsPath,
 } from '@/paths';
-
 import { NavItem } from './types';
 
 export const navItems: NavItem[] = [

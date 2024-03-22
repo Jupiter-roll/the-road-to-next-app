@@ -6,7 +6,6 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Argon2id } from 'oslo/password';
 import { z } from 'zod';
-
 import {
   FormState,
   fromErrorToFormState,

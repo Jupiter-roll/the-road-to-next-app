@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-
 import {
   Card,
   CardContent,
@@ -10,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-
 import { getComments } from '../queries/get-comments';
 import { CommentWithUser } from '../types';
 import { CommentCreateForm } from './comment-create-form';

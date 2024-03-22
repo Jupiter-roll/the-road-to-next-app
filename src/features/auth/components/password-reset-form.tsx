@@ -31,13 +31,17 @@ const PasswordResetForm = ({
 
   return (
     <form action={action} ref={ref} className="flex flex-col gap-y-2">
-      <Input type="password" name="password" placeholder="Password" />
+      <Input
+        type="password"
+        name="password"
+        placeholder="New Password"
+      />
       <FieldError formState={formState} name="password" />
 
       <Input
         type="password"
         name="confirmPassword"
-        placeholder="Confirm Password"
+        placeholder="Confirm New Password"
       />
       <FieldError formState={formState} name="confirmPassword" />
 
