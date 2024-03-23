@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { PasswordResetForm } from '@/features/auth/components/password-reset-form';
+import { PasswordResetForm } from '@/features/password/components/password-reset-form';
 
 type PasswordResetPage = {
   params: {

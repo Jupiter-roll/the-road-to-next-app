@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { PasswordChangeForm } from '@/features/auth/components/password-change-form';
+import { PasswordChangeForm } from '@/features/password/components/password-change-form';
 import { AccountTabs } from '../_tabs/account-tabs';
 
 const PasswordPage = () => {

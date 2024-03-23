@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { PasswordForgotForm } from '@/features/auth/components/password-forgot-form';
+import { PasswordForgotForm } from '@/features/password/components/password-forgot-form';
 
 const PasswordForgotPage = () => {
   return (
