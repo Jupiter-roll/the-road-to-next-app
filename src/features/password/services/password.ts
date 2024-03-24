@@ -7,7 +7,7 @@ import { passwordResetPath } from '@/paths';
 import { getBaseUrl } from '@/utils/url';
 
 export const createPasswordResetLink = async (userId: string) => {
-  await prisma.resetToken.deleteMany({
+  await prisma.passwordResetToken.deleteMany({
     where: {
       userId,
     },
@@ -18,7 +18,7 @@ export const createPasswordResetLink = async (userId: string) => {
     await sha256(new TextEncoder().encode(tokenId))
   );
 
-  await prisma.resetToken.create({
+  await prisma.passwordResetToken.create({
     data: {
       tokenHash,
       userId,

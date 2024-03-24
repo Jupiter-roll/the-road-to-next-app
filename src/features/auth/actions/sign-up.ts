@@ -11,9 +11,11 @@ import {
   fromErrorToFormState,
   toFormState,
 } from '@/components/form/utils/to-form-state';
+import { inngest } from '@/lib/inngest';
 import { lucia } from '@/lib/lucia';
 import { prisma } from '@/lib/prisma';
 import { ticketsPath } from '@/paths';
+import { generateEmailVerificationCode } from '../services/email-verification';
 
 const signUpSchema = z
   .object({
@@ -58,12 +60,27 @@ export const signUp = async (
     const hashedPassword = await new Argon2id().hash(password);
     const userId = generateId(15);
 
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         id: userId,
         username,
         email,
         hashedPassword,
+        emailVerified: false,
+      },
+    });
+
+    const verificationCode = await generateEmailVerificationCode(
+      userId,
+      email
+    );
+
+    await inngest.send({
+      name: 'app/auth.email-verification',
+      data: {
+        username: user.username,
+        email: user.email,
+        verificationCode,
       },
     });
 

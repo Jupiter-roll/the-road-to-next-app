@@ -13,13 +13,6 @@ const SignUpForm = () => {
   const [formState, action] = useFormState(signUp, EMPTY_FORM_STATE);
 
   const { ref } = useFormFeedback(formState, {
-    onSuccess: ({ formState, reset }) => {
-      if (formState.message) {
-        toast.success(formState.message);
-      }
-
-      reset();
-    },
     onError: ({ formState }) => {
       if (formState.message) {
         toast.error(formState.message);

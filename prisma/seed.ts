@@ -36,7 +36,7 @@ const users = [
   {
     username: 'user',
     // use your own email here
-    email: 'user@user.com',
+    email: 'daniel.drehmann@gmail.com',
   },
 ];
 

@@ -46,14 +46,14 @@ export const passwordReset = async (
       await sha256(new TextEncoder().encode(verificationToken))
     );
 
-    const token = await prisma.resetToken.findUnique({
+    const token = await prisma.passwordResetToken.findUnique({
       where: {
         tokenHash,
       },
     });
 
     if (token) {
-      await prisma.resetToken.delete({
+      await prisma.passwordResetToken.delete({
         where: {
           tokenHash,
         },

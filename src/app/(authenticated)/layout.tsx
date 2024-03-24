@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getAuth } from '@/features/auth/queries/get-auth';
-import { signInPath } from '@/paths';
+import { emailVerificationPath, signInPath } from '@/paths';
 
 export default async function AuthenticatedLayout({
   children,
@@ -11,6 +11,10 @@ export default async function AuthenticatedLayout({
 
   if (!user) {
     redirect(signInPath());
+  }
+
+  if (user && !user.emailVerified) {
+    redirect(emailVerificationPath());
   }
 
   return <>{children}</>;

@@ -7,10 +7,13 @@ import { useFormFeedback } from '@/components/form/hooks/use-form-feedback';
 import { SubmitButton } from '@/components/form/submit-button';
 import { EMPTY_FORM_STATE } from '@/components/form/utils/to-form-state';
 import { Input } from '@/components/ui/input';
-import { signIn } from '../actions/sign-in';
+import { verifyEmail } from '../actions/verify-email';
 
-const SignInForm = () => {
-  const [formState, action] = useFormState(signIn, EMPTY_FORM_STATE);
+const EmailVerificationForm = () => {
+  const [formState, action] = useFormState(
+    verifyEmail,
+    EMPTY_FORM_STATE
+  );
 
   const { ref } = useFormFeedback(formState, {
     onError: ({ formState }) => {
@@ -22,15 +25,12 @@ const SignInForm = () => {
 
   return (
     <form action={action} ref={ref} className="flex flex-col gap-y-2">
-      <Input name="email" placeholder="Email" />
-      <FieldError formState={formState} name="email" />
+      <Input type="code" name="code" placeholder="Code" />
+      <FieldError formState={formState} name="code" />
 
-      <Input type="password" name="password" placeholder="Password" />
-      <FieldError formState={formState} name="password" />
-
-      <SubmitButton label="Sign In" />
+      <SubmitButton label="Verify" />
     </form>
   );
 };
 
-export { SignInForm };
+export { EmailVerificationForm };
