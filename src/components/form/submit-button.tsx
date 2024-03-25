@@ -8,13 +8,24 @@ import { Button } from '../ui/button';
 type SubmitButtonProps = {
   label: string;
   suffixIcon?: React.ReactElement;
+  variant?:
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | 'link';
 };
 
-const SubmitButton = ({ label, suffixIcon }: SubmitButtonProps) => {
+const SubmitButton = ({
+  label,
+  suffixIcon,
+  variant = 'default',
+}: SubmitButtonProps) => {
   const { pending } = useFormStatus();
 
   return (
-    <Button disabled={pending} type="submit">
+    <Button disabled={pending} type="submit" variant={variant}>
       {pending && (
         <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
       )}

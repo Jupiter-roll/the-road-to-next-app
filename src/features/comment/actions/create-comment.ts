@@ -7,7 +7,7 @@ import {
   fromErrorToFormState,
   toFormState,
 } from '@/components/form/utils/to-form-state';
-import { getCurrentUserOrRedirect } from '@/features/auth/queries/get-current-user-or-redirect';
+import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-auth-or-redirect';
 import { prisma } from '@/lib/prisma';
 import { ticketPath } from '@/paths';
 import { CommentWithUser } from '../types';
@@ -21,7 +21,7 @@ export const createComment = async (
   _formState: FormState,
   formData: FormData
 ) => {
-  const user = await getCurrentUserOrRedirect();
+  const { user } = await getCurrentAuthOrRedirect();
 
   let comment;
 

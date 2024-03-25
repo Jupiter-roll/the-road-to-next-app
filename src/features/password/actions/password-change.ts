@@ -7,7 +7,7 @@ import {
   fromErrorToFormState,
   toFormState,
 } from '@/components/form/utils/to-form-state';
-import { getCurrentUserOrRedirect } from '@/features/auth/queries/get-current-user-or-redirect';
+import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-auth-or-redirect';
 import { inngest } from '@/lib/inngest';
 import { prisma } from '@/lib/prisma';
 import { createPasswordResetLink } from '../../password/services/password';
@@ -20,7 +20,7 @@ export const passwordChange = async (
   _formState: FormState,
   formData: FormData
 ) => {
-  const authUser = await getCurrentUserOrRedirect();
+  const auth = await getCurrentAuthOrRedirect();
 
   try {
     const { password } = passwordChangeSchema.parse({
@@ -28,7 +28,7 @@ export const passwordChange = async (
     });
 
     const user = await prisma.user.findUnique({
-      where: { email: authUser.email },
+      where: { email: auth.user.email },
     });
 
     if (!user) {

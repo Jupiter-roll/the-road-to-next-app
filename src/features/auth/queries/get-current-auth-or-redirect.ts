@@ -2,12 +2,12 @@ import { redirect } from 'next/navigation';
 import { signInPath } from '@/paths';
 import { getAuth } from './get-auth';
 
-export const getCurrentUserOrRedirect = async () => {
-  const { user } = await getAuth();
+export const getCurrentAuthOrRedirect = async () => {
+  const auth = await getAuth();
 
-  if (!user) {
+  if (!auth.user) {
     redirect(signInPath());
   }
 
-  return user;
+  return auth;
 };

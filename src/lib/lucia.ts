@@ -12,6 +12,7 @@ export const lucia = new Lucia(adapter, {
     },
   },
   getUserAttributes: (attributes) => ({
+    username: attributes.email,
     email: attributes.email,
     emailVerified: attributes.emailVerified,
   }),
@@ -21,6 +22,7 @@ declare module 'lucia' {
   interface Register {
     Lucia: typeof lucia;
     DatabaseUserAttributes: {
+      username: string;
       email: string;
       emailVerified: boolean;
     };

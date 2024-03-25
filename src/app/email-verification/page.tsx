@@ -2,10 +2,12 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import { EmailVerificationForm } from '@/features/auth/components/email-verification-form';
+import { EmailVerificationResendForm } from '@/features/auth/components/email-verification-resend-form';
 
 const EmailVerificationPage = () => {
   return (
@@ -20,6 +22,9 @@ const EmailVerificationPage = () => {
         <CardContent>
           <EmailVerificationForm />
         </CardContent>
+        <CardFooter className="flex justify-center">
+          <EmailVerificationResendForm />
+        </CardFooter>
       </Card>
     </div>
   );

@@ -1,3 +1,4 @@
+import { differenceInSeconds } from 'date-fns';
 import { User } from 'lucia';
 import { createDate, isWithinExpirationDate, TimeSpan } from 'oslo';
 import { alphabet, generateRandomString } from 'oslo/crypto';
@@ -56,4 +57,23 @@ export const verifyVerificationCode = async (
   }
 
   return true;
+};
+
+export const canResendVerificationEmail = async (userId: string) => {
+  const databaseCode = await prisma.emailVerificationToken.findFirst({
+    where: {
+      userId,
+    },
+  });
+
+  if (!databaseCode) {
+    return true;
+  }
+
+  const diff = differenceInSeconds(
+    new Date(),
+    new Date(databaseCode.createdAt)
+  );
+
+  return diff > 60;
 };

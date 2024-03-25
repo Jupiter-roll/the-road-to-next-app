@@ -11,7 +11,7 @@ import {
 import { lucia } from '@/lib/lucia';
 import { prisma } from '@/lib/prisma';
 import { ticketsPath } from '@/paths';
-import { getCurrentUserOrRedirect } from '../queries/get-current-user-or-redirect';
+import { getCurrentAuthOrRedirect } from '../queries/get-current-auth-or-redirect';
 import { verifyVerificationCode } from '../services/email-verification';
 
 const verifyEmailSchema = z.object({
@@ -22,7 +22,7 @@ export const verifyEmail = async (
   _formState: FormState,
   formData: FormData
 ) => {
-  const user = await getCurrentUserOrRedirect();
+  const { user } = await getCurrentAuthOrRedirect();
 
   try {
     const { code } = verifyEmailSchema.parse({
@@ -31,16 +31,29 @@ export const verifyEmail = async (
 
     const validCode = await verifyVerificationCode(user, code);
     if (!validCode) {
-      return toFormState(
-        'ERROR',
-        'Invalid or expired code. Try again or request a new one.'
-      );
+      return toFormState('ERROR', 'Invalid or expired code');
     }
 
     await lucia.invalidateUserSessions(user.id);
     await prisma.user.update({
       where: { id: user.id },
       data: { emailVerified: true },
+    });
+
+    await prisma.organization.create({
+      data: {
+        name: user.username,
+        memberships: {
+          create: {
+            membershipRole: 'ADMIN',
+            user: {
+              connect: {
+                id: user.id,
+              },
+            },
+          },
+        },
+      },
     });
 
     const session = await lucia.createSession(user.id, {});

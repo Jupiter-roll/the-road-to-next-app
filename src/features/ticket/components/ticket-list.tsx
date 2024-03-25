@@ -44,7 +44,7 @@ const TicketList = async ({
 
       {tickets.length === 0 && (
         <div className="w-[420px] h-[166px] flex flex-col justify-center">
-          <Placeholder label="No tickets found" />
+          <Placeholder label="No tickets" />
         </div>
       )}
 

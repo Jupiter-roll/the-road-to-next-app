@@ -5,12 +5,12 @@ import {
   fromErrorToFormState,
   toFormState,
 } from '@/components/form/utils/to-form-state';
-import { getCurrentUserOrRedirect } from '@/features/auth/queries/get-current-user-or-redirect';
+import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-auth-or-redirect';
 import { prisma } from '@/lib/prisma';
 import { ticketPath } from '@/paths';
 
 export const deleteComment = async (id: string) => {
-  const user = await getCurrentUserOrRedirect();
+  const { user } = await getCurrentAuthOrRedirect();
 
   try {
     await prisma.comment.delete({

@@ -53,16 +53,37 @@ const seed = async () => {
   await prisma.comment.deleteMany();
   await prisma.ticket.deleteMany();
   await prisma.user.deleteMany();
+  await prisma.organization.deleteMany();
 
   const dbUsers = await Promise.all(
     users.map(async (user) => {
       const hashedPassword = await new Argon2id().hash('geheimnis');
 
+      const memberships = {
+        create: {
+          membershipRole: 'ADMIN' as const,
+          organization: {
+            create: {
+              name: user.username,
+            },
+          },
+        },
+      };
+
       return prisma.user.create({
         data: {
           ...user,
+          emailVerified: true,
           id: generateId(15),
           hashedPassword,
+          memberships,
+        },
+        include: {
+          memberships: {
+            include: {
+              organization: true,
+            },
+          },
         },
       });
     })
@@ -75,6 +96,7 @@ const seed = async () => {
         data: {
           ...ticket,
           userId: dbUsers[0].id,
+          // organizationId: dbUsers[0].memberships[0].organization.id,
           comments: {
             create: comments.map((comment) => ({
               ...comment,
