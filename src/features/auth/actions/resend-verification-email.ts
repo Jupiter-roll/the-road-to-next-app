@@ -12,7 +12,11 @@ import {
 } from '../services/email-verification';
 
 export const resendVerificationEmail = async () => {
-  const { user } = await getCurrentAuthOrRedirect();
+  const { user } = await getCurrentAuthOrRedirect({
+    checkEmailVerified: false,
+    checkOrganization: false,
+    checkActiveOrganization: false,
+  });
 
   try {
     const canResend = await canResendVerificationEmail(user.id);
@@ -40,5 +44,5 @@ export const resendVerificationEmail = async () => {
     return fromErrorToFormState(error);
   }
 
-  return toFormState('SUCCESS', 'Verification email has been sent.');
+  return toFormState('SUCCESS', 'Verification email has been sent');
 };

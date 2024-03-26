@@ -10,6 +10,7 @@ export const getAuth = cache(async () => {
     return {
       user: null,
       session: null,
+      organizations: [],
     };
   }
 
@@ -38,21 +39,20 @@ export const getAuth = cache(async () => {
 
   // organization
 
-  let organizationId = cookies().get('organizationId')?.value ?? null;
+  const organizations = result.user
+    ? await prisma.organization.findMany({
+        where: {
+          memberships: {
+            some: {
+              userId: result.user.id,
+            },
+          },
+        },
+        include: {
+          memberships: true,
+        },
+      })
+    : [];
 
-  if (result.user && !organizationId) {
-    const memberships = await prisma.membership.findMany({
-      where: {
-        userId: result.user.id,
-      },
-    });
-
-    if (memberships.length > 0) {
-      organizationId = memberships[0].organizationId;
-    } else {
-      throw new Error('User has no organization');
-    }
-  }
-
-  return { ...result, currentOrganizationId: organizationId };
+  return { ...result, organizations };
 });

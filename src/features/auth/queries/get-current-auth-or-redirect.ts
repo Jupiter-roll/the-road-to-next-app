@@ -1,13 +1,52 @@
+import { Organization } from '@prisma/client';
+import { Session, User } from 'lucia';
 import { redirect } from 'next/navigation';
-import { signInPath } from '@/paths';
+import {
+  emailVerificationPath,
+  onboardingPath,
+  selectActiveOrganizationPath,
+  signInPath,
+} from '@/paths';
 import { getAuth } from './get-auth';
 
-export const getCurrentAuthOrRedirect = async () => {
+type GetCurrentAuthOrRedirectOptions = {
+  checkUser?: boolean;
+  checkEmailVerified?: boolean;
+  checkOrganization?: boolean;
+  checkActiveOrganization?: boolean;
+};
+
+export const getCurrentAuthOrRedirect = async (
+  options?: GetCurrentAuthOrRedirectOptions
+) => {
+  const {
+    checkUser = true,
+    checkEmailVerified = true,
+    checkOrganization = true,
+    checkActiveOrganization = true,
+  } = options ?? {};
+
   const auth = await getAuth();
 
-  if (!auth.user) {
+  if (checkUser && !auth.user) {
     redirect(signInPath());
   }
 
-  return auth;
+  if (checkEmailVerified && !auth.user?.emailVerified) {
+    redirect(emailVerificationPath());
+  }
+
+  if (checkOrganization && !auth.organizations.length) {
+    redirect(onboardingPath());
+  }
+
+  if (checkActiveOrganization && !auth.user?.activeOrganizationId) {
+    redirect(selectActiveOrganizationPath());
+  }
+
+  return auth as {
+    user: User;
+    session: Session;
+    organizations: Organization[];
+  };
 };

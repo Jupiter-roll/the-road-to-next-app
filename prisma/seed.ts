@@ -4,7 +4,7 @@ import { Argon2id } from 'oslo/password';
 
 const prisma = new PrismaClient();
 
-const initialTickets = [
+const tickets = [
   {
     title: 'Ticket 1',
     content: 'First ticket from DB.',
@@ -54,59 +54,57 @@ const seed = async () => {
   await prisma.ticket.deleteMany();
   await prisma.user.deleteMany();
   await prisma.organization.deleteMany();
+  await prisma.membership.deleteMany();
 
   const dbUsers = await Promise.all(
-    users.map(async (user) => {
+    users.map(async (user, index) => {
       const hashedPassword = await new Argon2id().hash('geheimnis');
-
-      const memberships = {
-        create: {
-          membershipRole: 'ADMIN' as const,
-          organization: {
-            create: {
-              name: user.username,
-            },
-          },
-        },
-      };
 
       return prisma.user.create({
         data: {
           ...user,
-          emailVerified: true,
+          emailVerified: index === 0,
           id: generateId(15),
           hashedPassword,
-          memberships,
-        },
-        include: {
-          memberships: {
-            include: {
-              organization: true,
-            },
-          },
         },
       });
     })
   );
 
-  // https://github.com/prisma/prisma/issues/5455
-  await Promise.all(
-    initialTickets.map(async (ticket) => {
+  const dbOrganization = await prisma.organization.create({
+    data: {
+      name: dbUsers[0].username,
+    },
+  });
+
+  await prisma.membership.create({
+    data: {
+      userId: dbUsers[0].id,
+      organizationId: dbOrganization.id,
+      membershipRole: 'ADMIN' as const,
+    },
+  });
+
+  // https://github.com/prisma/prisma/issues/8131
+  const dbTickets = await Promise.all(
+    tickets.map(async (ticket) => {
       return prisma.ticket.create({
         data: {
           ...ticket,
           userId: dbUsers[0].id,
-          // organizationId: dbUsers[0].memberships[0].organization.id,
-          comments: {
-            create: comments.map((comment) => ({
-              ...comment,
-              userId: dbUsers[0].id,
-            })),
-          },
+          // organizationId: dbOrganization.id,
         },
       });
     })
   );
+
+  await prisma.comment.createMany({
+    data: comments.map((comment) => ({
+      ...comment,
+      ticketId: dbTickets[0].id,
+      userId: dbUsers[1].id,
+    })),
+  });
 
   const t1 = performance.now();
   console.log(`Seed: Finished (${t1 - t0}ms)`);

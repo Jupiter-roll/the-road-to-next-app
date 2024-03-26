@@ -22,7 +22,11 @@ export const verifyEmail = async (
   _formState: FormState,
   formData: FormData
 ) => {
-  const { user } = await getCurrentAuthOrRedirect();
+  const { user } = await getCurrentAuthOrRedirect({
+    checkEmailVerified: false,
+    checkOrganization: false,
+    checkActiveOrganization: false,
+  });
 
   try {
     const { code } = verifyEmailSchema.parse({
@@ -38,22 +42,6 @@ export const verifyEmail = async (
     await prisma.user.update({
       where: { id: user.id },
       data: { emailVerified: true },
-    });
-
-    await prisma.organization.create({
-      data: {
-        name: user.username,
-        memberships: {
-          create: {
-            membershipRole: 'ADMIN',
-            user: {
-              connect: {
-                id: user.id,
-              },
-            },
-          },
-        },
-      },
     });
 
     const session = await lucia.createSession(user.id, {});

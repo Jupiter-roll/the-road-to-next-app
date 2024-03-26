@@ -4,9 +4,11 @@ import {
   LibraryIcon,
   LockIcon,
   UserIcon,
+  UsersIcon,
 } from 'lucide-react';
 import {
   homePath,
+  organizationsPath,
   passwordPath,
   profilePath,
   ticketsPath,
@@ -45,6 +47,12 @@ export const navItems: NavItem[] = [
         href: passwordPath(),
       },
     ],
+  },
+  {
+    title: 'Organization',
+    icon: UsersIcon,
+    href: organizationsPath(),
+    color: 'text-red-500',
   },
 ];
 

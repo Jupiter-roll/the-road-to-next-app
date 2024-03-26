@@ -4,12 +4,18 @@ export const signUpPath = () => '/sign-up';
 export const signInPath = () => '/sign-in';
 
 export const emailVerificationPath = () => '/email-verification';
+export const onboardingPath = () => '/onboarding';
+export const selectActiveOrganizationPath = () =>
+  '/onboarding/select-active-organization';
 
 export const passwordForgotPath = () => '/password-forgot';
 export const passwordResetPath = () => '/password-reset';
 
 export const profilePath = () => '/account/profile';
 export const passwordPath = () => '/account/password';
+
+export const organizationsPath = () => '/organization';
+export const organizationCreatePath = () => '/organization/create';
 
 export const ticketsPath = () => '/tickets';
 
