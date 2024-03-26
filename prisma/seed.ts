@@ -92,7 +92,7 @@ const seed = async () => {
         data: {
           ...ticket,
           userId: dbUsers[0].id,
-          // organizationId: dbOrganization.id,
+          organizationId: dbOrganization.id,
         },
       });
     })

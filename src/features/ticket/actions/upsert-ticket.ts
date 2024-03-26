@@ -25,7 +25,7 @@ export const upsertTicket = async (
   _formState: { message: string },
   formData: FormData
 ) => {
-  const { user } = await getCurrentAuthOrRedirect();
+  const { user } = await getCurrentAuthOrRedirect(); // reference #1
 
   try {
     if (id) {
@@ -55,7 +55,10 @@ export const upsertTicket = async (
         id: id || '',
       },
       update: dbData,
-      create: dbData,
+      create: {
+        ...dbData,
+        organizationId: user.activeOrganizationId!, // careful #1
+      },
     });
   } catch (error) {
     return fromErrorToFormState(error);

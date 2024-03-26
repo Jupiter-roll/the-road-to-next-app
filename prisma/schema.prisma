@@ -21,7 +21,7 @@ model Organization {
   name        String
   memberships Membership[]
   activeUsers User[]
-  // tickets     Ticket[]
+  tickets     Ticket[]
 }
 
 model Membership {
@@ -92,21 +92,21 @@ model EmailVerificationToken {
 }
 
 model Ticket {
-  id        String       @id @default(cuid())
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-  title     String
-  content   String       @db.VarChar(1024)
-  status    TicketStatus @default(OPEN)
-  deadline  String
-  bounty    Int
-  user      User         @relation(fields: [userId], references: [id])
-  userId    String
-  comments  Comment[]
-  // organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  // organizationId String
+  id             String       @id @default(cuid())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  title          String
+  content        String       @db.VarChar(1024)
+  status         TicketStatus @default(OPEN)
+  deadline       String
+  bounty         Int
+  user           User         @relation(fields: [userId], references: [id])
+  userId         String
+  comments       Comment[]
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
 
-  // @@index([organizationId])
+  @@index([organizationId])
   @@index([userId])
 }
 
