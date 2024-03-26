@@ -5,6 +5,7 @@ import { ParsedSearchParams } from '../search-params';
 
 export const getTickets = async (
   userId: string | undefined,
+  byOrganization: boolean,
   searchParams: ParsedSearchParams
 ) => {
   const { user } = await getAuth();
@@ -14,6 +15,11 @@ export const getTickets = async (
     title: {
       contains: searchParams.search,
     },
+    ...(byOrganization && user?.activeOrganizationId
+      ? {
+          organizationId: user.activeOrganizationId,
+        }
+      : {}),
   };
 
   const skip = searchParams.size * searchParams.page;

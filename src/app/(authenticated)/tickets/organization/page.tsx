@@ -9,20 +9,25 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { getAuth } from '@/features/auth/queries/get-auth';
 import { TicketList } from '@/features/ticket/components/ticket-list';
 import { TicketUpsertForm } from '@/features/ticket/components/ticket-upsert-form';
 import { searchParamsCache } from '@/features/ticket/search-params';
 
-type TicketsPageProps = {
+type TicketsByOrganizationPageProps = {
   searchParams: SearchParams;
 };
 
-const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
+const TicketsByOrganizationPage = async ({
+  searchParams,
+}: TicketsByOrganizationPageProps) => {
+  const { user } = await getAuth();
+
   return (
     <div className="flex flex-col flex-1 gap-y-8">
       <Heading
-        title="My Tickets"
-        description="All your tickets at one place"
+        title="Our Tickets"
+        description="All tickets related to my organization"
       />
 
       <div className="mx-auto w-[420px]">
@@ -42,7 +47,7 @@ const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
       <Suspense fallback={<Spinner />}>
         <div className="mx-auto animate-fade-in-from-top">
           <TicketList
-            byOrganization
+            userId={user?.id}
             searchParams={searchParamsCache.parse(searchParams)}
           />
         </div>
@@ -51,4 +56,4 @@ const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
   );
 };
 
-export default TicketsPage;
+export default TicketsByOrganizationPage;

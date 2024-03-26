@@ -1,4 +1,5 @@
 import {
+  BookCopyIcon,
   BookIcon,
   BookUserIcon,
   LibraryIcon,
@@ -11,6 +12,7 @@ import {
   organizationsPath,
   passwordPath,
   profilePath,
+  ticketsByOrganizationPath,
   ticketsPath,
 } from '@/paths';
 import { NavItem } from './types';
@@ -20,6 +22,12 @@ export const navItems: NavItem[] = [
     title: 'All Tickets',
     icon: LibraryIcon,
     href: homePath(),
+    color: 'text-sky-500',
+  },
+  {
+    title: 'Our Tickets',
+    icon: BookCopyIcon,
+    href: ticketsByOrganizationPath(),
     color: 'text-sky-500',
   },
   {
