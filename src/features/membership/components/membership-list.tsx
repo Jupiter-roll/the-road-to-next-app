@@ -1,4 +1,5 @@
-import { BanIcon, CheckIcon } from 'lucide-react';
+import { BanIcon, CheckIcon, TrashIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -25,7 +26,13 @@ const MembershipList = async () => {
       </TableHeader>
       <TableBody>
         {memberships.map((membership) => {
-          const buttons = <></>; // TODO
+          const deleteButton = (
+            <Button variant="outline" size="icon">
+              <TrashIcon className="w-4 h-4" />
+            </Button>
+          );
+
+          const buttons = <>{deleteButton}</>;
 
           return (
             <TableRow key={membership.userId}>

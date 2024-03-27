@@ -4,19 +4,19 @@ import { useFormState } from 'react-dom';
 import { toast } from 'sonner';
 import { useFormFeedback } from '@/components/form/hooks/use-form-feedback';
 import { EMPTY_FORM_STATE } from '@/components/form/utils/to-form-state';
-import { switchToOrganization } from '../actions/switch-to-organization';
+import { switchOrganization } from '../actions/switch-organization';
 
-type SwitchToOrganizationButtonProps = {
+type OrganizationSwitchButtonProps = {
   organizationId: string;
   trigger: React.ReactElement;
 };
 
-const SwitchToOrganizationButton = ({
+const OrganizationSwitchButton = ({
   organizationId,
   trigger,
-}: SwitchToOrganizationButtonProps) => {
+}: OrganizationSwitchButtonProps) => {
   const [formState, formAction] = useFormState(
-    switchToOrganization.bind(0, organizationId),
+    switchOrganization.bind(0, organizationId),
     EMPTY_FORM_STATE
   );
 
@@ -40,4 +40,4 @@ const SwitchToOrganizationButton = ({
   );
 };
 
-export { SwitchToOrganizationButton };
+export { OrganizationSwitchButton };

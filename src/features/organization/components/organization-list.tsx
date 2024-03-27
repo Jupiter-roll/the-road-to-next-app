@@ -15,13 +15,12 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { getAuth } from '@/features/auth/queries/get-auth';
+import { MembershipDeleteButton } from '@/features/membership/components/membership-delete-button';
 import { membershipsPath } from '@/paths';
-import { getOrganizations } from '../queries/get-organizations';
-import { SwitchToOrganizationButton } from './switch-to-organization-button';
+import { OrganizationSwitchButton } from './organization-switch-button';
 
 const OrganizationList = async () => {
-  const { user } = await getAuth();
-  const organizations = await getOrganizations();
+  const { user, organizations } = await getAuth();
 
   return (
     <Table>
@@ -37,8 +36,8 @@ const OrganizationList = async () => {
           const isActiveOrganization =
             user?.activeOrganizationId === organization.id;
 
-          const switchToOrganizationButton = (
-            <SwitchToOrganizationButton
+          const organizationSwitchIcon = (
+            <OrganizationSwitchButton
               organizationId={organization.id}
               trigger={
                 <Button
@@ -66,17 +65,29 @@ const OrganizationList = async () => {
             </Button>
           );
 
+          const membership = organization?.memberships.find(
+            (v) => v.userId === user?.id
+          );
+
+          const leaveButton = membership ? (
+            <MembershipDeleteButton
+              userId={membership?.userId}
+              organizationId={membership?.organizationId}
+            />
+          ) : null;
+
           const deleteButton = (
-            <Button variant="outline" size="icon">
+            <Button variant="destructive" size="icon">
               <TrashIcon className="w-4 h-4" />
             </Button>
           );
 
           const buttons = (
             <>
-              {switchToOrganizationButton}
+              {organizationSwitchIcon}
               {detailButton}
               {editButton}
+              {leaveButton}
               {deleteButton}
             </>
           );

@@ -9,9 +9,7 @@ import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-au
 import { prisma } from '@/lib/prisma';
 import { organizationsPath } from '@/paths';
 
-export const switchToOrganization = async (
-  organizationId: string
-) => {
+export const switchOrganization = async (organizationId: string) => {
   const { user } = await getCurrentAuthOrRedirect({
     checkActiveOrganization: false,
   });

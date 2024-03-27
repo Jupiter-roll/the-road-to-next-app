@@ -22,6 +22,16 @@ model Organization {
   memberships Membership[]
   activeUsers User[]
   tickets     Ticket[]
+  invitations Invitation[]
+}
+
+model Invitation {
+  tokenHash      String       @unique
+  email          String       @unique
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+
+  @@index([organizationId])
 }
 
 model Membership {

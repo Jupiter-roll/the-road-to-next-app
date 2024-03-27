@@ -1,7 +1,8 @@
 import { Suspense } from 'react';
 import { Heading } from '@/components/heading';
 import { Spinner } from '@/components/spinner';
-import { MembershipList } from '@/features/memberships/components/membership-list';
+import { InvitationCreateButton } from '@/features/invitation/components/invitation-create-button';
+import { MembershipList } from '@/features/membership/components/membership-list';
 
 const MembershipsPage = async () => {
   return (
@@ -9,6 +10,7 @@ const MembershipsPage = async () => {
       <Heading
         title="Memberships"
         description="Manage your members in your organization."
+        actions={<InvitationCreateButton />}
       />
 
       <Suspense fallback={<Spinner />}>

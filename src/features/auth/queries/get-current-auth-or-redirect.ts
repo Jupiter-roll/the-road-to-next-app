@@ -1,4 +1,4 @@
-import { Organization } from '@prisma/client';
+import { Membership, Organization } from '@prisma/client';
 import { Session, User } from 'lucia';
 import { redirect } from 'next/navigation';
 import {
@@ -47,6 +47,6 @@ export const getCurrentAuthOrRedirect = async (
   return auth as {
     user: User & { activeOrganizationId: string };
     session: Session;
-    organizations: Organization[];
+    organizations: (Organization & { memberships: Membership[] })[];
   };
 };
