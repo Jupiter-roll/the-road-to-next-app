@@ -45,7 +45,7 @@ export const getCurrentAuthOrRedirect = async (
   }
 
   return auth as {
-    user: User;
+    user: User & { activeOrganizationId: string };
     session: Session;
     organizations: Organization[];
   };
