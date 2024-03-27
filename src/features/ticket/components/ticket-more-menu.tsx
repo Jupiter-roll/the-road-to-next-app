@@ -74,9 +74,9 @@ const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" side="right">
-          {deleteButton}
-          <DropdownMenuSeparator />
           {ticketStatusRadioGroupItems}
+          <DropdownMenuSeparator />
+          {deleteButton}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

@@ -21,7 +21,7 @@ import { useFormFeedback } from './form/hooks/use-form-feedback';
 import { Button } from './ui/button';
 
 type useConfirmDialogArgs = {
-  action: () => Promise<FormState>;
+  action: () => Promise<FormState | undefined>;
   trigger:
     | React.ReactElement
     | ((isLoading: boolean) => React.ReactElement);
@@ -42,7 +42,7 @@ const useConfirmDialog = ({
 
   const toastRef = useRef<string | number | null>(null);
 
-  useFormFeedback(formState, {
+  useFormFeedback(formState ?? EMPTY_FORM_STATE, {
     onSuccess: ({ formState, reset }) => {
       if (formState.message) {
         toast.success(formState.message);
@@ -63,7 +63,6 @@ const useConfirmDialog = ({
     },
     onCleanup: () => {
       if (toastRef.current) {
-        console.log('asdasdasd');
         toast.dismiss(toastRef.current);
       }
     },

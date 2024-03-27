@@ -27,23 +27,30 @@ const DatePicker = ({
   imperativeHandleRef,
 }: DatePickerProps) => {
   const [date, setDate] = useState<Date | undefined>(
-    defaultValue ? new Date(defaultValue) : undefined
+    defaultValue ? new Date(defaultValue) : new Date()
   );
 
   useImperativeHandle(
     imperativeHandleRef,
     () => ({
       reset() {
-        setDate(undefined);
+        setDate(new Date());
       },
     }),
     []
   );
 
+  const [open, setOpen] = useState(false);
+
+  const handleSelect = (selectedDate: Date | undefined) => {
+    setDate(selectedDate);
+    setOpen(false);
+  };
+
   const formattedStringDate = date ? format(date, 'yyyy-MM-dd') : '';
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger id={id} className="w-full" asChild>
         <Button
           variant="outline"
@@ -62,7 +69,7 @@ const DatePicker = ({
         <Calendar
           mode="single"
           selected={date}
-          onSelect={setDate}
+          onSelect={handleSelect}
           initialFocus
         />
       </PopoverContent>
