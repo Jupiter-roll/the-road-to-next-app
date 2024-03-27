@@ -1,4 +1,4 @@
-import { useEffect,useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { FormState } from '@/components/form/utils/to-form-state';
 
 type OnArgs = {
@@ -10,6 +10,7 @@ type UseFormFeedbackOptions = {
   onSuccess?: (onArgs: OnArgs) => void;
   onError?: (onArgs: OnArgs) => void;
   onSettled?: (onArgs: OnArgs) => void;
+  onCleanup?: () => void;
 };
 
 const useFormFeedback = (
@@ -49,6 +50,10 @@ const useFormFeedback = (
 
       prevUpdate.current = formState.timestamp;
     }
+
+    return () => {
+      options?.onCleanup?.();
+    };
   }, [isUpdate, formState, options]);
 
   return { ref };

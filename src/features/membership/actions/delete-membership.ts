@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { setCookieByKey } from '@/actions/cookies';
 import { toFormState } from '@/components/form/utils/to-form-state';
 import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-auth-or-redirect';
 import { prisma } from '@/lib/prisma';
@@ -35,18 +36,18 @@ export const deleteMembership = async ({
 
     revalidatePath(organizationsPath());
 
-    return toFormState(
-      'SUCCESS',
+    setCookieByKey(
+      'toast',
       isMyself
         ? 'You have left the organization'
         : 'The membership has been deleted'
     );
+  } else {
+    return toFormState(
+      'ERROR',
+      isMyself
+        ? 'You can only delete your own membership'
+        : 'You can only delete memberships as an admin'
+    );
   }
-
-  return toFormState(
-    'ERROR',
-    isMyself
-      ? 'You can only delete your own membership'
-      : 'You can only delete memberships as an admin'
-  );
 };

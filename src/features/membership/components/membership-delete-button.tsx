@@ -1,6 +1,6 @@
 'use client';
 
-import { DoorClosedIcon, Loader2Icon } from 'lucide-react';
+import { Loader2Icon, LogOutIcon } from 'lucide-react';
 import { useConfirmDialog } from '@/components/confirm-dialog';
 import { Button } from '@/components/ui/button';
 import { deleteMembership } from '../actions/delete-membership';
@@ -28,7 +28,7 @@ const MembershipDeleteButton = ({
         </Button>
       ) : (
         <Button variant="destructive" size="icon">
-          <DoorClosedIcon className="w-4 h-4" />
+          <LogOutIcon className="w-4 h-4" />
         </Button>
       ),
   });

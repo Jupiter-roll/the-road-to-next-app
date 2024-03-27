@@ -65,14 +65,14 @@ const OrganizationList = async () => {
             </Button>
           );
 
-          const membership = organization?.memberships.find(
-            (v) => v.userId === user?.id
+          const membership = organization.memberships.find(
+            (membership) => membership.userId === user?.id
           );
 
           const leaveButton = membership ? (
             <MembershipDeleteButton
-              userId={membership?.userId}
-              organizationId={membership?.organizationId}
+              userId={membership.userId}
+              organizationId={membership.organizationId}
             />
           ) : null;
 

@@ -61,6 +61,12 @@ const useConfirmDialog = ({
         toast.dismiss(toastRef.current);
       }
     },
+    onCleanup: () => {
+      if (toastRef.current) {
+        console.log('asdasdasd');
+        toast.dismiss(toastRef.current);
+      }
+    },
   });
 
   const [isPending, startTransition] = useTransition();
