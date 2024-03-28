@@ -17,9 +17,20 @@ export const deleteMembership = async ({
   const { user, organizations: myOrganizations } =
     await getCurrentAuthOrRedirect();
 
-  const membership = myOrganizations
-    .find((v) => v.id === organizationId)
-    ?.memberships.find((v) => v.userId === user?.id);
+  const memberships = myOrganizations.find(
+    (organization) => organization.id === organizationId
+  )?.memberships;
+
+  const membership = memberships?.find(
+    (membership) => membership.userId === user?.id
+  );
+
+  if ((memberships ?? []).length <= 1) {
+    return toFormState(
+      'ERROR',
+      'You cannot delete the last membership of an organization'
+    );
+  }
 
   const isMyself = user.id === userId;
   const isAdmin = membership?.membershipRole === 'ADMIN';

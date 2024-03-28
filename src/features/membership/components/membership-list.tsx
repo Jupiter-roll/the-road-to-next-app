@@ -1,5 +1,4 @@
 import { BanIcon, CheckIcon, TrashIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -9,6 +8,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { getMemberships } from '../queries/get-memberships';
+import { MembershipDeleteButton } from './membership-delete-button';
 
 const MembershipList = async () => {
   const memberships = await getMemberships();
@@ -27,9 +27,10 @@ const MembershipList = async () => {
       <TableBody>
         {memberships.map((membership) => {
           const deleteButton = (
-            <Button variant="outline" size="icon">
-              <TrashIcon className="w-4 h-4" />
-            </Button>
+            <MembershipDeleteButton
+              userId={membership.userId}
+              organizationId={membership.organizationId}
+            />
           );
 
           const buttons = <>{deleteButton}</>;

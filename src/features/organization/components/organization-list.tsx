@@ -20,7 +20,7 @@ import { membershipsPath } from '@/paths';
 import { OrganizationSwitchButton } from './organization-switch-button';
 
 const OrganizationList = async () => {
-  const { user, organizations } = await getAuth();
+  const { user, organizations, activeRole } = await getAuth();
 
   return (
     <Table>
@@ -51,36 +51,39 @@ const OrganizationList = async () => {
             />
           );
 
-          const detailButton = (
-            <Button variant="outline" size="icon" asChild>
-              <Link href={membershipsPath(organization.id)}>
-                <ArrowUpRightFromSquareIcon className="w-4 h-4" />
-              </Link>
-            </Button>
-          );
-
-          const editButton = (
-            <Button variant="outline" size="icon">
-              <PenIcon className="w-4 h-4" />
-            </Button>
-          );
-
-          const membership = organization.memberships.find(
+          const myMembership = organization.memberships.find(
             (membership) => membership.userId === user?.id
           );
 
-          const leaveButton = membership ? (
+          const detailButton =
+            myMembership?.membershipRole === 'ADMIN' ? (
+              <Button variant="outline" size="icon" asChild>
+                <Link href={membershipsPath(organization.id)}>
+                  <ArrowUpRightFromSquareIcon className="w-4 h-4" />
+                </Link>
+              </Button>
+            ) : null;
+
+          const editButton =
+            myMembership?.membershipRole === 'ADMIN' ? (
+              <Button variant="outline" size="icon">
+                <PenIcon className="w-4 h-4" />
+              </Button>
+            ) : null;
+
+          const leaveButton = myMembership ? (
             <MembershipDeleteButton
-              userId={membership.userId}
-              organizationId={membership.organizationId}
+              userId={myMembership.userId}
+              organizationId={myMembership.organizationId}
             />
           ) : null;
 
-          const deleteButton = (
-            <Button variant="destructive" size="icon">
-              <TrashIcon className="w-4 h-4" />
-            </Button>
-          );
+          const deleteButton =
+            myMembership?.membershipRole === 'ADMIN' ? (
+              <Button variant="destructive" size="icon">
+                <TrashIcon className="w-4 h-4" />
+              </Button>
+            ) : null;
 
           const buttons = (
             <>

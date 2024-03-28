@@ -1,4 +1,8 @@
-import { Membership, Organization } from '@prisma/client';
+import {
+  Membership,
+  MembershipRole,
+  Organization,
+} from '@prisma/client';
 import { Session, User } from 'lucia';
 import { redirect } from 'next/navigation';
 import {
@@ -14,6 +18,7 @@ type GetCurrentAuthOrRedirectOptions = {
   checkEmailVerified?: boolean;
   checkOrganization?: boolean;
   checkActiveOrganization?: boolean;
+  checkAdmin?: boolean;
 };
 
 export const getCurrentAuthOrRedirect = async (
@@ -24,6 +29,7 @@ export const getCurrentAuthOrRedirect = async (
     checkEmailVerified = true,
     checkOrganization = true,
     checkActiveOrganization = true,
+    checkAdmin = false,
   } = options ?? {};
 
   const auth = await getAuth();
@@ -44,9 +50,14 @@ export const getCurrentAuthOrRedirect = async (
     redirect(selectActiveOrganizationPath());
   }
 
+  if (checkAdmin && auth.activeRole !== 'ADMIN') {
+    redirect(signInPath());
+  }
+
   return auth as {
     user: User & { activeOrganizationId: string };
     session: Session;
     organizations: (Organization & { memberships: Membership[] })[];
+    activeRole: MembershipRole | null;
   };
 };

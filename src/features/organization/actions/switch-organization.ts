@@ -29,5 +29,8 @@ export const switchOrganization = async (organizationId: string) => {
 
   revalidatePath(organizationsPath());
 
-  return toFormState('SUCCESS', 'Organization has been switched.');
+  return toFormState(
+    'SUCCESS',
+    'Active organization has been switched'
+  );
 };
