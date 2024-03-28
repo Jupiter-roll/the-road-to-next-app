@@ -25,7 +25,8 @@ export const deleteMembership = async ({
     (membership) => membership.userId === user?.id
   );
 
-  if ((memberships ?? []).length <= 1) {
+  const isLastMembership = (memberships ?? []).length <= 1;
+  if (isLastMembership) {
     return toFormState(
       'ERROR',
       'You cannot delete the last membership of an organization'

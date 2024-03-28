@@ -20,7 +20,7 @@ import { membershipsPath } from '@/paths';
 import { OrganizationSwitchButton } from './organization-switch-button';
 
 const OrganizationList = async () => {
-  const { user, organizations, activeRole } = await getAuth();
+  const { user, organizations } = await getAuth();
 
   return (
     <Table>
@@ -28,15 +28,20 @@ const OrganizationList = async () => {
         <TableRow>
           <TableHead>ID</TableHead>
           <TableHead>Name</TableHead>
+          <TableHead>Role</TableHead>
           <TableHead />
         </TableRow>
       </TableHeader>
       <TableBody>
         {organizations.map((organization) => {
+          const myMembership = organization.memberships.find(
+            (membership) => membership.userId === user?.id
+          );
+
           const isActiveOrganization =
             user?.activeOrganizationId === organization.id;
 
-          const organizationSwitchIcon = (
+          const organizationSwitchButton = (
             <OrganizationSwitchButton
               organizationId={organization.id}
               trigger={
@@ -49,10 +54,6 @@ const OrganizationList = async () => {
                 </Button>
               }
             />
-          );
-
-          const myMembership = organization.memberships.find(
-            (membership) => membership.userId === user?.id
           );
 
           const detailButton =
@@ -87,7 +88,7 @@ const OrganizationList = async () => {
 
           const buttons = (
             <>
-              {organizationSwitchIcon}
+              {organizationSwitchButton}
               {detailButton}
               {editButton}
               {leaveButton}
@@ -99,6 +100,7 @@ const OrganizationList = async () => {
             <TableRow key={organization.id}>
               <TableCell>{organization.id}</TableCell>
               <TableCell>{organization.name}</TableCell>
+              <TableCell>{myMembership?.membershipRole}</TableCell>
               <TableCell className="flex justify-end gap-x-2">
                 {buttons}
               </TableCell>

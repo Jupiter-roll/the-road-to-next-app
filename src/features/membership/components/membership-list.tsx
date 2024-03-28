@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/table';
 import { getMemberships } from '../queries/get-memberships';
 import { MembershipDeleteButton } from './membership-delete-button';
+import { MembershipMoreMenu } from './membership-more-menu';
 
 const MembershipList = async () => {
   const memberships = await getMemberships();
@@ -33,7 +34,20 @@ const MembershipList = async () => {
             />
           );
 
-          const buttons = <>{deleteButton}</>;
+          const membershipMoreMenu = (
+            <MembershipMoreMenu
+              userId={membership.userId}
+              organizationId={membership.organizationId}
+              membershipRole={membership.membershipRole}
+            />
+          );
+
+          const buttons = (
+            <>
+              {membershipMoreMenu}
+              {deleteButton}
+            </>
+          );
 
           return (
             <TableRow key={membership.userId}>
