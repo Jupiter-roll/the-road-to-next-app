@@ -35,11 +35,10 @@ model Invitation {
 }
 
 model Membership {
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
-  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         String
-
   joinedAt       DateTime       @default(now())
   membershipRole MembershipRole
 

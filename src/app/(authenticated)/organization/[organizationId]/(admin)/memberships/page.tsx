@@ -4,13 +4,23 @@ import { Spinner } from '@/components/spinner';
 import { InvitationCreateButton } from '@/features/invitation/components/invitation-create-button';
 import { MembershipList } from '@/features/membership/components/membership-list';
 
-const MembershipsPage = async () => {
+type MembershipsPageProps = {
+  params: {
+    organizationId: string;
+  };
+};
+
+const MembershipsPage = async ({ params }: MembershipsPageProps) => {
   return (
     <div className="flex flex-col flex-1 gap-y-8">
       <Heading
         title="Memberships"
         description="Manage your members in your organization."
-        actions={<InvitationCreateButton />}
+        actions={
+          <InvitationCreateButton
+            organizationId={params.organizationId}
+          />
+        }
       />
 
       <Suspense fallback={<Spinner />}>

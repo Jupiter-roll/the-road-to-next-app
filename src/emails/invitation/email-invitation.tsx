@@ -10,15 +10,12 @@ import {
 } from '@react-email/components';
 import { Fragment } from 'react';
 
-type EmailPasswordResetProps = {
-  toName: string;
+type EmailInvitationProps = {
+  fromName: string;
   url: string;
 };
 
-const EmailPasswordReset = ({
-  toName,
-  url,
-}: EmailPasswordResetProps) => {
+const EmailInvitation = ({ fromName, url }: EmailInvitationProps) => {
   return (
     <Html>
       <Head />
@@ -28,9 +25,9 @@ const EmailPasswordReset = ({
             <Container>
               <Section>
                 <Text>
-                  Hello {toName}, you have requested to reset your
-                  password. Click the button below to reset your
-                  password.
+                  Hello there. Someone invited you to join the
+                  organization {fromName}. Please click the link below
+                  to accept the invitation.
                 </Text>
               </Section>
               <Section>
@@ -38,7 +35,7 @@ const EmailPasswordReset = ({
                   href={url}
                   className="bg-black rounded text-white p-2 m-2"
                 >
-                  Reset Password
+                  Accept Invitation
                 </Button>
               </Section>
             </Container>
@@ -49,9 +46,9 @@ const EmailPasswordReset = ({
   );
 };
 
-EmailPasswordReset.PreviewProps = {
-  toName: 'Robin Wieruch',
-  url: 'http://localhost:3000/password-reset/abc123',
-} as EmailPasswordResetProps;
+EmailInvitation.PreviewProps = {
+  fromName: 'The Road to Next',
+  url: 'http://localhost:3000/email-invitation/abc123',
+} as EmailInvitationProps;
 
-export default EmailPasswordReset;
+export default EmailInvitation;

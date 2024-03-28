@@ -6,6 +6,7 @@ import { useFormState } from 'react-dom';
 import { toast } from 'sonner';
 import { FieldError } from '@/components/form/field-error';
 import { useFormFeedback } from '@/components/form/hooks/use-form-feedback';
+import { SubmitButton } from '@/components/form/submit-button';
 import { EMPTY_FORM_STATE } from '@/components/form/utils/to-form-state';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,11 +22,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createInvitation } from '../actions/create-invitation';
 
-const InvitationCreateButton = () => {
+type InvitationCreateButtonProps = {
+  organizationId: string;
+};
+
+const InvitationCreateButton = ({
+  organizationId,
+}: InvitationCreateButtonProps) => {
   const [open, setOpen] = useState(false);
 
   const [formState, action] = useFormState(
-    createInvitation,
+    createInvitation.bind(null, organizationId),
     EMPTY_FORM_STATE
   );
 
@@ -80,7 +87,7 @@ const InvitationCreateButton = () => {
             <Button variant="outline" onClick={() => setOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit">Invite</Button>
+            <SubmitButton label="Invite" />
           </DialogFooter>
         </form>
       </DialogContent>

@@ -10,13 +10,13 @@ import {
 import { Fragment } from 'react';
 
 type EmailVerificationProps = {
-  username: string;
-  verificationCode: string;
+  toName: string;
+  code: string;
 };
 
 const EmailVerification = ({
-  username,
-  verificationCode,
+  toName,
+  code,
 }: EmailVerificationProps) => {
   return (
     <Html>
@@ -27,13 +27,13 @@ const EmailVerification = ({
             <Container>
               <Section>
                 <Text>
-                  Hello {username}, please verify your email address
-                  by using the following code:
+                  Hello {toName}, please verify your email address by
+                  using the following code:
                 </Text>
               </Section>
               <Section>
                 <Text className="bg-black rounded text-white p-2 m-2">
-                  {verificationCode}
+                  {code}
                 </Text>
               </Section>
             </Container>
@@ -45,8 +45,8 @@ const EmailVerification = ({
 };
 
 EmailVerification.PreviewProps = {
-  username: 'Robin Wieruch',
-  verificationCode: '95990511',
+  toName: 'Robin Wieruch',
+  code: '95990511',
 } as EmailVerificationProps;
 
 export default EmailVerification;

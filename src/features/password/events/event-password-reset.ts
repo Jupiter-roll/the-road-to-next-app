@@ -11,7 +11,7 @@ export type PasswordResetEventArgs = {
 
 export const passwordResetEvent = inngest.createFunction(
   { id: 'password-reset' },
-  { event: 'app/password.reset' },
+  { event: 'app/password.password-reset' },
   async ({ event }) => {
     const { username, email, passwordResetLink } = event.data;
 

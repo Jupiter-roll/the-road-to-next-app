@@ -48,7 +48,7 @@ export const passwordChange = async (
     const passwordResetLink = await createPasswordResetLink(user.id);
 
     await inngest.send({
-      name: 'app/password.reset',
+      name: 'app/password.password-reset',
       data: {
         username: user.username,
         email: user.email,

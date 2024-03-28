@@ -8,10 +8,7 @@ export const sendEmailVerification = async (
   verificationCode: string
 ) => {
   const emailHtml = await renderAsync(
-    <EmailVerification
-      username={username}
-      verificationCode={verificationCode}
-    />
+    <EmailVerification toName={username} code={verificationCode} />
   );
 
   resend.emails.send({

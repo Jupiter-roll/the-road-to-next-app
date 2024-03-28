@@ -11,8 +11,10 @@ import {
   toFormState,
 } from '@/components/form/utils/to-form-state';
 import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-auth-or-redirect';
+import { inngest } from '@/lib/inngest';
 import { prisma } from '@/lib/prisma';
-import { membershipsPath } from '@/paths';
+import { emailInvitationPath, membershipsPath } from '@/paths';
+import { getBaseUrl } from '@/utils/url';
 
 const createInvitationSchema = z.object({
   email: z
@@ -23,63 +25,79 @@ const createInvitationSchema = z.object({
 });
 
 export const createInvitation = async (
+  organizationId: string,
   _formState: FormState,
   formData: FormData
 ) => {
   const { user } = await getCurrentAuthOrRedirect();
-
-  const membership = await prisma.membership.findUnique({
-    where: {
-      organizationId_userId: {
-        userId: user.id,
-        organizationId: user.activeOrganizationId,
-      },
-    },
-  });
-
-  if (membership?.membershipRole !== 'ADMIN') {
-    return toFormState(
-      'ERROR',
-      'You can only invite members as an admin'
-    );
-  }
 
   try {
     const { email } = createInvitationSchema.parse({
       email: formData.get('email'),
     });
 
-    const invitation = await prisma.invitation.findUnique({
+    const myMembership = await prisma.membership.findUnique({
+      where: {
+        organizationId_userId: {
+          userId: user.id,
+          organizationId,
+        },
+      },
+    });
+
+    const isAdmin = myMembership?.membershipRole === 'ADMIN';
+    if (!isAdmin) {
+      return toFormState(
+        'ERROR',
+        'You can only invite members as an admin of this organization'
+      );
+    }
+
+    const alreadyMembership = await prisma.membership.findFirst({
+      where: {
+        user: {
+          email,
+        },
+      },
+    });
+
+    if (alreadyMembership) {
+      return toFormState(
+        'ERROR',
+        'User is already a member of this organization'
+      );
+    }
+
+    await prisma.invitation.deleteMany({
       where: {
         email,
       },
     });
 
-    if (!invitation) {
-      const tokenId = generateId(40);
-      const tokenHash = encodeHex(
-        await sha256(new TextEncoder().encode(tokenId))
-      );
+    const tokenId = generateId(40);
+    const tokenHash = encodeHex(
+      await sha256(new TextEncoder().encode(tokenId))
+    );
 
-      await prisma.invitation.create({
-        data: {
-          email,
-          tokenHash,
-          organizationId: user.activeOrganizationId,
-        },
-      });
-    }
+    await prisma.invitation.create({
+      data: {
+        tokenHash,
+        email,
+        organizationId,
+      },
+    });
 
-    // await inngest.send({
-    //   name: 'app/invitation.create',
-    //   data: {
-    //     username: user.username,
-    //     email: user.email,
-    //     passwordResetLink,
-    //   },
-    // });
+    const pageUrl = getBaseUrl() + emailInvitationPath();
+    const emailInvitationLink = pageUrl + `/${tokenId}`;
 
-    // TODO invite by email link to join organization
+    await inngest.send({
+      name: 'app/invitation.created',
+      data: {
+        organizationId,
+        email: user.email,
+        emailInvitationLink,
+      },
+    });
   } catch (error) {
     return fromErrorToFormState(error);
   }
