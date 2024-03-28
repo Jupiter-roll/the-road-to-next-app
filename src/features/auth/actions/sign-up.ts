@@ -70,10 +70,40 @@ export const signUp = async (
       },
     });
 
+    // has accepted invitation?
+
+    const invitations = await prisma.invitation.findMany({
+      where: {
+        email,
+        status: 'ACCEPTED_WITHOUT_ACCOUNT',
+      },
+    });
+
+    if (invitations.length > 0) {
+      await prisma.invitation.deleteMany({
+        where: {
+          email,
+          status: 'ACCEPTED_WITHOUT_ACCOUNT',
+        },
+      });
+
+      await prisma.membership.createMany({
+        data: invitations.map((invitation) => ({
+          organizationId: invitation.organizationId,
+          userId,
+          membershipRole: 'MEMBER',
+        })),
+      });
+    }
+
+    // email verification
+
     const verificationCode = await generateEmailVerificationCode(
       userId,
       email
     );
+
+    console.log('HERE');
 
     await inngest.send({
       name: 'app/auth.email-verification',
@@ -83,6 +113,8 @@ export const signUp = async (
         verificationCode,
       },
     });
+
+    // session
 
     const session = await lucia.createSession(userId, {});
     const sessionCookie = lucia.createSessionCookie(session.id);

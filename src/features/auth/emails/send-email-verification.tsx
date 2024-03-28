@@ -11,7 +11,7 @@ export const sendEmailVerification = async (
     <EmailVerification toName={username} code={verificationCode} />
   );
 
-  resend.emails.send({
+  await resend.emails.send({
     from: 'app@road-to-next.com',
     to: email,
     subject: 'Email Verification from TicketBounty',

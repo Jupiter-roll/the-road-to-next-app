@@ -23,7 +23,7 @@ const PasswordPage = () => {
           <CardHeader>
             <CardTitle>Change Password</CardTitle>
             <CardDescription>
-              Enter your current password
+              Enter your current password.
             </CardDescription>
           </CardHeader>
           <CardContent>

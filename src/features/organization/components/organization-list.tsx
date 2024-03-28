@@ -28,7 +28,7 @@ const OrganizationList = async () => {
         <TableRow>
           <TableHead>ID</TableHead>
           <TableHead>Name</TableHead>
-          <TableHead>Role</TableHead>
+          <TableHead>My Role</TableHead>
           <TableHead />
         </TableRow>
       </TableHeader>
@@ -50,7 +50,8 @@ const OrganizationList = async () => {
                     isActiveOrganization ? 'default' : 'outline'
                   }
                 >
-                  <ArrowLeftRightIcon className="w-4 h-4" />
+                  <ArrowLeftRightIcon className="mr-2 w-4 h-4" />
+                  {isActiveOrganization ? 'Active' : 'Switch'}
                 </Button>
               }
             />

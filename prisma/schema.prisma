@@ -26,12 +26,18 @@ model Organization {
 }
 
 model Invitation {
-  tokenHash      String       @unique
-  email          String       @unique
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  tokenHash      String           @unique
+  email          String           @unique
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
+  status         InvitationStatus @default(PENDING)
 
   @@index([organizationId])
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED_WITHOUT_ACCOUNT
 }
 
 model Membership {

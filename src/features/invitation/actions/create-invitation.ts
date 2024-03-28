@@ -94,7 +94,7 @@ export const createInvitation = async (
       name: 'app/invitation.created',
       data: {
         organizationId,
-        email: user.email,
+        email,
         emailInvitationLink,
       },
     });

@@ -7,6 +7,7 @@ export const sendEmailInvitation = async (
   email: string,
   emailInvitationLink: string
 ) => {
+  console.log(organizationName);
   const emailHtml = await renderAsync(
     <EmailInvitation
       fromName={organizationName}
@@ -14,7 +15,9 @@ export const sendEmailInvitation = async (
     />
   );
 
-  resend.emails.send({
+  console.log(emailInvitationLink);
+
+  await resend.emails.send({
     from: 'app@road-to-next.com',
     to: email,
     subject: 'Invitation from TicketBounty',

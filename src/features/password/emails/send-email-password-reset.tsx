@@ -11,7 +11,7 @@ export const sendEmailPasswordReset = async (
     <EmailPasswordReset toName={username} url={passwordResetLink} />
   );
 
-  resend.emails.send({
+  await resend.emails.send({
     from: 'app@road-to-next.com',
     to: email,
     subject: 'Password Reset from TicketBounty',
