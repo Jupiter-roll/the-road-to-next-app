@@ -25,11 +25,17 @@ export const deleteMembership = async ({
     (membership) => membership.userId === user?.id
   );
 
+  const adminMemberships = memberships?.filter(
+    (membership) => membership.membershipRole === 'ADMIN'
+  );
+
+  const isLastAdmin = (adminMemberships ?? []).length <= 1;
   const isLastMembership = (memberships ?? []).length <= 1;
-  if (isLastMembership) {
+
+  if (isLastAdmin || isLastMembership) {
     return toFormState(
       'ERROR',
-      'You cannot delete the last membership of an organization'
+      'You cannot delete the last (admin) membership of an organization'
     );
   }
 

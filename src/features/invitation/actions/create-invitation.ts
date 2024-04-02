@@ -29,29 +29,14 @@ export const createInvitation = async (
   _formState: FormState,
   formData: FormData
 ) => {
-  const { user } = await getCurrentAuthOrRedirect();
+  const { user } = await getCurrentAuthOrRedirect({
+    checkAdminByOrganizationId: organizationId,
+  });
 
   try {
     const { email } = createInvitationSchema.parse({
       email: formData.get('email'),
     });
-
-    const myMembership = await prisma.membership.findUnique({
-      where: {
-        organizationId_userId: {
-          userId: user.id,
-          organizationId,
-        },
-      },
-    });
-
-    const isAdmin = myMembership?.membershipRole === 'ADMIN';
-    if (!isAdmin) {
-      return toFormState(
-        'ERROR',
-        'You can only invite members as an admin of this organization'
-      );
-    }
 
     const alreadyMembership = await prisma.membership.findFirst({
       where: {

@@ -2,11 +2,13 @@ import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-au
 
 export default async function AdminLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: { organizationId: string };
 }>) {
   await getCurrentAuthOrRedirect({
-    checkAdmin: true,
+    checkAdminByOrganizationId: params.organizationId,
   });
 
   return <>{children}</>;

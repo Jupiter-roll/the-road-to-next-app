@@ -1,4 +1,4 @@
-import { BanIcon, CheckIcon, TrashIcon } from 'lucide-react';
+import { BanIcon, CheckIcon } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -11,8 +11,14 @@ import { getMemberships } from '../queries/get-memberships';
 import { MembershipDeleteButton } from './membership-delete-button';
 import { MembershipMoreMenu } from './membership-more-menu';
 
-const MembershipList = async () => {
-  const memberships = await getMemberships();
+type MembershipListProps = {
+  organizationId: string;
+};
+
+const MembershipList = async ({
+  organizationId,
+}: MembershipListProps) => {
+  const memberships = await getMemberships(organizationId);
 
   return (
     <Table>

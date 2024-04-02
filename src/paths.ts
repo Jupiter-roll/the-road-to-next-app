@@ -22,6 +22,9 @@ export const organizationCreatePath = () => '/organization/create';
 export const membershipsPath = (organizationId: string) =>
   `/organization/${organizationId}/memberships`;
 
+export const invitationsPath = (organizationId: string) =>
+  `/organization/${organizationId}/invitations`;
+
 export const ticketsPath = () => '/tickets';
 export const ticketsByOrganizationPath = () =>
   '/tickets/organization';

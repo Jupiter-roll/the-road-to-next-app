@@ -16,31 +16,22 @@ export const updateMembershipRole = async ({
   organizationId: string;
   membershipRole: MembershipRole;
 }) => {
-  const { user, organizations: myOrganizations } =
-    await getCurrentAuthOrRedirect();
+  const { organizations } = await getCurrentAuthOrRedirect({
+    checkAdminByOrganizationId: organizationId,
+  });
 
-  const memberships = myOrganizations.find(
+  const organization = organizations.find(
     (organization) => organization.id === organizationId
-  )?.memberships;
-
-  const membership = memberships?.find(
-    (membership) => membership.userId === user?.id
   );
 
-  const isAdmin = membership?.membershipRole === 'ADMIN';
-  if (!isAdmin) {
-    return toFormState(
-      'ERROR',
-      'You must be an admin to update roles'
-    );
-  }
-
-  const adminMemberships = memberships?.filter(
+  const adminMemberships = organization?.memberships?.filter(
     (membership) => membership.membershipRole === 'ADMIN'
   );
 
+  const removesAdmin = membershipRole !== 'ADMIN';
   const isLastAdmin = (adminMemberships ?? []).length <= 1;
-  if (isLastAdmin) {
+
+  if (removesAdmin && isLastAdmin) {
     return toFormState('ERROR', 'You must have at least one admin');
   }
 

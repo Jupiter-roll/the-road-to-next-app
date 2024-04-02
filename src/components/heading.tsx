@@ -4,11 +4,18 @@ type HeadingProps = {
   title: string;
   description?: string;
   actions?: React.ReactElement;
+  topNav?: React.ReactElement;
 };
 
-const Heading = ({ title, description, actions }: HeadingProps) => {
+const Heading = ({
+  title,
+  description,
+  actions,
+  topNav,
+}: HeadingProps) => {
   return (
     <>
+      {topNav}
       <div className="flex items-center justify-between px-8">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">
@@ -20,7 +27,7 @@ const Heading = ({ title, description, actions }: HeadingProps) => {
             </p>
           )}
         </div>
-        <div>{actions}</div>
+        <div className="flex gap-x-2">{actions}</div>
       </div>
 
       <Separator />

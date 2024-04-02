@@ -15,7 +15,7 @@ const PasswordPage = () => {
       <Heading
         title="Password"
         description="Keep your account secure"
-        actions={<AccountTabs />}
+        topNav={<AccountTabs />}
       />
 
       <div className="flex-1 flex flex-col justify-center items-center">

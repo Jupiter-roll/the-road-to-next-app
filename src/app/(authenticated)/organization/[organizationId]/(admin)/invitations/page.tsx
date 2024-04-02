@@ -2,21 +2,21 @@ import { Suspense } from 'react';
 import { Heading } from '@/components/heading';
 import { Spinner } from '@/components/spinner';
 import { InvitationCreateButton } from '@/features/invitation/components/invitation-create-button';
-import { MembershipList } from '@/features/membership/components/membership-list';
+import { InvitationList } from '@/features/invitation/components/invitation-list';
 import { OrganizationBreadcrumbs } from '../_tabs/organization-breadcrumbs';
 
-type MembershipsPageProps = {
+type InvitationsPageProps = {
   params: {
     organizationId: string;
   };
 };
 
-const MembershipsPage = async ({ params }: MembershipsPageProps) => {
+const InvitationsPage = async ({ params }: InvitationsPageProps) => {
   return (
     <div className="flex flex-col flex-1 gap-y-8">
       <Heading
-        title="Memberships"
-        description="Manage your members in your organization"
+        title="Invitations"
+        description="Manages your organization's invitations"
         topNav={<OrganizationBreadcrumbs />}
         actions={
           <InvitationCreateButton
@@ -27,11 +27,11 @@ const MembershipsPage = async ({ params }: MembershipsPageProps) => {
 
       <Suspense fallback={<Spinner />}>
         <div className="px-4 animate-fade-in-from-top">
-          <MembershipList organizationId={params.organizationId} />
+          <InvitationList organizationId={params.organizationId} />
         </div>
       </Suspense>
     </div>
   );
 };
 
-export default MembershipsPage;
+export default InvitationsPage;

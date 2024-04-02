@@ -11,7 +11,6 @@ export const getAuth = cache(async () => {
       user: null,
       session: null,
       organizations: [],
-      activeRole: null,
     };
   }
 
@@ -55,13 +54,5 @@ export const getAuth = cache(async () => {
       })
     : [];
 
-  // active role
-
-  const activeRole =
-    organizations
-      .find((v) => v.id === result.user?.activeOrganizationId)
-      ?.memberships.find((v) => v.userId === result.user?.id)
-      ?.membershipRole ?? null;
-
-  return { ...result, organizations, activeRole };
+  return { ...result, organizations };
 });

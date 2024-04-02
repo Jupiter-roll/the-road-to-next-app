@@ -7,7 +7,7 @@ const ProfilePage = () => {
       <Heading
         title="Profile"
         description="Update your profile information"
-        actions={<AccountTabs />}
+        topNav={<AccountTabs />}
       />
     </div>
   );

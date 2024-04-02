@@ -18,7 +18,7 @@ type GetCurrentAuthOrRedirectOptions = {
   checkEmailVerified?: boolean;
   checkOrganization?: boolean;
   checkActiveOrganization?: boolean;
-  checkAdmin?: boolean;
+  checkAdminByOrganizationId?: string | null;
 };
 
 export const getCurrentAuthOrRedirect = async (
@@ -29,7 +29,7 @@ export const getCurrentAuthOrRedirect = async (
     checkEmailVerified = true,
     checkOrganization = true,
     checkActiveOrganization = true,
-    checkAdmin = false,
+    checkAdminByOrganizationId = null,
   } = options ?? {};
 
   const auth = await getAuth();
@@ -50,14 +50,26 @@ export const getCurrentAuthOrRedirect = async (
     redirect(selectActiveOrganizationPath());
   }
 
-  if (checkAdmin && auth.activeRole !== 'ADMIN') {
-    redirect(signInPath());
+  if (checkAdminByOrganizationId) {
+    const organization = auth.organizations.find(
+      (organization) => organization.id === checkAdminByOrganizationId
+    );
+
+    const myMembership = organization?.memberships?.find(
+      (membership) => membership.userId === auth.user?.id
+    );
+
+    const isAdminInOrganization =
+      myMembership?.membershipRole === 'ADMIN';
+
+    if (!isAdminInOrganization) {
+      redirect(signInPath());
+    }
   }
 
   return auth as {
     user: User & { activeOrganizationId: string };
     session: Session;
     organizations: (Organization & { memberships: Membership[] })[];
-    activeRole: MembershipRole | null;
   };
 };

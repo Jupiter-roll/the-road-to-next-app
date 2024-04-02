@@ -3,23 +3,17 @@
 import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-auth-or-redirect';
 import { prisma } from '@/lib/prisma';
 
-export const getMemberships = async (organizationId: string) => {
+export const getInvitations = async (organizationId: string) => {
   await getCurrentAuthOrRedirect({
     checkAdminByOrganizationId: organizationId,
   });
 
-  return await prisma.membership.findMany({
+  return await prisma.invitation.findMany({
     where: {
       organizationId,
     },
-    include: {
-      user: {
-        select: {
-          email: true,
-          username: true,
-          emailVerified: true,
-        },
-      },
+    select: {
+      email: true,
     },
   });
 };
