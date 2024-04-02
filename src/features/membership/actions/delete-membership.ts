@@ -70,6 +70,15 @@ export const deleteMembership = async ({
     },
   });
 
+  await prisma.user.updateMany({
+    where: {
+      activeOrganizationId: organizationId,
+    },
+    data: {
+      activeOrganizationId: null,
+    },
+  });
+
   revalidatePath(organizationsPath());
 
   setCookieByKey(

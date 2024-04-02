@@ -40,6 +40,7 @@ export const createInvitation = async (
 
     const alreadyMembership = await prisma.membership.findFirst({
       where: {
+        organizationId,
         user: {
           email,
         },
