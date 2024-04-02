@@ -21,46 +21,38 @@ export const deleteMembership = async ({
     (organization) => organization.id === organizationId
   )?.memberships;
 
-  const membership = memberships?.find(
-    (membership) => membership.userId === user?.id
+  const isLastMembership = (memberships ?? []).length <= 1;
+
+  if (isLastMembership) {
+    return toFormState(
+      'ERROR',
+      'You cannot delete the last membership of an organization'
+    );
+  }
+
+  const targetMembership = memberships?.find(
+    (membership) => membership.userId === userId
   );
 
   const adminMemberships = memberships?.filter(
     (membership) => membership.membershipRole === 'ADMIN'
   );
 
+  const removesAdmin = targetMembership?.membershipRole === 'ADMIN';
   const isLastAdmin = (adminMemberships ?? []).length <= 1;
-  const isLastMembership = (memberships ?? []).length <= 1;
 
-  if (isLastAdmin || isLastMembership) {
-    return toFormState(
-      'ERROR',
-      'You cannot delete the last (admin) membership of an organization'
-    );
+  if (removesAdmin && isLastAdmin) {
+    return toFormState('ERROR', 'You must have at least one admin');
   }
 
+  const myMembership = memberships?.find(
+    (membership) => membership.userId === user?.id
+  );
+
   const isMyself = user.id === userId;
-  const isAdmin = membership?.membershipRole === 'ADMIN';
+  const isAdmin = myMembership?.membershipRole === 'ADMIN';
 
-  if (isMyself || isAdmin) {
-    await prisma.membership.delete({
-      where: {
-        organizationId_userId: {
-          userId,
-          organizationId,
-        },
-      },
-    });
-
-    revalidatePath(organizationsPath());
-
-    setCookieByKey(
-      'toast',
-      isMyself
-        ? 'You have left the organization'
-        : 'The membership has been deleted'
-    );
-  } else {
+  if (!isMyself && !isAdmin) {
     return toFormState(
       'ERROR',
       isMyself
@@ -68,4 +60,22 @@ export const deleteMembership = async ({
         : 'You can only delete memberships as an admin'
     );
   }
+
+  await prisma.membership.delete({
+    where: {
+      organizationId_userId: {
+        userId,
+        organizationId,
+      },
+    },
+  });
+
+  revalidatePath(organizationsPath());
+
+  setCookieByKey(
+    'toast',
+    isMyself
+      ? 'You have left the organization'
+      : 'The membership has been deleted'
+  );
 };

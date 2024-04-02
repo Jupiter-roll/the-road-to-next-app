@@ -28,7 +28,7 @@ export const updateMembershipRole = async ({
     (membership) => membership.membershipRole === 'ADMIN'
   );
 
-  const removesAdmin = membershipRole !== 'ADMIN';
+  const removesAdmin = membershipRole === 'ADMIN';
   const isLastAdmin = (adminMemberships ?? []).length <= 1;
 
   if (removesAdmin && isLastAdmin) {
