@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 
-export type TicketWithUser = Prisma.TicketGetPayload<{
+export type TicketWithMetadata = Prisma.TicketGetPayload<{
   include: {
     user: {
       select: { username: true };

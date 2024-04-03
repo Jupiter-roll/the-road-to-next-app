@@ -16,11 +16,11 @@ import {
 import { ticketEditPath, ticketPath } from '@/paths';
 import { toCurrencyFromCent } from '@/utils/currency';
 import { TICKET_ICONS } from '../constants';
-import { TicketWithUser } from '../types';
+import { TicketWithMetadata } from '../types';
 import { TicketMoreMenu } from './ticket-more-menu';
 
 type TicketItemProps = {
-  ticket: TicketWithUser;
+  ticket: TicketWithMetadata;
   isDetail?: boolean;
   comments?: React.ReactNode;
 };

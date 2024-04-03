@@ -16,10 +16,10 @@ import {
 import { deleteTicket } from '../actions/delete-ticket';
 import { updateTicketStatus } from '../actions/update-ticket-status';
 import { TICKET_STATUS_LABELS } from '../constants';
-import { TicketWithUser } from '../types';
+import { TicketWithMetadata } from '../types';
 
 type TicketMoreMenuProps = {
-  ticket: TicketWithUser;
+  ticket: TicketWithMetadata;
   trigger: React.ReactElement;
 };
 

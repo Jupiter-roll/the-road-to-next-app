@@ -10,13 +10,13 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { getComments } from '../queries/get-comments';
-import { CommentWithUser } from '../types';
+import { CommentWithMetadata } from '../types';
 import { CommentCreateForm } from './comment-create-form';
 import { CommentItem } from './comment-item';
 
 type CommentsProps = {
   ticketId: string;
-  initialComments: CommentWithUser[];
+  initialComments: CommentWithMetadata[];
   hasNextPage: boolean;
 };
 
@@ -61,7 +61,7 @@ const Comments = ({
     );
   };
 
-  const handleCreateComment = (comment: CommentWithUser) => {
+  const handleCreateComment = (comment: CommentWithMetadata) => {
     setComments((prevComments) => [
       { ...comment, isOwner: true },
       ...prevComments,

@@ -55,13 +55,18 @@ export const getTickets = async (
   );
 
   return {
-    list: tickets.map((ticket) => ({
-      ...ticket,
-      isOwner: isOwner(user, ticket),
-      permissions: {
-        canDeleteTicket: membership?.canDeleteTicket ?? false,
-      },
-    })),
+    list: tickets.map((ticket) => {
+      const owner = isOwner(user, ticket);
+      const canDeleteTicket = owner && !!membership?.canDeleteTicket;
+
+      return {
+        ...ticket,
+        isOwner: owner,
+        permissions: {
+          canDeleteTicket,
+        },
+      };
+    }),
     metadata: {
       count,
       hasNextPage: count > skip + take,

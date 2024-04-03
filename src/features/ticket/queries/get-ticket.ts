@@ -26,11 +26,14 @@ export const getTicket = async (id: string) => {
     (membership) => membership.userId === user?.id
   );
 
+  const owner = isOwner(user, ticket);
+  const canDeleteTicket = owner && !!membership?.canDeleteTicket;
+
   return {
     ...ticket,
-    isOwner: isOwner(user, ticket),
+    isOwner: owner,
     permissions: {
-      canDeleteTicket: membership?.canDeleteTicket ?? false,
+      canDeleteTicket,
     },
   };
 };

@@ -8,11 +8,11 @@ import { SubmitButton } from '@/components/form/submit-button';
 import { EMPTY_FORM_STATE } from '@/components/form/utils/to-form-state';
 import { Textarea } from '@/components/ui/textarea';
 import { createComment } from '../actions/create-comment';
-import { CommentWithUser } from '../types';
+import { CommentWithMetadata } from '../types';
 
 type CommentCreateFormProps = {
   ticketId: string;
-  onCreateComment: (comment: CommentWithUser) => void;
+  onCreateComment: (comment: CommentWithMetadata) => void;
 };
 
 const CommentCreateForm = ({
@@ -33,7 +33,7 @@ const CommentCreateForm = ({
       }
 
       if (formState.data) {
-        onCreateComment(formState.data as CommentWithUser);
+        onCreateComment(formState.data as CommentWithMetadata);
       }
 
       reset();

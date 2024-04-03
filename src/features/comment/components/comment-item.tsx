@@ -2,11 +2,11 @@
 
 import { format } from 'date-fns';
 import { Card } from '@/components/ui/card';
-import { CommentWithUser } from '../types';
+import { CommentWithMetadata } from '../types';
 import { CommentDeleteButton } from './comment-delete-button';
 
 type CommentItemProps = {
-  comment: CommentWithUser;
+  comment: CommentWithMetadata;
   onRemoveComment: (id: string) => void;
 };
 
