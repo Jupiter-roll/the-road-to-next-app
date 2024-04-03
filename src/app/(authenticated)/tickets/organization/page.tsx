@@ -30,22 +30,20 @@ const TicketsByOrganizationPage = async ({
         description="All tickets related to my organization"
       />
 
-      <div className="mx-auto w-[420px]">
-        <Card>
-          <CardHeader>
-            <CardTitle>Create Ticket</CardTitle>
-            <CardDescription>
-              A new ticket will be created
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <TicketUpsertForm />
-          </CardContent>
-        </Card>
-      </div>
+      <Card className="mx-auto w-[420px]">
+        <CardHeader>
+          <CardTitle>Create Ticket</CardTitle>
+          <CardDescription>
+            A new ticket will be created
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <TicketUpsertForm />
+        </CardContent>
+      </Card>
 
       <Suspense fallback={<Spinner />}>
-        <div className="mx-auto animate-fade-in-from-top">
+        <div className="flex-1 flex mx-auto animate-fade-in-from-top">
           <TicketList
             userId={user?.id}
             searchParams={searchParamsCache.parse(searchParams)}

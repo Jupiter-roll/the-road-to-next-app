@@ -25,22 +25,20 @@ const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
         description="All your tickets at one place"
       />
 
-      <div className="mx-auto w-[420px]">
-        <Card>
-          <CardHeader>
-            <CardTitle>Create Ticket</CardTitle>
-            <CardDescription>
-              A new ticket will be created
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <TicketUpsertForm />
-          </CardContent>
-        </Card>
-      </div>
+      <Card className="mx-auto w-[420px]">
+        <CardHeader>
+          <CardTitle>Create Ticket</CardTitle>
+          <CardDescription>
+            A new ticket will be created
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <TicketUpsertForm />
+        </CardContent>
+      </Card>
 
       <Suspense fallback={<Spinner />}>
-        <div className="mx-auto animate-fade-in-from-top">
+        <div className="flex flex-1 mx-auto animate-fade-in-from-top">
           <TicketList
             byOrganization
             searchParams={searchParamsCache.parse(searchParams)}

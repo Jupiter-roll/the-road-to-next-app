@@ -18,7 +18,7 @@ const HomePage = async ({ searchParams }: HomePageProps) => {
       />
 
       <Suspense fallback={<Spinner />}>
-        <div className="mx-auto animate-fade-in-from-top">
+        <div className="flex-1 flex mx-auto animate-fade-in-from-top">
           <TicketList
             searchParams={searchParamsCache.parse(searchParams)}
           />

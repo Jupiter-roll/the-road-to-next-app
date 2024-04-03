@@ -20,6 +20,10 @@ const TicketList = async ({
   const { list: tickets, metadata: ticketMetadata } =
     await getTickets(userId, byOrganization, searchParams);
 
+  if (!tickets.length) {
+    return <Placeholder label="There are no tickets" />;
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex gap-x-2">
@@ -43,12 +47,6 @@ const TicketList = async ({
       {tickets.map((ticket) => (
         <TicketItem key={ticket.id} ticket={ticket} />
       ))}
-
-      {tickets.length === 0 && (
-        <div className="w-[420px] h-[210px] flex flex-col justify-center">
-          <Placeholder label="No tickets" />
-        </div>
-      )}
 
       <TicketPagination {...ticketMetadata} />
     </div>

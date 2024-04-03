@@ -36,7 +36,7 @@ const TicketPage = async ({ params }: TicketPageProps) => {
       <Separator />
 
       <div className="flex flex-col gap-y-8">
-        <div className="mx-auto animate-fade-in-from-top">
+        <div className="flex-1 flex mx-auto animate-fade-in-from-top">
           <TicketItem
             ticket={ticket}
             isDetail
