@@ -41,13 +41,14 @@ enum InvitationStatus {
 }
 
 model Membership {
-  organization    Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  organizationId  String
-  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId          String
-  joinedAt        DateTime       @default(now())
-  membershipRole  MembershipRole
-  canDeleteTicket Boolean        @default(true)
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+  joinedAt       DateTime       @default(now())
+  membershipRole MembershipRole
+
+  canDeleteTicket Boolean @default(true)
 
   @@id([organizationId, userId])
   @@index([organizationId])

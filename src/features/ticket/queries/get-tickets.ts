@@ -8,7 +8,7 @@ export const getTickets = async (
   byOrganization: boolean,
   searchParams: ParsedSearchParams
 ) => {
-  const { user } = await getAuth();
+  const { user, organizations } = await getAuth();
 
   const where = {
     userId,
@@ -46,10 +46,21 @@ export const getTickets = async (
     }),
   ]);
 
+  const organization = organizations.find(
+    (organization) => organization.id === user?.activeOrganizationId
+  );
+
+  const membership = organization?.memberships.find(
+    (membership) => membership.userId === user?.id
+  );
+
   return {
     list: tickets.map((ticket) => ({
       ...ticket,
       isOwner: isOwner(user, ticket),
+      permissions: {
+        canDeleteTicket: membership?.canDeleteTicket ?? false,
+      },
     })),
     metadata: {
       count,

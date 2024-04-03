@@ -6,4 +6,4 @@ export type CommentWithUser = Prisma.CommentGetPayload<{
       select: { username: true };
     };
   };
-}>;
+}> & { isOwner: boolean };

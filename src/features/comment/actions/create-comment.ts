@@ -10,7 +10,6 @@ import {
 import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-auth-or-redirect';
 import { prisma } from '@/lib/prisma';
 import { ticketPath } from '@/paths';
-import { CommentWithUser } from '../types';
 
 const createCommentSchema = z.object({
   content: z.string().min(1).max(1024),

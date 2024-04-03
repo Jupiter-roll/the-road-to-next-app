@@ -16,7 +16,7 @@ import { CommentItem } from './comment-item';
 
 type CommentsProps = {
   ticketId: string;
-  initialComments: (CommentWithUser & { isOwner: boolean })[];
+  initialComments: CommentWithUser[];
   hasNextPage: boolean;
 };
 

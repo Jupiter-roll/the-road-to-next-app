@@ -6,7 +6,7 @@ import { CommentWithUser } from '../types';
 import { CommentDeleteButton } from './comment-delete-button';
 
 type CommentItemProps = {
-  comment: CommentWithUser & { isOwner: boolean };
+  comment: CommentWithUser;
   onRemoveComment: (id: string) => void;
 };
 

@@ -20,7 +20,7 @@ import { TicketWithUser } from '../types';
 import { TicketMoreMenu } from './ticket-more-menu';
 
 type TicketItemProps = {
-  ticket: TicketWithUser & { isOwner: boolean };
+  ticket: TicketWithUser;
   isDetail?: boolean;
   comments?: React.ReactNode;
 };

@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { getAuth } from '@/features/auth/queries/get-auth';
 import { TicketList } from '@/features/ticket/components/ticket-list';
 import { TicketUpsertForm } from '@/features/ticket/components/ticket-upsert-form';
 import { searchParamsCache } from '@/features/ticket/search-params';
@@ -18,6 +19,8 @@ type TicketsPageProps = {
 };
 
 const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
+  const { user } = await getAuth();
+
   return (
     <div className="flex flex-col flex-1 gap-y-8">
       <Heading
@@ -40,7 +43,7 @@ const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
       <Suspense fallback={<Spinner />}>
         <div className="flex flex-1 mx-auto animate-fade-in-from-top">
           <TicketList
-            byOrganization
+            userId={user?.id}
             searchParams={searchParamsCache.parse(searchParams)}
           />
         </div>

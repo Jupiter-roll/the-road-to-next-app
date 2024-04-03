@@ -12,7 +12,7 @@ const Header = async () => {
 
   const navItems = user ? (
     <form action={signOut}>
-      <SubmitButton label="Sign Out" suffixIcon={<LogOutIcon />} />
+      <SubmitButton label="Sign Out" icon={<LogOutIcon />} />
     </form>
   ) : (
     <>
