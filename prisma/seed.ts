@@ -73,7 +73,7 @@ const seed = async () => {
 
   const dbOrganization = await prisma.organization.create({
     data: {
-      name: dbUsers[0].username,
+      name: 'Organization 1',
     },
   });
 
