@@ -38,16 +38,31 @@ const OrganizationList = async () => {
         {organizations.map((organization) => {
           const myMembership = organization.membershipByUser;
 
+          const hasActive = !!user?.activeOrganizationId;
+
           const isActive =
-            user?.activeOrganizationId === organization.id;
+            hasActive &&
+            user.activeOrganizationId === organization.id;
 
           const organizationSwitchButton = (
             <OrganizationSwitchButton
               organizationId={organization.id}
               trigger={
-                <Button variant={isActive ? 'default' : 'outline'}>
+                <Button
+                  variant={
+                    !hasActive
+                      ? 'secondary'
+                      : isActive
+                      ? 'default'
+                      : 'outline'
+                  }
+                >
                   <ArrowLeftRightIcon className="mr-2 w-4 h-4" />
-                  {isActive ? 'Active' : 'Switch'}
+                  {!hasActive
+                    ? 'Activate'
+                    : isActive
+                    ? 'Active'
+                    : 'Switch'}
                 </Button>
               }
             />
