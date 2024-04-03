@@ -6,6 +6,7 @@ import { toFormState } from '@/components/form/utils/to-form-state';
 import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-auth-or-redirect';
 import { prisma } from '@/lib/prisma';
 import { organizationsPath } from '@/paths';
+import { getMemberships } from '../queries/get-memberships';
 
 export const deleteMembership = async ({
   userId,
@@ -14,12 +15,8 @@ export const deleteMembership = async ({
   userId: string;
   organizationId: string;
 }) => {
-  const { user, organizations: myOrganizations } =
-    await getCurrentAuthOrRedirect();
-
-  const memberships = myOrganizations.find(
-    (organization) => organization.id === organizationId
-  )?.memberships;
+  const { user } = await getCurrentAuthOrRedirect();
+  const memberships = await getMemberships(organizationId);
 
   const isLastMembership = (memberships ?? []).length <= 1;
 

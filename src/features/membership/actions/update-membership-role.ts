@@ -6,6 +6,7 @@ import { toFormState } from '@/components/form/utils/to-form-state';
 import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-auth-or-redirect';
 import { prisma } from '@/lib/prisma';
 import { organizationsPath } from '@/paths';
+import { getMemberships } from '../queries/get-memberships';
 
 export const updateMembershipRole = async ({
   userId,
@@ -16,15 +17,13 @@ export const updateMembershipRole = async ({
   organizationId: string;
   membershipRole: MembershipRole;
 }) => {
-  const { organizations } = await getCurrentAuthOrRedirect({
+  await getCurrentAuthOrRedirect({
     checkAdminByOrganizationId: organizationId,
   });
 
-  const organization = organizations.find(
-    (organization) => organization.id === organizationId
-  );
+  const memberships = await getMemberships(organizationId);
 
-  const adminMemberships = organization?.memberships?.filter(
+  const adminMemberships = memberships.filter(
     (membership) => membership.membershipRole === 'ADMIN'
   );
 

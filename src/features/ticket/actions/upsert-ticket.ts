@@ -26,8 +26,8 @@ export const upsertTicket = async (
   formData: FormData
 ) => {
   const { user } = await getCurrentAuthOrRedirect({
-    checkActiveOrganization: true, // default anyway
-  }); // reference #1
+    checkActiveOrganization: true, // reference #1 (default anyway)
+  });
 
   try {
     if (id) {

@@ -17,10 +17,12 @@ import {
 import { getAuth } from '@/features/auth/queries/get-auth';
 import { MembershipDeleteButton } from '@/features/membership/components/membership-delete-button';
 import { membershipsPath } from '@/paths';
+import { getOrganizationsByUser } from '../queries/get-organizations-by-user';
 import { OrganizationSwitchButton } from './organization-switch-button';
 
 const OrganizationList = async () => {
-  const { user, organizations } = await getAuth();
+  const { user } = await getAuth();
+  const organizations = await getOrganizationsByUser(user?.id);
 
   return (
     <Table>
@@ -34,24 +36,18 @@ const OrganizationList = async () => {
       </TableHeader>
       <TableBody>
         {organizations.map((organization) => {
-          const myMembership = organization.memberships.find(
-            (membership) => membership.userId === user?.id
-          );
+          const myMembership = organization.membershipByUser;
 
-          const isActiveOrganization =
+          const isActive =
             user?.activeOrganizationId === organization.id;
 
           const organizationSwitchButton = (
             <OrganizationSwitchButton
               organizationId={organization.id}
               trigger={
-                <Button
-                  variant={
-                    isActiveOrganization ? 'default' : 'outline'
-                  }
-                >
+                <Button variant={isActive ? 'default' : 'outline'}>
                   <ArrowLeftRightIcon className="mr-2 w-4 h-4" />
-                  {isActiveOrganization ? 'Active' : 'Switch'}
+                  {isActive ? 'Active' : 'Switch'}
                 </Button>
               }
             />
@@ -101,7 +97,7 @@ const OrganizationList = async () => {
             <TableRow key={organization.id}>
               <TableCell>{organization.id}</TableCell>
               <TableCell>{organization.name}</TableCell>
-              <TableCell>{myMembership?.membershipRole}</TableCell>
+              <TableCell>{myMembership.membershipRole}</TableCell>
               <TableCell className="flex justify-end gap-x-2">
                 {buttons}
               </TableCell>

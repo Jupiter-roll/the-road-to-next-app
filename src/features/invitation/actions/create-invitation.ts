@@ -29,7 +29,7 @@ export const createInvitation = async (
   _formState: FormState,
   formData: FormData
 ) => {
-  const { user } = await getCurrentAuthOrRedirect({
+  await getCurrentAuthOrRedirect({
     checkAdminByOrganizationId: organizationId,
   });
 
@@ -88,7 +88,7 @@ export const createInvitation = async (
     return fromErrorToFormState(error);
   }
 
-  revalidatePath(membershipsPath(user.activeOrganizationId));
+  revalidatePath(membershipsPath(organizationId));
 
   return toFormState('SUCCESS', 'User invited to organization');
 };

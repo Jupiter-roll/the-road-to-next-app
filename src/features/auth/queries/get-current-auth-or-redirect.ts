@@ -1,10 +1,7 @@
-import {
-  Membership,
-  MembershipRole,
-  Organization,
-} from '@prisma/client';
 import { Session, User } from 'lucia';
 import { redirect } from 'next/navigation';
+import { getMembership } from '@/features/membership/queries/get-membership';
+import { getOrganizationsByUser } from '@/features/organization/queries/get-organizations-by-user';
 import {
   emailVerificationPath,
   onboardingPath,
@@ -14,7 +11,6 @@ import {
 import { getAuth } from './get-auth';
 
 type GetCurrentAuthOrRedirectOptions = {
-  checkUser?: boolean;
   checkEmailVerified?: boolean;
   checkOrganization?: boolean;
   checkActiveOrganization?: boolean;
@@ -25,7 +21,6 @@ export const getCurrentAuthOrRedirect = async (
   options?: GetCurrentAuthOrRedirectOptions
 ) => {
   const {
-    checkUser = true,
     checkEmailVerified = true,
     checkOrganization = true,
     checkActiveOrganization = true,
@@ -34,42 +29,38 @@ export const getCurrentAuthOrRedirect = async (
 
   const auth = await getAuth();
 
-  if (checkUser && !auth.user) {
+  if (!auth.user) {
     redirect(signInPath());
   }
 
-  if (checkEmailVerified && !auth.user?.emailVerified) {
+  if (checkEmailVerified && !auth.user.emailVerified) {
     redirect(emailVerificationPath());
   }
 
-  if (checkOrganization && !auth.organizations.length) {
-    redirect(onboardingPath());
+  if (checkOrganization) {
+    const organizations = await getOrganizationsByUser(auth.user.id);
+
+    if (!organizations.length) {
+      redirect(onboardingPath());
+    }
   }
 
-  if (checkActiveOrganization && !auth.user?.activeOrganizationId) {
+  if (checkActiveOrganization && !auth.user.activeOrganizationId) {
     redirect(selectActiveOrganizationPath());
   }
 
   if (checkAdminByOrganizationId) {
-    const organization = auth.organizations.find(
-      (organization) => organization.id === checkAdminByOrganizationId
-    );
+    const membership = await getMembership({
+      organizationId: checkAdminByOrganizationId,
+      userId: auth.user.id,
+    });
 
-    const myMembership = organization?.memberships?.find(
-      (membership) => membership.userId === auth.user?.id
-    );
+    const isAdmin = membership?.membershipRole === 'ADMIN';
 
-    const isAdminInOrganization =
-      myMembership?.membershipRole === 'ADMIN';
-
-    if (!isAdminInOrganization) {
+    if (!isAdmin) {
       redirect(signInPath());
     }
   }
 
-  return auth as {
-    user: User & { activeOrganizationId: string };
-    session: Session;
-    organizations: (Organization & { memberships: Membership[] })[];
-  };
+  return auth;
 };

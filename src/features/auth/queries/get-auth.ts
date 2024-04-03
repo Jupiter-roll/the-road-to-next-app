@@ -1,7 +1,6 @@
 import { cookies } from 'next/headers';
 import { cache } from 'react';
 import { lucia } from '@/lib/lucia';
-import { prisma } from '@/lib/prisma';
 
 export const getAuth = cache(async () => {
   const sessionId =
@@ -10,7 +9,6 @@ export const getAuth = cache(async () => {
     return {
       user: null,
       session: null,
-      organizations: [],
     };
   }
 
@@ -37,22 +35,5 @@ export const getAuth = cache(async () => {
     }
   } catch {}
 
-  // organization
-
-  const organizations = result.user
-    ? await prisma.organization.findMany({
-        where: {
-          memberships: {
-            some: {
-              userId: result.user.id,
-            },
-          },
-        },
-        include: {
-          memberships: true,
-        },
-      })
-    : [];
-
-  return { ...result, organizations };
+  return result;
 });

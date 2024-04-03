@@ -8,7 +8,7 @@ export const getTickets = async (
   byOrganization: boolean,
   searchParams: ParsedSearchParams
 ) => {
-  const { user, organizations } = await getAuth();
+  const { user } = await getAuth();
 
   const where = {
     userId,
@@ -39,6 +39,15 @@ export const getTickets = async (
             username: true,
           },
         },
+        organization: {
+          include: {
+            memberships: {
+              where: {
+                userId: user?.id,
+              },
+            },
+          },
+        },
       },
     }),
     prisma.ticket.count({
@@ -46,24 +55,17 @@ export const getTickets = async (
     }),
   ]);
 
-  const organization = organizations.find(
-    (organization) => organization.id === user?.activeOrganizationId
-  );
-
-  const membership = organization?.memberships.find(
-    (membership) => membership.userId === user?.id
-  );
-
   return {
     list: tickets.map((ticket) => {
       const owner = isOwner(user, ticket);
-      const canDeleteTicket = owner && !!membership?.canDeleteTicket;
+      const myMaybeMembership = ticket.organization.memberships[0];
+      const canDeleteTicket = !!myMaybeMembership?.canDeleteTicket;
 
       return {
         ...ticket,
         isOwner: owner,
         permissions: {
-          canDeleteTicket,
+          canDeleteTicket: owner && canDeleteTicket,
         },
       };
     }),
