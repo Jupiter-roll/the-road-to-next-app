@@ -5,31 +5,62 @@ import { prisma } from '@/lib/prisma';
 import { stripe } from '@/lib/stripe';
 
 const upsertSubscription = async (
-  subscription: Stripe.Subscription
+  subscription: Stripe.Subscription,
+  eventAt: number
+) => {
+  const stripeCustomer =
+    await prisma.stripeCustomer.findUniqueOrThrow({
+      where: {
+        customerId: subscription.customer as string,
+      },
+    });
+
+  if (!stripeCustomer.eventAt || stripeCustomer.eventAt < eventAt) {
+    await prisma.stripeCustomer.update({
+      where: {
+        customerId: subscription.customer as string,
+      },
+      data: {
+        subscriptionId: subscription.id,
+        subscriptionStatus: subscription.status,
+        productId: subscription.items.data[0].price.product as string,
+        priceId: subscription.items.data[0].price.id as string,
+        eventAt,
+      },
+    });
+  }
+};
+
+const handleSubscriptionCreated = async (
+  subscription: Stripe.Subscription,
+  eventAt: number
+) => {
+  await upsertSubscription(subscription, eventAt);
+};
+
+const handleSubscriptionUpdated = async (
+  subscription: Stripe.Subscription,
+  eventAt: number
+) => {
+  await upsertSubscription(subscription, eventAt);
+};
+
+const handleSubscriptionDeleted = async (
+  subscription: Stripe.Subscription,
+  eventAt: number
 ) => {
   await prisma.stripeCustomer.update({
     where: {
       customerId: subscription.customer as string,
     },
     data: {
-      subscriptionId: subscription.id,
-      subscriptionStatus: subscription.status,
-      productId: subscription.items.data[0].price.product as string,
-      priceId: subscription.items.data[0].price.id as string,
+      subscriptionId: null,
+      subscriptionStatus: null,
+      productId: null,
+      priceId: null,
+      eventAt,
     },
   });
-};
-
-const handleSubscriptionCreated = async (
-  subscription: Stripe.Subscription
-) => {
-  await upsertSubscription(subscription);
-};
-
-const handleSubscriptionUpdated = async (
-  subscription: Stripe.Subscription
-) => {
-  await upsertSubscription(subscription);
 };
 
 export async function POST(req: Request) {
@@ -60,10 +91,16 @@ export async function POST(req: Request) {
 
     switch (event.type) {
       case 'customer.subscription.created':
-        handleSubscriptionCreated(event.data.object);
+        handleSubscriptionCreated(event.data.object, event.created);
         break;
       case 'customer.subscription.updated':
-        handleSubscriptionUpdated(event.data.object);
+        handleSubscriptionUpdated(event.data.object, event.created);
+        break;
+      case 'customer.subscription.deleted':
+        handleSubscriptionDeleted(event.data.object, event.created);
+        break;
+      case 'customer.subscription.trial_will_end':
+        console.log('Subscription trial will end. Send email?'); // TODO
         break;
       default:
         console.log(`Unhandled event type ${event.type}.`);

@@ -31,8 +31,9 @@ export const getStripeProvisioningByOrganization = async (
     ]);
 
   const currentMembers = membershipCount + invitationCount;
+  const isActive = stripeCustomer?.subscriptionStatus === 'active';
 
-  if (!stripeCustomer?.productId) {
+  if (!isActive || !stripeCustomer?.productId) {
     return {
       allowedMembers: 1,
       currentMembers,

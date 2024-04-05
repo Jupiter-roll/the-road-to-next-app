@@ -1,3 +1,4 @@
+import { SettingsIcon } from 'lucide-react';
 import { Suspense } from 'react';
 import { Heading } from '@/components/heading';
 import { Spinner } from '@/components/spinner';
@@ -22,7 +23,10 @@ const SubscriptionPage = async ({
         topNav={<OrganizationBreadcrumbs />}
         actions={
           <CustomerPortalForm organizationId={params.organizationId}>
-            Manage Subscription
+            <>
+              <SettingsIcon className="mr-2 w-4 h-4" />
+              Manage Subscription
+            </>
           </CustomerPortalForm>
         }
       />

@@ -48,7 +48,7 @@ const comments = [
 
 const seed = async () => {
   const t0 = performance.now();
-  console.log('Seed: Started ...');
+  console.log('DB Seed: Started ...');
 
   await prisma.comment.deleteMany();
   await prisma.ticket.deleteMany();
@@ -107,7 +107,7 @@ const seed = async () => {
   });
 
   const t1 = performance.now();
-  console.log(`Seed: Finished (${t1 - t0}ms)`);
+  console.log(`DB Seed: Finished (${t1 - t0}ms)`);
 };
 
 seed();

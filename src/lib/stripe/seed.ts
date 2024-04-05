@@ -1,12 +1,10 @@
 import 'dotenv/config';
-import { features } from 'process';
-import { metadata } from '@/app/layout';
 import { prisma } from '../prisma';
 import { stripe } from './';
 
 const seed = async () => {
   const t0 = performance.now();
-  console.log('Seed: Started ...');
+  console.log('Stripe Seed: Started ...');
 
   // clean up
 
@@ -34,9 +32,14 @@ const seed = async () => {
 
   const organization = await prisma.organization.findFirstOrThrow();
 
+  const testClock = await stripe.testHelpers.testClocks.create({
+    frozen_time: Math.round(new Date().getTime() / 1000),
+  });
+
   const customer = await stripe.customers.create({
     name: 'admin',
     email: 'admin@admin.com',
+    test_clock: testClock.id,
   });
 
   await prisma.stripeCustomer.create({
@@ -54,7 +57,7 @@ const seed = async () => {
     },
     features: [
       {
-        name: 'Cancel anytime',
+        name: 'Trial period of 7 days',
       },
       {
         name: 'Unlimited members',
@@ -70,7 +73,7 @@ const seed = async () => {
     },
     features: [
       {
-        name: 'Cancel anytime',
+        name: 'Trial period of 7 days',
       },
       {
         name: 'Up to 3 members',
@@ -115,7 +118,7 @@ const seed = async () => {
   });
 
   const t1 = performance.now();
-  console.log(`Seed: Finished (${t1 - t0}ms)`);
+  console.log(`Stripe Seed: Finished (${t1 - t0}ms)`);
 };
 
 seed();

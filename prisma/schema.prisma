@@ -35,6 +35,7 @@ model StripeCustomer {
   subscriptionStatus StripeSubscriptionStatus?
   productId          String?
   priceId            String?
+  eventAt            Int?
 }
 
 enum StripeSubscriptionStatus {

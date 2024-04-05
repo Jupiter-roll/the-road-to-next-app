@@ -59,12 +59,20 @@ const Products = async ({ organizationId }: ProductsProps) => {
     organizationId
   );
 
-  const activeProductId = stripeCustomer?.productId;
-  const activePriceId = stripeCustomer?.priceId;
+  const subscriptionStatus = stripeCustomer?.subscriptionStatus;
+  const activeSubscription = subscriptionStatus === 'active';
+  const activeProductId = activeSubscription
+    ? stripeCustomer?.productId
+    : null;
+  const activePriceId = activeSubscription
+    ? stripeCustomer?.priceId
+    : null;
 
   const products = await stripe.products.list({
     active: true,
   });
+
+  console.log(subscriptionStatus);
 
   return (
     <div className="flex-1 flex justify-center items-center gap-x-4">

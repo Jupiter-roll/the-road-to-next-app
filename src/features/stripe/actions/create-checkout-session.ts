@@ -51,6 +51,7 @@ export const createCheckoutSession = async (
       metadata: {
         organizationId,
       },
+      trial_period_days: 7,
     },
   });
 

@@ -69,7 +69,7 @@ export const createCustomerPortal = async (
           mode: 'at_period_end',
         },
         subscription_update: {
-          default_allowed_updates: ['price'],
+          default_allowed_updates: ['price', 'promotion_code'],
           enabled: true,
           proration_behavior: 'create_prorations', // TODO test with clock
           products: productsWithPrices.map(({ product, prices }) => ({
