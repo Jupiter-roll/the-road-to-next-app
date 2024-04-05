@@ -11,6 +11,7 @@ import {
   toFormState,
 } from '@/components/form/utils/to-form-state';
 import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-auth-or-redirect';
+import { getStripeProvisioningByOrganization } from '@/features/stripe/queries/get-stripe-provisioning';
 import { inngest } from '@/lib/inngest';
 import { prisma } from '@/lib/prisma';
 import { emailInvitationPath, membershipsPath } from '@/paths';
@@ -32,6 +33,16 @@ export const createInvitation = async (
   await getCurrentAuthOrRedirect({
     checkAdminByOrganizationId: organizationId,
   });
+
+  const { allowedMembers, currentMembers } =
+    await getStripeProvisioningByOrganization(organizationId);
+
+  if (allowedMembers <= currentMembers) {
+    return toFormState(
+      'ERROR',
+      'Upgrade your subscription to invite more members'
+    );
+  }
 
   try {
     const { email } = createInvitationSchema.parse({

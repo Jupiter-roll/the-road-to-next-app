@@ -22,19 +22,19 @@ export const navItems: NavItem[] = [
     title: 'All Tickets',
     icon: LibraryIcon,
     href: homePath(),
-    color: 'text-sky-500',
+    color: 'text-amber-500',
   },
   {
     title: 'Our Tickets',
     icon: BookCopyIcon,
     href: ticketsByOrganizationPath(),
-    color: 'text-sky-500',
+    color: 'text-amber-500',
   },
   {
     title: 'My Tickets',
     icon: BookIcon,
     href: ticketsPath(),
-    color: 'text-sky-500',
+    color: 'text-amber-500',
   },
   {
     title: 'Account',

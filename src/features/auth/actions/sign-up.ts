@@ -103,8 +103,6 @@ export const signUp = async (
       email
     );
 
-    console.log('HERE');
-
     await inngest.send({
       name: 'app/auth.email-verification',
       data: {

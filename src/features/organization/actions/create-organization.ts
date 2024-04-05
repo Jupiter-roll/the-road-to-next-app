@@ -8,6 +8,7 @@ import {
   fromErrorToFormState,
 } from '@/components/form/utils/to-form-state';
 import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-auth-or-redirect';
+import { inngest } from '@/lib/inngest';
 import { prisma } from '@/lib/prisma';
 import { ticketsPath } from '@/paths';
 
@@ -47,6 +48,13 @@ export const createOrganization = async (
       },
       where: {
         id: user.id,
+      },
+    });
+
+    await inngest.send({
+      name: 'app/organization.created',
+      data: {
+        organizationId: organization.id,
       },
     });
   } catch (error) {

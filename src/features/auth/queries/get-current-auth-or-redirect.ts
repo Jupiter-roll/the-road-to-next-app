@@ -1,4 +1,3 @@
-import { Session, User } from 'lucia';
 import { redirect } from 'next/navigation';
 import { getMembership } from '@/features/membership/queries/get-membership';
 import { getOrganizationsByUser } from '@/features/organization/queries/get-organizations-by-user';

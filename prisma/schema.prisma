@@ -15,14 +15,37 @@ datasource db {
 }
 
 model Organization {
-  id          String       @id @default(cuid())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  name        String
-  memberships Membership[]
-  activeUsers User[]
-  tickets     Ticket[]
-  invitations Invitation[]
+  id               String          @id @default(cuid())
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  name             String
+  memberships      Membership[]
+  activeUsers      User[]
+  tickets          Ticket[]
+  invitations      Invitation[]
+  stripeCustomerId String?
+  stripeCustomer   StripeCustomer?
+}
+
+model StripeCustomer {
+  organizationId     String                    @unique
+  organization       Organization              @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customerId         String                    @unique
+  subscriptionId     String?
+  subscriptionStatus StripeSubscriptionStatus?
+  productId          String?
+  priceId            String?
+}
+
+enum StripeSubscriptionStatus {
+  active
+  incomplete
+  incomplete_expired
+  past_due
+  canceled
+  unpaid
+  trialing
+  paused
 }
 
 model Invitation {

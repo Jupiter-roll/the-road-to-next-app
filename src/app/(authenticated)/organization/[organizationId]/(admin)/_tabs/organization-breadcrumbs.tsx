@@ -6,6 +6,7 @@ import {
   invitationsPath,
   membershipsPath,
   organizationsPath,
+  subscriptionPath,
 } from '@/paths';
 
 const OrganizationBreadcrumbs = () => {
@@ -15,7 +16,13 @@ const OrganizationBreadcrumbs = () => {
   const title = {
     memberships: 'Memberships' as const,
     invitations: 'Invitations' as const,
-  }[pathName.split('/').at(-1) as 'memberships' | 'invitations'];
+    subscription: 'Subscription' as const,
+  }[
+    pathName.split('/').at(-1) as
+      | 'memberships'
+      | 'invitations'
+      | 'subscription'
+  ];
 
   return (
     <Breadcrumbs
@@ -31,6 +38,10 @@ const OrganizationBreadcrumbs = () => {
             {
               title: 'Invitations',
               href: invitationsPath(params.organizationId),
+            },
+            {
+              title: 'Subscription',
+              href: subscriptionPath(params.organizationId),
             },
           ],
         },
