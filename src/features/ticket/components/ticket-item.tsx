@@ -23,12 +23,14 @@ type TicketItemProps = {
   ticket: TicketWithMetadata;
   isDetail?: boolean;
   comments?: React.ReactNode;
+  attachments?: React.ReactNode;
 };
 
 const TicketItem = ({
   ticket,
   isDetail,
   comments,
+  attachments,
 }: TicketItemProps) => {
   const isTicketOwner = ticket.isOwner;
 
@@ -105,7 +107,7 @@ const TicketItem = ({
           </div>
         )}
       </div>
-
+      {attachments}
       {comments}
     </div>
   );

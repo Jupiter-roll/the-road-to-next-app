@@ -85,7 +85,7 @@ const Comments = ({
         </CardContent>
       </Card>
 
-      <div className="space-y-2">
+      <div className="space-y-2 ml-8">
         {comments.map((comment) => (
           <CommentItem
             key={comment.id}
