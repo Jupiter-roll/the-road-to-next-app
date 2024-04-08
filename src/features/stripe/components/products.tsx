@@ -11,6 +11,7 @@ import { CheckoutSessionForm } from '@/features/stripe/components/checkout-sessi
 import { stripe } from '@/lib/stripe';
 import { toCurrencyFromCent } from '@/utils/currency';
 import { getStripeCustomerByOrganization } from '../queries/get-stripe-customer';
+import { isActiveSubscription } from '../utils/is-active-subscription';
 
 type PricesProps = {
   organizationId: string | null | undefined;
@@ -60,7 +61,7 @@ const Products = async ({ organizationId }: ProductsProps) => {
   );
 
   const subscriptionStatus = stripeCustomer?.subscriptionStatus;
-  const activeSubscription = subscriptionStatus === 'active';
+  const activeSubscription = isActiveSubscription(stripeCustomer);
   const activeProductId = activeSubscription
     ? stripeCustomer?.productId
     : null;
