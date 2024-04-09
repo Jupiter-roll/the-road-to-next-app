@@ -1,6 +1,7 @@
 'use server';
 
 import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { AttachmentEntity } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import {
@@ -14,7 +15,10 @@ import { s3 } from '@/lib/aws/s3';
 import { prisma } from '@/lib/prisma';
 import { ticketPath } from '@/paths';
 import { ACCEPTED_TYPES, MAX_IMAGE_SIZE } from '../constants';
-import { generateS3Key, sizeInMB } from '../utils';
+import { isComment, isTicket } from '../types';
+import { getOrganizationIdByAttachment } from '../utils/attachment-helpers';
+import { generateS3Key } from '../utils/generate-s3-key';
+import { sizeInMB } from '../utils/size-in-mb';
 
 const createAttachmentsSchema = z.object({
   files: z
@@ -46,25 +50,50 @@ const createAttachmentsSchema = z.object({
     ),
 });
 
+type CreateAttachmentsArgs = {
+  entityId: string;
+  entity: AttachmentEntity;
+};
+
 export const createAttachments = async (
-  ticketId: string,
+  { entityId, entity }: CreateAttachmentsArgs,
   _formState: FormState,
   formData: FormData
 ) => {
   const { user } = await getCurrentAuthOrRedirect();
 
-  const ticket = await prisma.ticket.findUnique({
-    where: {
-      id: ticketId,
-    },
-  });
+  let subject;
 
-  if (!ticket) {
-    return toFormState('ERROR', 'Ticket not found');
+  switch (entity) {
+    case 'TICKET': {
+      subject = await prisma.ticket.findUnique({
+        where: {
+          id: entityId,
+        },
+      });
+      break;
+    }
+    case 'COMMENT': {
+      subject = await prisma.comment.findUnique({
+        where: {
+          id: entityId,
+        },
+        include: {
+          ticket: true,
+        },
+      });
+      break;
+    }
+    default:
+      return toFormState('ERROR', 'Subject not found');
   }
 
-  if (!isOwner(user, ticket)) {
-    return toFormState('ERROR', 'Not the owner of this ticket');
+  if (!subject) {
+    return toFormState('ERROR', 'Subject not found');
+  }
+
+  if (!isOwner(user, subject)) {
+    return toFormState('ERROR', 'Not the owner of this subject');
   }
 
   let attachment;
@@ -80,16 +109,24 @@ export const createAttachments = async (
       attachment = await prisma.attachment.create({
         data: {
           name: file.name,
-          ticketId: ticket.id,
+          ...(entity === 'TICKET' ? { ticketId: entityId } : {}),
+          ...(entity === 'COMMENT' ? { commentId: entityId } : {}),
+          entity,
         },
       });
+
+      const organizationId = getOrganizationIdByAttachment(
+        entity,
+        subject
+      );
 
       await s3.send(
         new PutObjectCommand({
           Bucket: process.env.AWS_BUCKET_NAME,
           Key: generateS3Key({
-            organizationId: ticket.organizationId,
-            ticketId: ticket.id,
+            organizationId,
+            entityId,
+            entity,
             fileName: file.name,
             attachmentId: attachment.id,
           }),
@@ -111,7 +148,19 @@ export const createAttachments = async (
     return fromErrorToFormState(error);
   }
 
-  revalidatePath(ticketPath(ticketId));
+  switch (entity) {
+    case 'TICKET':
+      if (isTicket(subject)) {
+        revalidatePath(ticketPath(subject.id));
+      }
+      break;
+    case 'COMMENT': {
+      if (isComment(subject)) {
+        revalidatePath(ticketPath(subject.ticket.id));
+      }
+      break;
+    }
+  }
 
   return toFormState('SUCCESS', 'Attachment(s) uploaded');
 };

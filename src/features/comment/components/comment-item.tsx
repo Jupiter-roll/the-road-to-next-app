@@ -2,6 +2,7 @@
 
 import { format } from 'date-fns';
 import { Card } from '@/components/ui/card';
+import { AttachmentCreateButton } from '@/features/attachment/components/attachment-create-button';
 import { CommentWithMetadata } from '../types';
 import { CommentDeleteButton } from './comment-delete-button';
 
@@ -29,10 +30,16 @@ const CommentItem = ({
       </Card>
 
       {comment.isOwner && (
-        <CommentDeleteButton
-          id={comment.id}
-          onRemoveComment={onRemoveComment}
-        />
+        <div className="flex flex-col gap-y-1">
+          <AttachmentCreateButton
+            entityId={comment.id}
+            entity="COMMENT"
+          />
+          <CommentDeleteButton
+            id={comment.id}
+            onRemoveComment={onRemoveComment}
+          />
+        </div>
       )}
     </div>
   );

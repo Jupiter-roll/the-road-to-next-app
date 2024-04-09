@@ -1,3 +1,4 @@
+import { AttachmentEntity } from '@prisma/client';
 import {
   Card,
   CardContent,
@@ -10,15 +11,17 @@ import { AttachmentCreateForm } from './attachment-create-form';
 import { AttachmentItem } from './attachment-item';
 
 type AttachmentsProps = {
-  ticketId: string;
+  entityId: string;
+  entity: AttachmentEntity;
   isOwner: boolean;
 };
 
 const Attachments = async ({
+  entityId,
+  entity,
   isOwner,
-  ticketId,
 }: AttachmentsProps) => {
-  const attachments = await getAttachments(ticketId);
+  const attachments = await getAttachments(entityId, entity);
 
   return (
     <>
@@ -26,12 +29,13 @@ const Attachments = async ({
         <Card>
           <CardHeader>
             <CardTitle>Upload File(s)</CardTitle>
-            <CardDescription>
-              Attach images or PDFs to the ticket
-            </CardDescription>
+            <CardDescription>Attach images or PDFs</CardDescription>
           </CardHeader>
           <CardContent>
-            <AttachmentCreateForm ticketId={ticketId} />
+            <AttachmentCreateForm
+              entityId={entityId}
+              entity={entity}
+            />
           </CardContent>
         </Card>
       )}

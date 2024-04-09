@@ -43,7 +43,8 @@ const TicketPage = async ({ params }: TicketPageProps) => {
             isDetail
             attachments={
               <Attachments
-                ticketId={ticket.id}
+                entityId={ticket.id}
+                entity="TICKET"
                 isOwner={ticket.isOwner}
               />
             }

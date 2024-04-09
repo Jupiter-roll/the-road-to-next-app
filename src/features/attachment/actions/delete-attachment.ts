@@ -11,7 +11,9 @@ import { isOwner } from '@/features/auth/utils/is-owner';
 import { inngest } from '@/lib/inngest';
 import { prisma } from '@/lib/prisma';
 import { ticketPath } from '@/paths';
-import { generateS3Key } from '../utils';
+import { isComment, isTicket } from '../types';
+import { getOrganizationIdByAttachment } from '../utils/attachment-helpers';
+import { generateS3Key } from '../utils/generate-s3-key';
 
 export const deleteAttachment = async (id: string) => {
   const { user } = await getCurrentAuthOrRedirect();
@@ -22,10 +24,26 @@ export const deleteAttachment = async (id: string) => {
     },
     include: {
       ticket: true,
+      comment: {
+        include: {
+          ticket: true,
+        },
+      },
     },
   });
 
-  if (!isOwner(user, attachment.ticket)) {
+  const subject = attachment.ticket ?? attachment.comment;
+
+  if (!subject) {
+    return toFormState('ERROR', 'Subject not found');
+  }
+
+  const organizationId = getOrganizationIdByAttachment(
+    attachment.entity,
+    subject
+  );
+
+  if (!isOwner(user, subject)) {
     return toFormState('ERROR', 'Not authorized');
   }
 
@@ -40,8 +58,9 @@ export const deleteAttachment = async (id: string) => {
       name: 'app/attachment.deleted',
       data: {
         key: generateS3Key({
-          organizationId: attachment.ticket.organizationId,
-          ticketId: attachment.ticket.id,
+          organizationId,
+          entityId: subject.id,
+          entity: attachment.entity,
           fileName: attachment.name,
           attachmentId: attachment.id,
         }),
@@ -51,7 +70,19 @@ export const deleteAttachment = async (id: string) => {
     return fromErrorToFormState(error);
   }
 
-  revalidatePath(ticketPath(id));
+  switch (attachment.entity) {
+    case 'TICKET':
+      if (isTicket(subject)) {
+        revalidatePath(ticketPath(subject.id));
+      }
+      break;
+    case 'COMMENT': {
+      if (isComment(subject)) {
+        revalidatePath(ticketPath(subject.ticket.id));
+      }
+      break;
+    }
+  }
 
   setCookieByKey('toast', 'Attachment deleted');
 };

@@ -1,5 +1,6 @@
 'use client';
 
+import { AttachmentEntity } from '@prisma/client';
 import { useFormState } from 'react-dom';
 import { toast } from 'sonner';
 import { FieldError } from '@/components/form/field-error';
@@ -11,14 +12,18 @@ import { createAttachments } from '../actions/create-attachments';
 import { ACCEPTED_TYPES } from '../constants';
 
 type AttachmentCreateFormProps = {
-  ticketId: string;
+  entityId: string;
+  entity: AttachmentEntity;
+  onSuccess?: () => void;
 };
 
 const AttachmentCreateForm = ({
-  ticketId,
+  entityId,
+  entity,
+  onSuccess,
 }: AttachmentCreateFormProps) => {
   const [formState, action] = useFormState(
-    createAttachments.bind(null, ticketId),
+    createAttachments.bind(null, { entityId, entity }),
     EMPTY_FORM_STATE
   );
 
@@ -27,6 +32,8 @@ const AttachmentCreateForm = ({
       if (formState.message) {
         toast.success(formState.message);
       }
+
+      onSuccess?.();
     },
     onError: ({ formState }) => {
       if (formState.message) {
