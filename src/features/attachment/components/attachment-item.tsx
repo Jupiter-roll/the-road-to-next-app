@@ -1,5 +1,8 @@
 import { Attachment } from '@prisma/client';
+import Link from 'next/link';
 import { Card } from '@/components/ui/card';
+import { attachmentDownloadPath } from '@/paths';
+import { getBaseUrl } from '@/utils/url';
 import { AttachmentDeleteButton } from './attachment-delete-button';
 
 type AttachmentItemProps = {
@@ -13,8 +16,12 @@ const AttachmentItem = ({
 }: AttachmentItemProps) => {
   return (
     <div className="flex gap-x-1">
-      <Card className="p-4 flex-1 flex flex-col gap-y-1">
-        <p className="whitespace-pre-line">{attachment.name}</p>
+      <Card className="p-4 flex-1">
+        <Link
+          href={getBaseUrl() + attachmentDownloadPath(attachment.id)}
+        >
+          {attachment.name}
+        </Link>
       </Card>
 
       {isOwner && <AttachmentDeleteButton id={attachment.id} />}

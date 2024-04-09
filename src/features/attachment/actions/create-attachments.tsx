@@ -14,7 +14,7 @@ import { s3 } from '@/lib/aws/s3';
 import { prisma } from '@/lib/prisma';
 import { ticketPath } from '@/paths';
 import { ACCEPTED_TYPES, MAX_IMAGE_SIZE } from '../constants';
-import { generateKey, sizeInMB } from '../utils';
+import { generateS3Key, sizeInMB } from '../utils';
 
 const createAttachmentsSchema = z.object({
   files: z
@@ -87,7 +87,7 @@ export const createAttachments = async (
       await s3.send(
         new PutObjectCommand({
           Bucket: process.env.AWS_BUCKET_NAME,
-          Key: generateKey({
+          Key: generateS3Key({
             organizationId: ticket.organizationId,
             ticketId: ticket.id,
             fileName: file.name,

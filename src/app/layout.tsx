@@ -29,7 +29,7 @@ export default function RootLayout({
               {children}
             </main>
           </div>
-          <Toaster />
+          <Toaster expand />
         </ThemeProvider>
       </body>
     </html>

@@ -10,7 +10,7 @@ type GenerateKeyArgs = {
   attachmentId: string;
 };
 
-export const generateKey = ({
+export const generateS3Key = ({
   organizationId,
   ticketId,
   fileName,

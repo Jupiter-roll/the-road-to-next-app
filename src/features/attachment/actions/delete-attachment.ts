@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { setCookieByKey } from '@/actions/cookies';
 import {
   fromErrorToFormState,
   toFormState,
@@ -10,6 +11,7 @@ import { isOwner } from '@/features/auth/utils/is-owner';
 import { inngest } from '@/lib/inngest';
 import { prisma } from '@/lib/prisma';
 import { ticketPath } from '@/paths';
+import { generateS3Key } from '../utils';
 
 export const deleteAttachment = async (id: string) => {
   const { user } = await getCurrentAuthOrRedirect();
@@ -18,7 +20,7 @@ export const deleteAttachment = async (id: string) => {
     where: {
       id,
     },
-    select: {
+    include: {
       ticket: true,
     },
   });
@@ -37,7 +39,12 @@ export const deleteAttachment = async (id: string) => {
     await inngest.send({
       name: 'app/attachment.deleted',
       data: {
-        id,
+        key: generateS3Key({
+          organizationId: attachment.ticket.organizationId,
+          ticketId: attachment.ticket.id,
+          fileName: attachment.name,
+          attachmentId: attachment.id,
+        }),
       },
     });
   } catch (error) {
@@ -46,5 +53,5 @@ export const deleteAttachment = async (id: string) => {
 
   revalidatePath(ticketPath(id));
 
-  return toFormState('SUCCESS', 'Attachment deleted');
+  setCookieByKey('toast', 'Attachment deleted');
 };
