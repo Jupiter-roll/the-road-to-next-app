@@ -14,12 +14,14 @@ import { ACCEPTED_TYPES } from '../constants';
 type AttachmentCreateFormProps = {
   entityId: string;
   entity: AttachmentEntity;
+  buttons?: React.ReactNode;
   onSuccess?: () => void;
 };
 
 const AttachmentCreateForm = ({
   entityId,
   entity,
+  buttons,
   onSuccess,
 }: AttachmentCreateFormProps) => {
   const [formState, action] = useFormState(
@@ -43,7 +45,11 @@ const AttachmentCreateForm = ({
   });
 
   return (
-    <form ref={ref} action={action} className="flex flex-col gap-y-2">
+    <form
+      ref={ref}
+      action={action}
+      className="flex flex-col gap-y-2 "
+    >
       <Input
         name="files"
         id="files"
@@ -53,7 +59,7 @@ const AttachmentCreateForm = ({
       />
       <FieldError formState={formState} name="files" />
 
-      <SubmitButton label="Upload" />
+      {buttons || <SubmitButton label="Upload" />}
     </form>
   );
 };

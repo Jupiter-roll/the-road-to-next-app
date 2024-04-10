@@ -3,11 +3,13 @@
 import { AttachmentEntity } from '@prisma/client';
 import { PaperclipIcon } from 'lucide-react';
 import { useState } from 'react';
+import { SubmitButton } from '@/components/form/submit-button';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -40,6 +42,18 @@ const AttachmentCreateButton = ({
         <AttachmentCreateForm
           entityId={entityId}
           entity={entity}
+          buttons={
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </Button>
+              <SubmitButton label="Upload" />
+            </DialogFooter>
+          }
           onSuccess={() => setOpen(false)}
         />
       </DialogContent>

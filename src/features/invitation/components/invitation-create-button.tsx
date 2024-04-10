@@ -60,14 +60,14 @@ const InvitationCreateButton = ({
         </Button>
       </DialogTrigger>
       <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Invite Member</DialogTitle>
+          <DialogDescription>
+            Invite a user by email to your organization.
+          </DialogDescription>
+        </DialogHeader>
         <form ref={ref} action={action}>
-          <DialogHeader>
-            <DialogTitle>Invite Member</DialogTitle>
-            <DialogDescription>
-              Invite a user by email to your organization.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
+          <div className="grid gap-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="email" className="text-right">
                 Email
