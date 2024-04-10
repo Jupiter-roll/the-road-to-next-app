@@ -24,32 +24,27 @@ const Attachments = async ({
   const attachments = await getAttachments(entityId, entity);
 
   return (
-    <>
-      {isOwner && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Upload File(s)</CardTitle>
-            <CardDescription>Attach images or PDFs</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <AttachmentCreateForm
-              entityId={entityId}
-              entity={entity}
+    <Card>
+      <CardHeader>
+        <CardTitle>Attachments</CardTitle>
+        <CardDescription>Attached images or PDFs</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="mx-2 mb-4">
+          {attachments.map((attachment) => (
+            <AttachmentItem
+              key={attachment.id}
+              attachment={attachment}
+              isOwner={isOwner}
             />
-          </CardContent>
-        </Card>
-      )}
+          ))}
+        </div>
 
-      <div className="space-y-2 ml-8">
-        {attachments.map((attachment) => (
-          <AttachmentItem
-            key={attachment.id}
-            attachment={attachment}
-            isOwner={isOwner}
-          />
-        ))}
-      </div>
-    </>
+        {isOwner && (
+          <AttachmentCreateForm entityId={entityId} entity={entity} />
+        )}
+      </CardContent>
+    </Card>
   );
 };
 

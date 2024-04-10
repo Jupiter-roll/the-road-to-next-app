@@ -1,6 +1,11 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import {
+  InfiniteData,
+  useInfiniteQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import {
   Card,
@@ -25,48 +30,77 @@ const Comments = ({
   initialComments,
   hasNextPage: initialHasNextPage,
 }: CommentsProps) => {
-  const [comments, setComments] = useState(initialComments);
-  const [hasNextPage, setHasNextPage] = useState(initialHasNextPage);
+  const queryKey = ['comments', ticketId];
 
-  const { ref, inView } = useInView();
-  const isFetching = useRef(false);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey,
+      queryFn: ({ pageParam }) => getComments(ticketId, pageParam),
+      initialPageParam: 0,
+      initialData: {
+        pages: [
+          {
+            list: initialComments,
+            metadata: { hasNextPage: initialHasNextPage },
+          },
+        ],
+        pageParams: [0],
+      },
+      getNextPageParam: (lastPage, allPages) => {
+        return lastPage.metadata.hasNextPage
+          ? allPages.map((page) => page.list).flat().length
+          : null;
+      },
+    });
 
-  useEffect(() => {
-    const handleMore = async () => {
-      if (!hasNextPage) return;
+  const comments = data?.pages.map((page) => page.list).flat() ?? [];
 
-      if (isFetching.current) return;
-      isFetching.current = true;
-
-      const { list: newComments, metadata } = await getComments(
-        ticketId,
-        comments.length
-      );
-
-      setComments((prevComments) => [
-        ...prevComments,
-        ...newComments,
-      ]);
-      setHasNextPage(metadata.hasNextPage);
-
-      isFetching.current = false;
-    };
-
-    handleMore();
-  }, [inView, comments, hasNextPage, ticketId]);
+  const queryClient = useQueryClient();
 
   const handleRemoveComment = (id: string) => {
-    setComments((prevComments) =>
-      prevComments.filter((comment) => comment.id !== id)
-    );
+    queryClient.setQueryData<
+      InfiniteData<Awaited<ReturnType<typeof getComments>>>
+    >(queryKey, (cachedData) => {
+      if (!cachedData) return cachedData;
+
+      const pages = cachedData.pages.map((page) => ({
+        ...page,
+        list: page.list.filter((comment) => comment.id !== id),
+      }));
+
+      return { ...cachedData, pages };
+    });
+
+    queryClient.invalidateQueries({ queryKey });
   };
 
   const handleCreateComment = (comment: CommentWithMetadata) => {
-    setComments((prevComments) => [
-      { ...comment, isOwner: true },
-      ...prevComments,
-    ]);
+    queryClient.setQueryData<
+      InfiniteData<Awaited<ReturnType<typeof getComments>>>
+    >(queryKey, (cachedData) => {
+      if (!cachedData) return cachedData;
+
+      const pages = cachedData.pages.map((page, index) => ({
+        ...page,
+        list:
+          index === 0
+            ? [{ ...comment, isOwner: true }, ...page.list]
+            : page.list,
+      }));
+
+      return { ...cachedData, pages };
+    });
+
+    queryClient.invalidateQueries({ queryKey });
   };
+
+  const { ref, inView } = useInView();
+
+  useEffect(() => {
+    if (inView && !isFetchingNextPage && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, inView, isFetchingNextPage]);
 
   return (
     <>
@@ -95,7 +129,13 @@ const Comments = ({
         ))}
       </div>
 
-      <div className="flex flex-col justify-center" ref={ref} />
+      <div className="flex flex-col justify-center" ref={ref}>
+        {!hasNextPage && (
+          <p className="text-right text-xs italic">
+            No more comments.
+          </p>
+        )}
+      </div>
     </>
   );
 };

@@ -18,11 +18,11 @@ const AttachmentDeleteButton = ({
     action: deleteAttachmentWithId,
     trigger: (isLoading) =>
       isLoading ? (
-        <Button variant="outline" size="icon">
+        <Button variant="ghost" size="icon">
           <Loader2Icon className="h-4 w-4 animate-spin" />
         </Button>
       ) : (
-        <Button variant="outline" size="icon">
+        <Button variant="ghost" size="icon">
           <TrashIcon className="w-4 h-4" />
         </Button>
       ),
