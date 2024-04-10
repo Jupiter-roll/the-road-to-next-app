@@ -28,7 +28,6 @@ export const getComments = async (
             username: true,
           },
         },
-        attachments: true,
       },
       orderBy: {
         createdAt: 'desc',
