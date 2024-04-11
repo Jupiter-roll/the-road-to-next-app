@@ -19,13 +19,24 @@ import { AttachmentCreateForm } from './attachment-create-form';
 type AttachmentCreateButtonProps = {
   entityId: string;
   entity: AttachmentEntity;
+  onCreateAttachment?: () => void;
 };
 
 const AttachmentCreateButton = ({
   entityId,
   entity,
+  onCreateAttachment,
 }: AttachmentCreateButtonProps) => {
   const [open, setOpen] = useState(false);
+
+  const handleSuccess = () => {
+    onCreateAttachment?.();
+    setOpen(false);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -47,14 +58,14 @@ const AttachmentCreateButton = ({
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setOpen(false)}
+                onClick={handleCancel}
               >
                 Cancel
               </Button>
               <SubmitButton label="Upload" />
             </DialogFooter>
           }
-          onSuccess={() => setOpen(false)}
+          onSuccess={handleSuccess}
         />
       </DialogContent>
     </Dialog>

@@ -2,16 +2,15 @@ import { Attachment } from '@prisma/client';
 import Link from 'next/link';
 import { attachmentDownloadPath } from '@/paths';
 import { getBaseUrl } from '@/utils/url';
-import { AttachmentDeleteButton } from './attachment-delete-button';
 
 type AttachmentItemProps = {
   attachment: Attachment;
-  isOwner: boolean;
+  buttons: React.ReactNode[];
 };
 
 const AttachmentItem = ({
   attachment,
-  isOwner,
+  buttons,
 }: AttachmentItemProps) => {
   return (
     <div className="flex justify-between items-center">
@@ -22,7 +21,7 @@ const AttachmentItem = ({
         {attachment.name}
       </Link>
 
-      {isOwner && <AttachmentDeleteButton id={attachment.id} />}
+      {buttons}
     </div>
   );
 };

@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  InfiniteData,
   useInfiniteQuery,
   useQueryClient,
 } from '@tanstack/react-query';
@@ -14,9 +13,18 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { AttachmentCreateButton } from '@/features/attachment/components/attachment-create-button';
+import { AttachmentDeleteButton } from '@/features/attachment/components/attachment-delete-button';
+import { AttachmentItem } from '@/features/attachment/components/attachment-item';
+import {
+  addCommentInCache,
+  getInitialData,
+  removeCommentFromCache,
+} from '../cache';
 import { getComments } from '../queries/get-comments';
 import { CommentWithMetadata } from '../types';
 import { CommentCreateForm } from './comment-create-form';
+import { CommentDeleteButton } from './comment-delete-button';
 import { CommentItem } from './comment-item';
 
 type CommentsProps = {
@@ -37,15 +45,10 @@ const Comments = ({
       queryKey,
       queryFn: ({ pageParam }) => getComments(ticketId, pageParam),
       initialPageParam: 0,
-      initialData: {
-        pages: [
-          {
-            list: initialComments,
-            metadata: { hasNextPage: initialHasNextPage },
-          },
-        ],
-        pageParams: [0],
-      },
+      initialData: getInitialData(
+        initialComments,
+        initialHasNextPage
+      ),
       getNextPageParam: (lastPage, allPages) => {
         return lastPage.metadata.hasNextPage
           ? allPages.map((page) => page.list).flat().length
@@ -57,41 +60,18 @@ const Comments = ({
 
   const queryClient = useQueryClient();
 
-  const handleRemoveComment = (id: string) => {
-    queryClient.setQueryData<
-      InfiniteData<Awaited<ReturnType<typeof getComments>>>
-    >(queryKey, (cachedData) => {
-      if (!cachedData) return cachedData;
-
-      const pages = cachedData.pages.map((page) => ({
-        ...page,
-        list: page.list.filter((comment) => comment.id !== id),
-      }));
-
-      return { ...cachedData, pages };
-    });
-
+  const handleInvalidateQuery = () => {
     queryClient.invalidateQueries({ queryKey });
   };
 
+  const handleRemoveComment = (id: string) => {
+    removeCommentFromCache({ queryClient, queryKey }, { id });
+    handleInvalidateQuery();
+  };
+
   const handleCreateComment = (comment: CommentWithMetadata) => {
-    queryClient.setQueryData<
-      InfiniteData<Awaited<ReturnType<typeof getComments>>>
-    >(queryKey, (cachedData) => {
-      if (!cachedData) return cachedData;
-
-      const pages = cachedData.pages.map((page, index) => ({
-        ...page,
-        list:
-          index === 0
-            ? [{ ...comment, isOwner: true }, ...page.list]
-            : page.list,
-      }));
-
-      return { ...cachedData, pages };
-    });
-
-    queryClient.invalidateQueries({ queryKey });
+    addCommentInCache({ queryClient, queryKey }, { comment });
+    handleInvalidateQuery();
   };
 
   const { ref, inView } = useInView();
@@ -120,13 +100,57 @@ const Comments = ({
       </Card>
 
       <div className="space-y-2 ml-8">
-        {comments.map((comment) => (
-          <CommentItem
-            key={comment.id}
-            comment={comment}
-            onRemoveComment={handleRemoveComment}
-          />
-        ))}
+        {comments.map((comment) => {
+          const sections = [];
+
+          if (comment.attachments?.length) {
+            sections.push({
+              label: 'Attachments',
+              content: comment.attachments.map((attachment) => (
+                <AttachmentItem
+                  key={attachment.id}
+                  attachment={attachment}
+                  buttons={[
+                    ...(comment.isOwner
+                      ? [
+                          <AttachmentDeleteButton
+                            key="0"
+                            id={attachment.id}
+                            onDeleteAttachment={handleInvalidateQuery}
+                          />,
+                        ]
+                      : []),
+                  ]}
+                />
+              )),
+            });
+          }
+
+          return (
+            <CommentItem
+              key={comment.id}
+              comment={comment}
+              sections={sections}
+              buttons={[
+                ...(comment.isOwner
+                  ? [
+                      <AttachmentCreateButton
+                        key="0"
+                        entityId={comment.id}
+                        entity="COMMENT"
+                        onCreateAttachment={handleInvalidateQuery}
+                      />,
+                      <CommentDeleteButton
+                        key="1"
+                        id={comment.id}
+                        onRemoveComment={handleRemoveComment}
+                      />,
+                    ]
+                  : []),
+              ]}
+            />
+          );
+        })}
       </div>
 
       <div className="flex flex-col justify-center" ref={ref}>

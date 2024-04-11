@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/card';
 import { getAttachments } from '../queries/get-attachments';
 import { AttachmentCreateForm } from './attachment-create-form';
+import { AttachmentDeleteButton } from './attachment-delete-button';
 import { AttachmentItem } from './attachment-item';
 
 type AttachmentsProps = {
@@ -35,7 +36,16 @@ const Attachments = async ({
             <AttachmentItem
               key={attachment.id}
               attachment={attachment}
-              isOwner={isOwner}
+              buttons={[
+                ...(isOwner
+                  ? [
+                      <AttachmentDeleteButton
+                        key="0"
+                        id={attachment.id}
+                      />,
+                    ]
+                  : []),
+              ]}
             />
           ))}
         </div>

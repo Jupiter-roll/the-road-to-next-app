@@ -1,62 +1,24 @@
 'use client';
 
 import { format } from 'date-fns';
-import { PaperclipIcon } from 'lucide-react';
-import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from '@/components/ui/toggle-group';
-import { AttachmentCreateButton } from '@/features/attachment/components/attachment-create-button';
-import { AttachmentItem } from '@/features/attachment/components/attachment-item';
 import { CommentWithMetadata } from '../types';
-import { CommentDeleteButton } from './comment-delete-button';
 
 type CommentItemProps = {
   comment: CommentWithMetadata;
-  onRemoveComment: (id: string) => void;
+  sections: {
+    label: string;
+    content: React.ReactNode;
+  }[];
+  buttons: React.ReactNode[];
 };
 
 const CommentItem = ({
   comment,
-  onRemoveComment,
+  sections,
+  buttons,
 }: CommentItemProps) => {
-  const hasAttachments = !!comment.attachments?.length;
-  const showToggles = hasAttachments;
-
-  const [activeToggles, setActiveToggles] = useState<string[]>([]);
-
-  const toggles = showToggles ? (
-    <ToggleGroup
-      type="multiple"
-      size="sm"
-      onValueChange={setActiveToggles}
-    >
-      <ToggleGroupItem value="attachments">
-        {comment.attachments.length}&nbsp;
-        <PaperclipIcon className="w-4 h-4" />
-      </ToggleGroupItem>
-    </ToggleGroup>
-  ) : null;
-
-  const attachments = activeToggles.includes('attachments') ? (
-    <div className="space-y-2">
-      <Separator />
-
-      <h4 className="text-sm text-muted-foreground">Attachments</h4>
-
-      {(comment.attachments ?? []).map((attachment) => (
-        <AttachmentItem
-          key={attachment.id}
-          attachment={attachment}
-          isOwner={comment.isOwner}
-        />
-      ))}
-    </div>
-  ) : null;
-
   return (
     <div className="flex gap-x-1">
       <Card className="p-4 flex-1 flex flex-col gap-y-1">
@@ -68,26 +30,23 @@ const CommentItem = ({
             {format(comment.createdAt, 'yyyy-MM-dd, HH:mm')}
           </p>
         </div>
-        <div className="flex justify-between items-center">
-          <p className="whitespace-pre-line">{comment.content}</p>
-          {showToggles && toggles}
-        </div>
 
-        {attachments}
+        <p className="whitespace-pre-line">{comment.content}</p>
+
+        {sections.map((section) => (
+          <div key={section.label} className="space-y-2 mt-2">
+            <Separator />
+
+            <h4 className="text-sm text-muted-foreground">
+              {section.label}
+            </h4>
+
+            <div>{section.content}</div>
+          </div>
+        ))}
       </Card>
 
-      {comment.isOwner && (
-        <div className="flex flex-col gap-y-1">
-          <AttachmentCreateButton
-            entityId={comment.id}
-            entity="COMMENT"
-          />
-          <CommentDeleteButton
-            id={comment.id}
-            onRemoveComment={onRemoveComment}
-          />
-        </div>
-      )}
+      <div className="flex flex-col gap-y-1">{buttons}</div>
     </div>
   );
 };

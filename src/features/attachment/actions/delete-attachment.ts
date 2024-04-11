@@ -1,7 +1,6 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { setCookieByKey } from '@/actions/cookies';
 import {
   fromErrorToFormState,
   toFormState,
@@ -84,5 +83,5 @@ export const deleteAttachment = async (id: string) => {
     }
   }
 
-  setCookieByKey('toast', 'Attachment deleted');
+  return toFormState('SUCCESS', 'Attachment deleted');
 };
