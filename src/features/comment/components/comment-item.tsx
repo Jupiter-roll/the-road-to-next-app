@@ -35,6 +35,7 @@ const CommentItem = ({
       onValueChange={setActiveToggles}
     >
       <ToggleGroupItem value="attachments">
+        {comment.attachments.length}&nbsp;
         <PaperclipIcon className="w-4 h-4" />
       </ToggleGroupItem>
     </ToggleGroup>
