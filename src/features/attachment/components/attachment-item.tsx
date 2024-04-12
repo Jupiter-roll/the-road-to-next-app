@@ -1,7 +1,7 @@
 import { Attachment } from '@prisma/client';
+import { ArrowUpRightFromSquareIcon } from 'lucide-react';
 import Link from 'next/link';
 import { attachmentDownloadPath } from '@/paths';
-import { getBaseUrl } from '@/utils/url';
 
 type AttachmentItemProps = {
   attachment: Attachment;
@@ -15,9 +15,10 @@ const AttachmentItem = ({
   return (
     <div className="flex justify-between items-center">
       <Link
-        className="text-sm"
-        href={getBaseUrl() + attachmentDownloadPath(attachment.id)}
+        className="flex gap-x-2 items-center text-sm"
+        href={attachmentDownloadPath(attachment.id)}
       >
+        <ArrowUpRightFromSquareIcon className="h-4 w-4" />
         {attachment.name}
       </Link>
 

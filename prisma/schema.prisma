@@ -148,8 +148,13 @@ model Ticket {
   organizationId String
   attachments    Attachment[]
 
+  referencedTicketId String?
+  referencedTicket   Ticket?  @relation("ReferencedTickets", fields: [referencedTicketId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  referencedTickets  Ticket[] @relation("ReferencedTickets")
+
   @@index([organizationId])
   @@index([userId])
+  @@index([referencedTicketId])
 }
 
 enum TicketStatus {

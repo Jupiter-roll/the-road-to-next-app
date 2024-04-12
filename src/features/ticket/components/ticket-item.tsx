@@ -24,6 +24,7 @@ type TicketItemProps = {
   isDetail?: boolean;
   comments?: React.ReactNode;
   attachments?: React.ReactNode;
+  referencedTickets?: React.ReactNode;
 };
 
 const TicketItem = ({
@@ -31,6 +32,7 @@ const TicketItem = ({
   isDetail,
   comments,
   attachments,
+  referencedTickets,
 }: TicketItemProps) => {
   const isTicketOwner = ticket.isOwner;
 
@@ -64,7 +66,7 @@ const TicketItem = ({
   return (
     <div className="space-y-4">
       <div
-        className={clsx('flex gap-x-1', {
+        className={clsx('flex  gap-x-1', {
           'w-[580px]': isDetail,
           'w-[420px]': !isDetail,
         })}
@@ -107,6 +109,7 @@ const TicketItem = ({
           </div>
         )}
       </div>
+      {referencedTickets}
       {attachments}
       {comments}
     </div>
