@@ -1,7 +1,7 @@
 import { Comment } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
+import { findTicketIdsFromText } from '../paths';
 import * as ticketRepository from '../repository';
-import { findTicketIdsFromText } from '../utils/find-ticket-ids-from-text';
 
 export const disconnectReferencedTickets = async (
   comment: Comment

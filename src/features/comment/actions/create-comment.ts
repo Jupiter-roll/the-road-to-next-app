@@ -10,8 +10,8 @@ import {
 import { filesSchema } from '@/features/attachment/schemas/files';
 import * as attachmentService from '@/features/attachment/services';
 import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-auth-or-redirect';
+import { findTicketIdsFromText } from '@/features/ticket/paths';
 import * as ticketRepository from '@/features/ticket/repository';
-import { findTicketIdsFromText } from '@/features/ticket/utils/find-ticket-ids-from-text';
 import { prisma } from '@/lib/prisma';
 import { ticketPath } from '@/paths';
 
