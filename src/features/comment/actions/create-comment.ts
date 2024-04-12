@@ -8,7 +8,7 @@ import {
   toFormState,
 } from '@/components/form/utils/to-form-state';
 import { filesSchema } from '@/features/attachment/schemas/files';
-import { doCreateAttachments } from '@/features/attachment/services/create-attachments';
+import * as attachmentService from '@/features/attachment/services';
 import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-auth-or-redirect';
 import { prisma } from '@/lib/prisma';
 import { ticketPath } from '@/paths';
@@ -50,7 +50,7 @@ export const createComment = async (
       },
     });
 
-    attachments = await doCreateAttachments({
+    attachments = await attachmentService.createAttachments({
       subject: comment,
       entity: 'COMMENT',
       entityId: comment.id,

@@ -13,7 +13,7 @@ import { isOwner } from '@/features/auth/utils/is-owner';
 import { prisma } from '@/lib/prisma';
 import { ticketPath } from '@/paths';
 import { filesSchema } from '../schemas/files';
-import { doCreateAttachments } from '../services/create-attachments';
+import * as attachmentService from '../services';
 import { isComment, isTicket } from '../types';
 
 const createAttachmentsSchema = z.object({
@@ -74,7 +74,7 @@ export const createAttachments = async (
       files: formData.getAll('files'),
     });
 
-    await doCreateAttachments({
+    await attachmentService.createAttachments({
       subject,
       entity,
       entityId,
