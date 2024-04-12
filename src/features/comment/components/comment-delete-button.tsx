@@ -7,12 +7,12 @@ import { deleteComment } from '../actions/delete-comment';
 
 type CommentDeleteButtonProps = {
   id: string;
-  onRemoveComment: (id: string) => void;
+  onDeleteComment: (id: string) => void;
 };
 
 const CommentDeleteButton = ({
   id,
-  onRemoveComment,
+  onDeleteComment,
 }: CommentDeleteButtonProps) => {
   const deleteCommentWithId = deleteComment.bind(null, id);
 
@@ -28,7 +28,7 @@ const CommentDeleteButton = ({
           <TrashIcon className="w-4 h-4" />
         </Button>
       ),
-    onSuccess: () => onRemoveComment(id),
+    onSuccess: () => onDeleteComment(id),
   });
 
   return (

@@ -1,6 +1,5 @@
 'use client';
 
-import { on } from 'events';
 import { Loader2Icon, TrashIcon } from 'lucide-react';
 import { useConfirmDialog } from '@/components/confirm-dialog';
 import { Button } from '@/components/ui/button';
@@ -8,7 +7,7 @@ import { deleteAttachment } from '../actions/delete-attachment';
 
 type AttachmentDeleteButtonProps = {
   id: string;
-  onDeleteAttachment?: () => void;
+  onDeleteAttachment?: (id: string) => void;
 };
 
 const AttachmentDeleteButton = ({
@@ -29,7 +28,7 @@ const AttachmentDeleteButton = ({
           <TrashIcon className="w-4 h-4" />
         </Button>
       ),
-    onSuccess: () => onDeleteAttachment?.(),
+    onSuccess: () => onDeleteAttachment?.(id),
   });
 
   return (

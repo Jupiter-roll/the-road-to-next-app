@@ -19,6 +19,7 @@ import { AttachmentItem } from '@/features/attachment/components/attachment-item
 import {
   addCommentInCache,
   getInitialData,
+  removeAttachmentFromCache,
   removeCommentFromCache,
 } from '../cache';
 import { getComments } from '../queries/get-comments';
@@ -64,13 +65,24 @@ const Comments = ({
     queryClient.invalidateQueries({ queryKey });
   };
 
-  const handleRemoveComment = (id: string) => {
+  const handleDeleteComment = (id: string) => {
     removeCommentFromCache({ queryClient, queryKey }, { id });
     handleInvalidateQuery();
   };
 
   const handleCreateComment = (comment: CommentWithMetadata) => {
     addCommentInCache({ queryClient, queryKey }, { comment });
+    handleInvalidateQuery();
+  };
+
+  const handleDeleteAttachment = (
+    commentId: string,
+    attachmentId: string
+  ) => {
+    removeAttachmentFromCache(
+      { queryClient, queryKey },
+      { attachmentId, commentId }
+    );
     handleInvalidateQuery();
   };
 
@@ -116,7 +128,12 @@ const Comments = ({
                           <AttachmentDeleteButton
                             key="0"
                             id={attachment.id}
-                            onDeleteAttachment={handleInvalidateQuery}
+                            onDeleteAttachment={(attachmentId) =>
+                              handleDeleteAttachment(
+                                comment.id,
+                                attachmentId
+                              )
+                            }
                           />,
                         ]
                       : []),
@@ -143,7 +160,7 @@ const Comments = ({
                       <CommentDeleteButton
                         key="1"
                         id={comment.id}
-                        onRemoveComment={handleRemoveComment}
+                        onDeleteComment={handleDeleteComment}
                       />,
                     ]
                   : []),

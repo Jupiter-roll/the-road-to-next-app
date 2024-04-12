@@ -49,7 +49,6 @@ const useConfirmDialog = ({
       }
 
       reset();
-      console.log('asdqasdasd');
       onSuccess?.();
     },
     onError: ({ formState }) => {
