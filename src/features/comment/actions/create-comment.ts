@@ -7,12 +7,15 @@ import {
   fromErrorToFormState,
   toFormState,
 } from '@/components/form/utils/to-form-state';
+import { filesSchema } from '@/features/attachment/schemas/files';
+import { doCreateAttachments } from '@/features/attachment/services/create-attachments';
 import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-auth-or-redirect';
 import { prisma } from '@/lib/prisma';
 import { ticketPath } from '@/paths';
 
 const createCommentSchema = z.object({
   content: z.string().min(1).max(1024),
+  files: filesSchema,
 });
 
 export const createComment = async (
@@ -23,17 +26,19 @@ export const createComment = async (
   const { user } = await getCurrentAuthOrRedirect();
 
   let comment;
+  let attachments;
 
   try {
-    const data = createCommentSchema.parse({
+    const { content, files } = createCommentSchema.parse({
       content: formData.get('content'),
+      files: formData.getAll('files'),
     });
 
     comment = await prisma.comment.create({
       data: {
         userId: user.id,
-        ticketId: ticketId,
-        ...data,
+        ticketId,
+        content,
       },
       include: {
         user: {
@@ -41,7 +46,15 @@ export const createComment = async (
             username: true,
           },
         },
+        ticket: true,
       },
+    });
+
+    attachments = await doCreateAttachments({
+      subject: comment,
+      entity: 'COMMENT',
+      entityId: comment.id,
+      files,
     });
   } catch (error) {
     return fromErrorToFormState(error);
@@ -49,5 +62,8 @@ export const createComment = async (
 
   revalidatePath(ticketPath(ticketId));
 
-  return toFormState('SUCCESS', 'Comment created', comment);
+  return toFormState('SUCCESS', 'Comment created', {
+    ...comment,
+    attachments,
+  });
 };

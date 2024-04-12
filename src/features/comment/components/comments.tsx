@@ -134,12 +134,12 @@ const Comments = ({
               buttons={[
                 ...(comment.isOwner
                   ? [
-                      <AttachmentCreateButton
-                        key="0"
-                        entityId={comment.id}
-                        entity="COMMENT"
-                        onCreateAttachment={handleInvalidateQuery}
-                      />,
+                      // <AttachmentCreateButton
+                      //   key="0"
+                      //   entityId={comment.id}
+                      //   entity="COMMENT"
+                      //   onCreateAttachment={handleInvalidateQuery}
+                      // />,
                       <CommentDeleteButton
                         key="1"
                         id={comment.id}

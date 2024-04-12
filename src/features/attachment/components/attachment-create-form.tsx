@@ -9,7 +9,7 @@ import { SubmitButton } from '@/components/form/submit-button';
 import { EMPTY_FORM_STATE } from '@/components/form/utils/to-form-state';
 import { Input } from '@/components/ui/input';
 import { createAttachments } from '../actions/create-attachments';
-import { ACCEPTED_TYPES } from '../constants';
+import { ACCEPTED } from '../constants';
 
 type AttachmentCreateFormProps = {
   entityId: string;
@@ -55,7 +55,7 @@ const AttachmentCreateForm = ({
         id="files"
         type="file"
         multiple
-        accept={ACCEPTED_TYPES.join(',')}
+        accept={ACCEPTED.join(',')}
       />
       <FieldError formState={formState} name="files" />
 
