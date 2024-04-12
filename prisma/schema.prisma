@@ -9,9 +9,8 @@ generator client {
 }
 
 datasource db {
-  provider     = "postgresql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Organization {
@@ -149,7 +148,7 @@ model Ticket {
   attachments    Attachment[]
 
   referencedTicketId String?
-  referencedTicket   Ticket?  @relation("ReferencedTickets", fields: [referencedTicketId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  referencedTicket   Ticket?  @relation("ReferencedTickets", fields: [referencedTicketId], references: [id], onDelete: SetNull, onUpdate: SetNull)
   referencedTickets  Ticket[] @relation("ReferencedTickets")
 
   @@index([organizationId])
