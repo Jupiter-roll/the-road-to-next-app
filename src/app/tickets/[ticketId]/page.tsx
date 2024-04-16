@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Placeholder } from "@/components/placeholder";
-import { TicketItem } from "@/feature/ticket/components/ticket-item";
-import { getTicket } from "@/feature/ticket/queries/get-ticket";
+import { TicketItem } from "@/features/ticket/components/ticket-item";
+import { getTicket } from "@/features/ticket/queries/get-ticket";
 
 type TicketPageProps = {
   params: {
