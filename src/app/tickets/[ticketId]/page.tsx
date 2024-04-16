@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { Placeholder } from "@/components/placeholder";
 import { TicketItem } from "@/feature/ticket/components/ticket-item";
 import { getTicket } from "@/feature/ticket/queries/get-ticket";
@@ -12,7 +13,7 @@ const TicketPage = async ({ params }: TicketPageProps) => {
   const ticket = await getTicket(params.ticketId);
 
   if (!ticket) {
-    return <Placeholder label="Ticket not found" />;
+    notFound();
   }
 
   return (
