@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Heading } from "@/components/heading";
-import { TicketList } from "@/feature/ticket/components/ticket-list";
 import { Spinner } from "@/components/spinner";
+import { TicketList } from "@/feature/ticket/components/ticket-list";
 
 const TicketsPage = () => {
   return (
