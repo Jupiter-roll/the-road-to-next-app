@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { CardCompact } from "@/components/card-compact";
-import { TicketUpdateForm } from "@/features/ticket/components/ticket-update-form";
+import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-form";
 import { getTicket } from "@/features/ticket/queries/get-ticket";
 
 type TicketEditPageProps = {
@@ -23,7 +23,7 @@ const TicketEditPage = async ({ params }: TicketEditPageProps) => {
         description="Edit an existing ticket"
         className="w-full max-w-[420px] animate-fade-in-from-top"
       >
-        <TicketUpdateForm ticket={ticket} />
+        <TicketUpsertForm ticket={ticket} />
       </CardCompact>
     </div>
   );

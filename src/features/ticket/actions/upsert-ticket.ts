@@ -5,22 +5,28 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/paths";
 
-export const updateTicket = async (id: string, formData: FormData) => {
+export const upsertTicket = async (
+  id: string | undefined,
+  formData: FormData
+) => {
   const data = {
     title: formData.get("title"),
     content: formData.get("content"),
   };
 
-  await prisma.ticket.update({
+  const dbData = {
+    title: data.title as string,
+    content: data.content as string,
+  };
+
+  await prisma.ticket.upsert({
     where: {
-      id,
+      id: id || "",
     },
-    data: {
-      title: data.title as string,
-      content: data.content as string,
-    },
+    update: dbData,
+    create: dbData,
   });
 
   revalidatePath(ticketsPath());
-  redirect(ticketsPath());
+  if (id) redirect(ticketsPath());
 };
