@@ -1,5 +1,6 @@
 "use client";
 
+import { cloneElement, useState } from "react";
 import { FormState } from "@/components/form/utils/to-form-state";
 import {
   AlertDialog,
@@ -10,7 +11,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "./ui/button";
 
@@ -27,12 +27,14 @@ const useConfirmDialog = ({
   action,
   trigger,
 }: UseConfirmDialogArgs) => {
-  const dialogTrigger = (
-    <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
-  );
+  const [isOpen, setIsOpen] = useState(false);
+
+  const dialogTrigger = cloneElement(trigger, {
+    onClick: () => setIsOpen((state) => !state),
+  });
 
   const dialog = (
-    <AlertDialog>
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
