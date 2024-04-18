@@ -52,6 +52,7 @@ export const upsertTicket = async (
   revalidatePath(ticketsPath());
 
   if (id) {
+    revalidatePath(ticketPath(id));
     setCookieByKey("toast", "Ticket updated");
     redirect(ticketPath(id));
   }

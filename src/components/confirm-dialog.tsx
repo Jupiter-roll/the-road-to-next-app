@@ -14,22 +14,25 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "./ui/button";
 
-type ConfirmDialogProps = {
+type UseConfirmDialogArgs = {
   title?: string;
   description?: string;
   action: () => Promise<FormState>;
   trigger: React.ReactElement;
 };
 
-const ConfirmDialog = ({
+const useConfirmDialog = ({
   title = "Are you absolutely sure?",
   description = "This action cannot be undone. Make sure you understand the consequences.",
   action,
   trigger,
-}: ConfirmDialogProps) => {
-  return (
+}: UseConfirmDialogArgs) => {
+  const dialogTrigger = (
+    <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
+  );
+
+  const dialog = (
     <AlertDialog>
-      <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
@@ -46,6 +49,8 @@ const ConfirmDialog = ({
       </AlertDialogContent>
     </AlertDialog>
   );
+
+  return [dialogTrigger, dialog] as const;
 };
 
-export { ConfirmDialog };
+export { useConfirmDialog };

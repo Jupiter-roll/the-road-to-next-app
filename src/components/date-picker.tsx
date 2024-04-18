@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { LucideCalendar } from "lucide-react";
 import { useImperativeHandle, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -56,7 +56,7 @@ const DatePicker = ({
           variant="outline"
           className="justify-start text-left font-normal"
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
+          <LucideCalendar className="mr-2 h-4 w-4" />
           {formattedStringDate}
           <input type="hidden" name={name} value={formattedStringDate} />
         </Button>
