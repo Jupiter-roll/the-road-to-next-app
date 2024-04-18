@@ -14,9 +14,8 @@ const TicketsPage = () => {
         title="Create Ticket"
         description="A new ticket will be created"
         className="w-full max-w-[420px] self-center"
-      >
-        <TicketUpsertForm />
-      </CardCompact>
+        content={<TicketUpsertForm />}
+      />
 
       <Suspense fallback={<Spinner />}>
         <TicketList />

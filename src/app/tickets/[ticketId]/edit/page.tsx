@@ -22,9 +22,8 @@ const TicketEditPage = async ({ params }: TicketEditPageProps) => {
         title="Edit Ticket"
         description="Edit an existing ticket"
         className="w-full max-w-[420px] animate-fade-in-from-top"
-      >
-        <TicketUpsertForm ticket={ticket} />
-      </CardCompact>
+        content={<TicketUpsertForm ticket={ticket} />}
+      />
     </div>
   );
 };

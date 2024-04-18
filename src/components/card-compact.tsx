@@ -11,7 +11,7 @@ type CardCompactProps = {
   title: string;
   description: string;
   className?: string;
-  children: React.ReactNode;
+  content: React.ReactNode;
   footer?: React.ReactNode;
 };
 
@@ -19,7 +19,7 @@ const CardCompact = ({
   title,
   description,
   className,
-  children,
+  content,
   footer,
 }: CardCompactProps) => {
   return (
@@ -28,8 +28,10 @@ const CardCompact = ({
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent>{children}</CardContent>
-      {footer && <CardFooter>{footer}</CardFooter>}
+      <CardContent>{content}</CardContent>
+      {footer && (
+        <CardFooter className="flex justify-between">{footer}</CardFooter>
+      )}
     </Card>
   );
 };
