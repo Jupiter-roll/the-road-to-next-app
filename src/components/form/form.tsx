@@ -6,9 +6,17 @@ type FormProps = {
   action: (payload: FormData) => void;
   formState: FormState;
   children: React.ReactNode;
+  onSuccess?: () => void;
+  onError?: () => void;
 };
 
-const Form = ({ action, formState, children }: FormProps) => {
+const Form = ({
+  action,
+  formState,
+  children,
+  onSuccess,
+  onError,
+}: FormProps) => {
   const { ref } = useActionFeedback(formState, {
     onSuccess: ({ formState, reset }) => {
       if (formState.message) {
@@ -16,11 +24,14 @@ const Form = ({ action, formState, children }: FormProps) => {
       }
 
       reset();
+      onSuccess?.();
     },
     onError: ({ formState }) => {
       if (formState.message) {
         toast.error(formState.message);
       }
+
+      onError?.();
     },
   });
 
