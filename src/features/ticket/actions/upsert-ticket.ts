@@ -9,6 +9,7 @@ import {
   fromErrorToFormState,
   toFormState,
 } from "@/components/form/utils/to-form-state";
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 import { prisma } from "@/lib/prisma";
 import { ticketPath, ticketsPath } from "@/paths";
 import { toCent } from "@/utils/currency";
@@ -25,6 +26,8 @@ export const upsertTicket = async (
   _formState: FormState,
   formData: FormData
 ) => {
+  const { user } = await getAuthOrRedirect();
+
   try {
     const data = upsertTicketSchema.parse({
       title: formData.get("title"),
@@ -35,6 +38,7 @@ export const upsertTicket = async (
 
     const dbData = {
       ...data,
+      userId: user.id,
       bounty: toCent(data.bounty),
     };
 
