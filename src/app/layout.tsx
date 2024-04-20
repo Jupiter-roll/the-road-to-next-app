@@ -1,9 +1,9 @@
 import "./globals.css";
-import { Sidebar } from "lucide-react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Header } from "@/components/header";
 import { RedirectToast } from "@/components/redirect-toast";
+import { Sidebar } from "@/components/sidebar/components/sidebar";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 

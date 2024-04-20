@@ -26,6 +26,7 @@ const SidebarItem = ({ isOpen, navItem }: SidebarItemProps) => {
       <span
         className={cn(
           "absolute left-12 text-base duration-200",
+          // isOpen ? "md:block hidden" : "w-[78px]",
           !isOpen && closedClassName
         )}
       >
