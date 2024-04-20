@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { cloneElement } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { closedClassName } from "../constants";
@@ -22,11 +23,13 @@ const SidebarItem = ({ isOpen, navItem }: SidebarItemProps) => {
         path === navItem.href && "bg-muted font-bold hover:bg-muted"
       )}
     >
-      <navItem.icon className={cn("h-5 w-5", navItem.color)} />
+      {cloneElement(navItem.icon, {
+        className: "h-5 w-5",
+      })}
       <span
         className={cn(
           "absolute left-12 text-base duration-200",
-          // isOpen ? "md:block hidden" : "w-[78px]",
+          isOpen ? "md:block hidden" : "w-[78px]",
           !isOpen && closedClassName
         )}
       >
