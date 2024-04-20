@@ -12,7 +12,6 @@ const useAuth = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const { user } = await getAuth();
-
       setUser(user);
       setFetched(true);
     };
