@@ -14,3 +14,6 @@ export const navItems: NavItem[] = [
     href: ticketsPath(),
   },
 ];
+
+export const closedClassName =
+  "text-background opacity-0 transition-all duration-300 group-hover:z-50 group-hover:ml-4 group-hover:rounded group-hover:bg-foreground group-hover:p-2 group-hover:opacity-100";
