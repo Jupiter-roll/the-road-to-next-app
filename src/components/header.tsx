@@ -47,7 +47,7 @@ const Header = () => {
       <div className="flex align-items gap-x-2">
         <Link
           href={homePath()}
-          className={buttonVariants({ variant: "outline" })}
+          className={buttonVariants({ variant: "ghost" })}
         >
           <LucideKanban />
           <h1 className="ml-2 text-lg font-semibold">TicketBounty</h1>
