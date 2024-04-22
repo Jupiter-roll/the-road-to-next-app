@@ -5,8 +5,6 @@ import {
   LucidePencil,
 } from "lucide-react";
 import Link from "next/link";
-import { Suspense } from "react";
-import { Spinner } from "@/components/spinner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,10 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { getAuth } from "@/features/auth/queries/get-auth";
 import { isOwner } from "@/features/auth/utils/is-owner";
-import { Comments } from "@/features/comment/components/comments";
 import { ticketEditPath, ticketPath } from "@/paths";
 import { toCurrencyFromCent } from "@/utils/currency";
 import { TICKET_ICONS } from "../constants";
