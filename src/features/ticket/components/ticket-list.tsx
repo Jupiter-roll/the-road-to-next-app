@@ -1,3 +1,4 @@
+import { Placeholder } from "@/components/placeholder";
 import { SearchInput } from "@/components/search-input";
 import { getTickets } from "../queries/get-tickets";
 import { SearchParams } from "../search-params";
@@ -10,6 +11,10 @@ type TicketListProps = {
 
 const TicketList = async ({ userId, searchParams }: TicketListProps) => {
   const tickets = await getTickets(userId, searchParams);
+
+  if (!tickets.length) {
+    return <Placeholder label="No tickets found" />;
+  }
 
   return (
     <div className="flex flex-col items-center gap-y-4 animate-fade-in-from-top">
