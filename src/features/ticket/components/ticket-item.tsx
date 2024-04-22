@@ -66,7 +66,7 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
 
   return (
     <div
-      className={clsx("flex-1 w-full flex gap-x-1", {
+      className={clsx("w-full flex gap-x-1", {
         "max-w-[580px]": isDetail,
         "max-w-[420px]": !isDetail,
       })}
