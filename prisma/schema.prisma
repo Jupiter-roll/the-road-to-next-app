@@ -38,7 +38,7 @@ model Ticket {
   bounty    Int
   user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  Comment   Comment[]
+  comments  Comment[]
 
   @@index([userId])
 }

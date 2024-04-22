@@ -1,16 +1,14 @@
+import { Suspense } from "react";
 import { CardCompact } from "@/components/card-compact";
-import { getComments } from "../queries/get-comments";
+import { Skeleton } from "@/components/ui/skeleton";
 import { CommentCreateForm } from "./comment-create-form";
-import { CommentDeleteButton } from "./comment-delete-button";
-import { CommentItem } from "./comment-item";
+import { CommentList } from "./comment-list";
 
 type CommentsProps = {
   ticketId: string;
 };
 
 const Comments = async ({ ticketId }: CommentsProps) => {
-  const comments = await getComments(ticketId);
-
   return (
     <>
       <CardCompact
@@ -19,15 +17,17 @@ const Comments = async ({ ticketId }: CommentsProps) => {
         content={<CommentCreateForm ticketId={ticketId} />}
       />
 
-      <div className="flex flex-col gap-y-2 ml-8">
-        {comments.map((comment) => (
-          <CommentItem
-            key={comment.id}
-            comment={comment}
-            buttons={[<CommentDeleteButton key="0" id={comment.id} />]}
-          />
-        ))}
-      </div>
+      <Suspense
+        fallback={
+          <div className="flex flex-col gap-y-4 ml-8">
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-20 w-full" />
+          </div>
+        }
+      >
+        <CommentList ticketId={ticketId} />
+      </Suspense>
     </>
   );
 };
