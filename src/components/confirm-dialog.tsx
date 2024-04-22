@@ -40,6 +40,10 @@ const useConfirmDialog = ({
 
   const [formState, formAction] = useFormState(action, EMPTY_FORM_STATE);
 
+  const handleSuccess = () => {
+    setIsOpen(false);
+  };
+
   const dialog = (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
@@ -50,7 +54,11 @@ const useConfirmDialog = ({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
-            <Form action={formAction} formState={formState}>
+            <Form
+              action={formAction}
+              formState={formState}
+              onSuccess={handleSuccess}
+            >
               <SubmitButton label="Confirm" />
             </Form>
           </AlertDialogAction>

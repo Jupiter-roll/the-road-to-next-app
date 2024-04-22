@@ -40,10 +40,17 @@ const users = [
   },
 ];
 
+const comments = [
+  { content: "First comment from DB." },
+  { content: "Second comment from DB." },
+  { content: "Third comment from DB." },
+];
+
 const seed = async () => {
   const t0 = performance.now();
   console.log("DB Seed: Started ...");
 
+  await prisma.comment.deleteMany();
   await prisma.user.deleteMany();
   await prisma.ticket.deleteMany();
 
@@ -62,10 +69,22 @@ const seed = async () => {
     })
   );
 
-  await prisma.ticket.createMany({
-    data: tickets.map((ticket) => ({
-      ...ticket,
-      userId: dbUsers[0].id,
+  const dbTickets = await Promise.all(
+    tickets.map(async (ticket) => {
+      return prisma.ticket.create({
+        data: {
+          ...ticket,
+          userId: dbUsers[0].id,
+        },
+      });
+    })
+  );
+
+  await prisma.comment.createMany({
+    data: comments.map((comment) => ({
+      ...comment,
+      ticketId: dbTickets[0].id,
+      userId: dbUsers[1].id,
     })),
   });
 
