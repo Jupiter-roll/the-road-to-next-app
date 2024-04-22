@@ -1,5 +1,6 @@
 import { Placeholder } from "@/components/placeholder";
 import { SearchInput } from "@/components/search-input";
+import { SortSelect } from "@/components/sort-select";
 import { getTickets } from "../queries/get-tickets";
 import { SearchParams } from "../search-params";
 import { TicketItem } from "./ticket-item";
@@ -18,8 +19,15 @@ const TicketList = async ({ userId, searchParams }: TicketListProps) => {
 
   return (
     <div className="flex flex-col items-center gap-y-4 animate-fade-in-from-top">
-      <div className="w-full max-w-[420px]">
+      <div className="w-full max-w-[420px] flex gap-x-2">
         <SearchInput placeholder="Search tickets ..." />
+        <SortSelect
+          defaulltValue="newest"
+          options={[
+            { value: "newest", label: "Newest" },
+            { value: "bounty", label: "Bounty" },
+          ]}
+        />
       </div>
 
       {tickets.map((ticket) => (
