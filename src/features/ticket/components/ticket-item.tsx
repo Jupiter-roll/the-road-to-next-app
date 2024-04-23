@@ -109,21 +109,6 @@ const TicketItem = async ({ ticket, isDetail, comments }: TicketItemProps) => {
       </div>
 
       {comments}
-
-      {/* remove */}
-      {/* {isDetail ? (
-        <Suspense
-          fallback={
-            <div className="flex flex-col gap-y-4 ml-8">
-              <Skeleton className="h-[250px] w-full" />
-              <Skeleton className="h-[80px] w-full" />
-              <Skeleton className="h-[80px] w-full" />
-            </div>
-          }
-        >
-          <Comments ticketId={ticket.id} />
-        </Suspense>
-      ) : null} */}
     </div>
   );
 };
