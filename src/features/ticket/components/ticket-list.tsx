@@ -44,7 +44,7 @@ const TicketList = async ({ userId, searchParams }: TicketListProps) => {
       )}
 
       <div className="w-full max-w-[420px]">
-        <TicketPagination {...ticketMetadata} />
+        <TicketPagination paginatedTicketsMetadata={ticketMetadata} />
       </div>
     </div>
   );

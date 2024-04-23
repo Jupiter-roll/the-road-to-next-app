@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { CardCompact } from "@/components/card-compact";
 import { Button } from "@/components/ui/button";
+import { PaginatedData } from "@/types/pagination";
 import { getComments } from "../queries/get-comments";
 import { CommentWithMetadata } from "../types";
 import { CommentCreateForm } from "./comment-create-form";
@@ -11,10 +12,7 @@ import { CommentItem } from "./comment-item";
 
 type CommentsProps = {
   ticketId: string;
-  paginatedComments: {
-    list: CommentWithMetadata[];
-    metadata: { count: number; hasNextPage: boolean };
-  };
+  paginatedComments: PaginatedData<CommentWithMetadata>;
 };
 
 const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
@@ -29,12 +27,32 @@ const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
     setMetadata(morePaginatedComments.metadata);
   };
 
+  const handleCreateComment = (comment: CommentWithMetadata | undefined) => {
+    if (!comment) return;
+
+    setComments((prevComments) => [
+      { ...comment, isOwner: true },
+      ...prevComments,
+    ]);
+  };
+
+  const handleDeleteComment = (id: string) => {
+    setComments((prevComments) =>
+      prevComments.filter((comment) => comment.id !== id)
+    );
+  };
+
   return (
     <>
       <CardCompact
         title="Create Comment"
         description="A new comment will be created"
-        content={<CommentCreateForm ticketId={ticketId} />}
+        content={
+          <CommentCreateForm
+            ticketId={ticketId}
+            onCreateComment={handleCreateComment}
+          />
+        }
       />
 
       <div className="flex-1 flex flex-col gap-y-2 ml-8">
@@ -44,7 +62,13 @@ const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
             comment={comment}
             buttons={[
               ...(comment.isOwner
-                ? [<CommentDeleteButton key="0" id={comment.id} />]
+                ? [
+                    <CommentDeleteButton
+                      key="0"
+                      id={comment.id}
+                      onDeleteComment={handleDeleteComment}
+                    />,
+                  ]
                 : []),
             ]}
           />

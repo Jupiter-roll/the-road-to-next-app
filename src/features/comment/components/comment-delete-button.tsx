@@ -1,24 +1,27 @@
 "use client";
 
-import { TrashIcon } from "lucide-react";
+import { LucideTrash } from "lucide-react";
 import { useConfirmDialog } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { deleteComment } from "../actions/delete-comment";
 
 type CommentDeleteButtonProps = {
   id: string;
+  onDeleteComment?: (id: string) => void;
 };
 
-const CommentDeleteButton = ({ id }: CommentDeleteButtonProps) => {
-  const deleteCommentWithId = deleteComment.bind(null, id);
-
+const CommentDeleteButton = ({
+  id,
+  onDeleteComment,
+}: CommentDeleteButtonProps) => {
   const [deleteButton, deleteDialog] = useConfirmDialog({
-    action: deleteCommentWithId,
+    action: deleteComment.bind(null, id),
     trigger: (
       <Button variant="outline" size="icon">
-        <TrashIcon className="w-4 h-4" />
+        <LucideTrash className="w-4 h-4" />
       </Button>
     ),
+    onSuccess: () => onDeleteComment?.(id),
   });
 
   return (

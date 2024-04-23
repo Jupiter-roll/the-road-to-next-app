@@ -1,19 +1,19 @@
 import { useEffect, useRef } from "react";
 import { FormState } from "@/components/form/utils/to-form-state";
 
-type OnArgs = {
-  formState: FormState;
+type OnArgs<T> = {
+  formState: FormState<T>;
   reset: () => void;
 };
 
-type UseActionFeedbackOptions = {
-  onSuccess?: (onArgs: OnArgs) => void;
-  onError?: (onArgs: OnArgs) => void;
+type UseActionFeedbackOptions<T> = {
+  onSuccess?: (onArgs: OnArgs<T>) => void;
+  onError?: (onArgs: OnArgs<T>) => void;
 };
 
-const useActionFeedback = (
-  formState: FormState,
-  options?: UseActionFeedbackOptions
+const useActionFeedback = <T = unknown>(
+  formState: FormState<T>,
+  options?: UseActionFeedbackOptions<T>
 ) => {
   const ref = useRef<HTMLFormElement>(null);
 
