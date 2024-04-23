@@ -23,5 +23,9 @@ export const getTicket = async (id: string) => {
     },
   });
 
+  if (!ticket) {
+    return null;
+  }
+
   return { ...ticket, isOwner: isOwner(user, ticket) };
 };
