@@ -76,13 +76,11 @@ const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
       </div>
 
       <div className="flex flex-col justify-center ml-8">
-        <Button
-          variant="ghost"
-          onClick={handleMore}
-          disabled={!metadata.hasNextPage}
-        >
-          More
-        </Button>
+        {metadata.hasNextPage && (
+          <Button variant="ghost" onClick={handleMore}>
+            More
+          </Button>
+        )}
       </div>
     </>
   );
