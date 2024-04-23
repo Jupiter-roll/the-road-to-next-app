@@ -1,7 +1,14 @@
 "use client";
 
-import { cloneElement, useState } from "react";
+import {
+  cloneElement,
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 import { useFormState } from "react-dom";
+import { toast } from "sonner";
 import {
   EMPTY_FORM_STATE,
   FormState,
@@ -16,14 +23,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Form } from "./form/form";
-import { SubmitButton } from "./form/submit-button";
+import { useActionFeedback } from "./form/hooks/use-action-feedback";
+import { Button } from "./ui/button";
 
 type UseConfirmDialogArgs = {
   title?: string;
   description?: string;
   action: () => Promise<FormState>;
-  trigger: React.ReactElement;
+  trigger: React.ReactElement | ((isLoading: boolean) => React.ReactElement);
   onSuccess?: (formState: FormState) => void;
 };
 
@@ -36,16 +43,54 @@ const useConfirmDialog = ({
 }: UseConfirmDialogArgs) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const dialogTrigger = cloneElement(trigger, {
-    onClick: () => setIsOpen((state) => !state),
-  });
-
   const [formState, formAction] = useFormState(action, EMPTY_FORM_STATE);
 
-  const handleSuccess = () => {
-    setIsOpen(false);
-    onSuccess?.(formState);
+  useActionFeedback(formState, {
+    onSuccess: ({ formState }) => {
+      if (formState.message) {
+        toast.success(formState.message);
+      }
+
+      onSuccess?.(formState);
+    },
+    onError: ({ formState }) => {
+      if (formState.message) {
+        toast.error(formState.message);
+      }
+    },
+  });
+
+  const [isPending, startTransition] = useTransition();
+
+  const dialogTrigger = cloneElement(
+    typeof trigger === "function" ? trigger(isPending) : trigger,
+    {
+      onClick: () => setIsOpen((state) => !state),
+    }
+  );
+
+  const handleAction = () => {
+    startTransition(() => {
+      formAction();
+    });
   };
+
+  const toastRef = useRef<string | number | null>(null);
+
+  useEffect(() => {
+    if (isPending) {
+      console.log(isPending);
+      toastRef.current = toast.loading("Deleting ...");
+    } else if (toastRef.current) {
+      toast.dismiss(toastRef.current);
+    }
+
+    return () => {
+      if (toastRef.current) {
+        toast.dismiss(toastRef.current);
+      }
+    };
+  }, [isPending]);
 
   const dialog = (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
@@ -57,13 +102,9 @@ const useConfirmDialog = ({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
-            <Form
-              action={formAction}
-              formState={formState}
-              onSuccess={handleSuccess}
-            >
-              <SubmitButton label="Confirm" />
-            </Form>
+            <form action={handleAction}>
+              <Button type="submit">Confirm</Button>
+            </form>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
