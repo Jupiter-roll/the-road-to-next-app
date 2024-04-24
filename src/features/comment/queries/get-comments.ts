@@ -15,12 +15,10 @@ export const getComments = async (ticketId: string, cursor?: number) => {
   };
 
   const take = 2;
-  const skip = 0;
 
   let [comments, count] = await prisma.$transaction([
     prisma.comment.findMany({
       where,
-      skip,
       take: take + 1,
       include: {
         user: {
