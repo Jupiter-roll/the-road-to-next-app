@@ -1,6 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import {
+  InfiniteData,
+  useInfiniteQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { CardCompact } from "@/components/card-compact";
 import { Button } from "@/components/ui/button";
 import { PaginatedData } from "@/types/pagination";
@@ -16,30 +20,71 @@ type CommentsProps = {
 };
 
 const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
-  const [comments, setComments] = useState(paginatedComments.list);
-  const [metadata, setMetadata] = useState(paginatedComments.metadata);
+  const queryKey = ["comments", ticketId];
 
-  const handleMore = async () => {
-    const morePaginatedComments = await getComments(ticketId, comments.length);
-    const moreComments = morePaginatedComments.list;
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey,
+      queryFn: ({ pageParam }) => getComments(ticketId, pageParam),
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, allPages) =>
+        lastPage.metadata.hasNextPage
+          ? allPages.flatMap((page) => page.list).length
+          : null,
+      initialData: {
+        pages: [
+          {
+            list: paginatedComments.list,
+            metadata: paginatedComments.metadata,
+          },
+        ],
+        pageParams: [0],
+      },
+    });
 
-    setComments([...comments, ...moreComments]);
-    setMetadata(morePaginatedComments.metadata);
-  };
+  const queryClient = useQueryClient();
+
+  const comments = data?.pages.map((page) => page.list).flat() ?? [];
+
+  const handleMore = () => fetchNextPage();
 
   const handleCreateComment = (comment: CommentWithMetadata | undefined) => {
     if (!comment) return;
 
-    setComments((prevComments) => [
-      { ...comment, isOwner: true },
-      ...prevComments,
-    ]);
+    queryClient.setQueryData<
+      InfiniteData<Awaited<ReturnType<typeof getComments>>>
+    >(queryKey, (cache) => {
+      if (!cache) return cache;
+
+      const pages = cache.pages.map((page, index) => ({
+        ...page,
+        list:
+          index === 0
+            ? [{ ...comment, isOwner: true }, ...page.list]
+            : page.list,
+      }));
+
+      return { ...cache, pages };
+    });
+
+    queryClient.invalidateQueries({ queryKey });
   };
 
   const handleDeleteComment = (id: string) => {
-    setComments((prevComments) =>
-      prevComments.filter((comment) => comment.id !== id)
-    );
+    queryClient.setQueryData<
+      InfiniteData<Awaited<ReturnType<typeof getComments>>>
+    >(queryKey, (cache) => {
+      if (!cache) return cache;
+
+      const pages = cache.pages.map((page) => ({
+        ...page,
+        list: page.list.filter((comment) => comment.id !== id),
+      }));
+
+      return { ...cache, pages };
+    });
+
+    queryClient.invalidateQueries({ queryKey });
   };
 
   return (
@@ -76,8 +121,12 @@ const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
       </div>
 
       <div className="flex flex-col justify-center ml-8">
-        {metadata.hasNextPage && (
-          <Button variant="ghost" onClick={handleMore}>
+        {hasNextPage && (
+          <Button
+            variant="ghost"
+            onClick={handleMore}
+            disabled={isFetchingNextPage}
+          >
             More
           </Button>
         )}
