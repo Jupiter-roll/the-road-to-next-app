@@ -1,5 +1,6 @@
 "use server";
 
+import "server-only";
 import { Prisma } from "@prisma/client";
 import { generateId } from "lucia";
 import { cookies } from "next/headers";

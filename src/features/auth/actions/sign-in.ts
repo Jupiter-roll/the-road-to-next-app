@@ -1,5 +1,6 @@
 "use server";
 
+import "server-only";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Argon2id } from "oslo/password";
@@ -29,16 +30,16 @@ export const signIn = async (_formState: FormState, formData: FormData) => {
       where: { email },
     });
 
-    if (!user) {
-      return toFormState("ERROR", "Incorrect email or password");
-    }
+    // if (!user) {
+    //   return toFormState("ERROR", "Incorrect email or password");
+    // }
 
     const validPassword = await new Argon2id().verify(
-      user.hashedPassword,
+      user ? user.hashedPassword : "$argon",
       password
     );
 
-    if (!validPassword) {
+    if (!user || !validPassword) {
       return toFormState("ERROR", "Incorrect email or password");
     }
 
