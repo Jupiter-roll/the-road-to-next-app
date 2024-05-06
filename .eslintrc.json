@@ -1,17 +1,3 @@
 {
-  "extends": "next/core-web-vitals",
-  "plugins": ["simple-import-sort"],
-  "rules": {
-    "simple-import-sort/imports": [
-      "error",
-      {
-        "groups": [["^\\u0000", "^@?\\w", "^[^.]", "^\\."]]
-      }
-    ],
-    "simple-import-sort/exports": "error"
-  },
-  "parserOptions": {
-    "sourceType": "module",
-    "ecmaVersion": "latest"
-  }
+  "extends": "next/core-web-vitals"
 }
