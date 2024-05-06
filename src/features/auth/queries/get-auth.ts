@@ -1,10 +1,12 @@
-import { cookies } from 'next/headers';
-import { cache } from 'react';
-import { lucia } from '@/lib/lucia';
+"use server";
+
+import "server-only";
+import { cookies } from "next/headers";
+import { cache } from "react";
+import { lucia } from "@/lib/lucia";
 
 export const getAuth = cache(async () => {
-  const sessionId =
-    cookies().get(lucia.sessionCookieName)?.value ?? null;
+  const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
   if (!sessionId) {
     return {
       user: null,
@@ -16,9 +18,7 @@ export const getAuth = cache(async () => {
 
   try {
     if (result.session && result.session.fresh) {
-      const sessionCookie = lucia.createSessionCookie(
-        result.session.id
-      );
+      const sessionCookie = lucia.createSessionCookie(result.session.id);
       cookies().set(
         sessionCookie.name,
         sessionCookie.value,
@@ -34,6 +34,5 @@ export const getAuth = cache(async () => {
       );
     }
   } catch {}
-
   return result;
 });

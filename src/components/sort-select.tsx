@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Select,
@@ -6,7 +6,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from './ui/select';
+} from "./ui/select";
 
 export type SortSelectOption = {
   sortKey: string;
@@ -25,11 +25,7 @@ type SortSelectProps = {
   options: SortSelectOption[];
 };
 
-const SortSelect = ({
-  value,
-  onChange,
-  options,
-}: SortSelectProps) => {
+const SortSelect = ({ value, onChange, options }: SortSelectProps) => {
   const handleSort = (sortKey: string) => {
     const sortValue = options.find(
       (option) => option.sortKey === sortKey

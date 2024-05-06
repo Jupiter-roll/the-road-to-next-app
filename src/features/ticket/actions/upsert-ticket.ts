@@ -1,49 +1,52 @@
-'use server';
+"use server";
 
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
-import { z } from 'zod';
-import { setCookieByKey } from '@/actions/cookies';
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { z } from "zod";
+import { setCookieByKey } from "@/actions/cookies";
 import {
+  FormState,
   fromErrorToFormState,
   toFormState,
-} from '@/components/form/utils/to-form-state';
-import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-auth-or-redirect';
-import { prisma } from '@/lib/prisma';
-import { ticketPath, ticketsPath } from '@/paths';
-import { toCent } from '@/utils/currency';
+} from "@/components/form/utils/to-form-state";
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { isOwner } from "@/features/auth/utils/is-owner";
+import { prisma } from "@/lib/prisma";
+import { ticketPath, ticketsPath } from "@/paths";
+import { toCent } from "@/utils/currency";
 
 const upsertTicketSchema = z.object({
   title: z.string().min(1).max(191),
   content: z.string().min(1).max(1024),
-  deadline: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Is required'),
+  deadline: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Is required"),
   bounty: z.coerce.number().positive(),
 });
 
 export const upsertTicket = async (
   id: string | undefined,
-  _formState: { message: string },
+  _formState: FormState,
   formData: FormData
 ) => {
-  const { user } = await getCurrentAuthOrRedirect({
-    checkActiveOrganization: true, // reference #1 (default anyway)
-  });
+  const { user } = await getAuthOrRedirect();
 
   try {
     if (id) {
-      await prisma.ticket.findUniqueOrThrow({
+      const ticket = await prisma.ticket.findUnique({
         where: {
           id,
-          userId: user.id,
         },
       });
+
+      if (!ticket || !isOwner(user, ticket)) {
+        return toFormState("ERROR", "Not authorized");
+      }
     }
 
     const data = upsertTicketSchema.parse({
-      title: formData.get('title'),
-      content: formData.get('content'),
-      deadline: formData.get('deadline'),
-      bounty: formData.get('bounty'),
+      title: formData.get("title"),
+      content: formData.get("content"),
+      deadline: formData.get("deadline"),
+      bounty: formData.get("bounty"),
     });
 
     const dbData = {
@@ -54,24 +57,22 @@ export const upsertTicket = async (
 
     await prisma.ticket.upsert({
       where: {
-        id: id || '',
+        id: id || "",
       },
       update: dbData,
-      create: {
-        ...dbData,
-        organizationId: user.activeOrganizationId!, // careful #1
-      },
+      create: dbData,
     });
   } catch (error) {
     return fromErrorToFormState(error);
   }
 
+  revalidatePath(ticketsPath());
+
   if (id) {
-    setCookieByKey('toast', 'Ticket updated');
+    revalidatePath(ticketPath(id));
+    setCookieByKey("toast", "Ticket updated");
     redirect(ticketPath(id));
   }
 
-  revalidatePath(ticketsPath());
-
-  return toFormState('SUCCESS', 'Ticket created');
+  return toFormState("SUCCESS", "Ticket created");
 };

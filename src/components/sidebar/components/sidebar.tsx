@@ -1,85 +1,57 @@
-'use client';
+"use client";
 
-import { ArrowLeftIcon } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
-import { cn } from '@/lib/utils';
-import { navItems } from '../constants';
-import { SidebarItem } from './sidebar-item';
-import { SidebarItemAccordion } from './sidebar-item-accordion';
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { useAuth } from "@/features/auth/hooks/use-auth";
+import { cn } from "@/lib/utils";
+import { getActivePath } from "@/utils/get-active-path";
+import { navItems } from "../constants";
+import { SidebarItem } from "./sidebar-item";
 
-type SidebarProps = {
-  initialIsOpen: string | null;
-  onChangeOpen: (value: string) => void;
-};
+const Sidebar = () => {
+  const { user, isFetched } = useAuth();
+  const pathName = usePathname();
 
-const Sidebar = ({ initialIsOpen, onChangeOpen }: SidebarProps) => {
+  const { activeIndex } = getActivePath(
+    pathName,
+    navItems.map((navItem) => navItem.href)
+  );
+
   const [isTransition, setTransition] = useState(false);
-  const [isOpen, setOpen] = useState(initialIsOpen === 'true');
-  const [openItem, setOpenItem] = useState('');
+  const [isOpen, setOpen] = useState(false);
 
-  const isOpenRef = useRef(isOpen);
-  const lastOpen = useRef(openItem);
-
-  useEffect(() => {
-    if (isOpen === isOpenRef.current) return;
-    isOpenRef.current = isOpen;
-
-    if (isOpen) {
-      setOpenItem(lastOpen.current);
-    } else {
-      lastOpen.current = openItem;
-      setOpenItem('');
-    }
-  }, [isOpen, openItem]);
-
-  const handleToggle = async () => {
+  const handleToggle = (open: boolean) => {
     setTransition(true);
-    setOpen(!isOpen);
-    setTimeout(() => setTransition(false), 500);
-
-    onChangeOpen((!isOpen).toString());
+    setOpen(open);
+    setTimeout(() => setTransition(false), 200);
   };
+
+  if (!user || !isFetched) {
+    return <div className="w-[78px] bg-secondary/20" />;
+  }
 
   return (
     <nav
       className={cn(
-        'animate-sidebar-from-left',
-        'relative hidden h-screen border-r pt-20 md:block',
-        isTransition && 'duration-500',
-        isOpen ? 'w-72' : 'w-[78px]'
+        "animate-sidebar-from-left",
+        "h-screen border-r pt-24",
+        isTransition && "duration-200",
+        isOpen ? "md:w-60 w-[78px]" : "w-[78px]"
       )}
+      onMouseEnter={() => handleToggle(true)}
+      onMouseLeave={() => handleToggle(false)}
     >
-      <ArrowLeftIcon
-        className={cn(
-          'absolute -right-3 top-20 cursor-pointer rounded-full border bg-background text-3xl text-foreground',
-          !isOpen && 'rotate-180'
-        )}
-        onClick={handleToggle}
-      />
-      <div className="py-4 space-y-4">
-        <div className="px-3 py-2">
-          <div className="mt-3 space-y-1">
-            <nav className="space-y-2">
-              {navItems.map((navItem) =>
-                navItem.children ? (
-                  <SidebarItemAccordion
-                    key={navItem.title}
-                    isOpen={isOpen}
-                    navItem={navItem}
-                    openItem={openItem}
-                    onOpenItem={setOpenItem}
-                  />
-                ) : (
-                  <SidebarItem
-                    key={navItem.title}
-                    isOpen={isOpen}
-                    navItem={navItem}
-                  />
-                )
-              )}
-            </nav>
-          </div>
-        </div>
+      <div className="px-3 py-2">
+        <nav className="space-y-2">
+          {navItems.map((navItem, index) => (
+            <SidebarItem
+              key={navItem.title}
+              isOpen={isOpen}
+              isActive={activeIndex === index}
+              navItem={navItem}
+            />
+          ))}
+        </nav>
       </div>
     </nav>
   );

@@ -1,11 +1,11 @@
-import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-auth-or-redirect';
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 
 export default async function AuthenticatedLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  await getCurrentAuthOrRedirect();
+  await getAuthOrRedirect();
 
   return <>{children}</>;
 }

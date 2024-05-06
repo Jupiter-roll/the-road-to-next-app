@@ -1,33 +1,25 @@
-import { Separator } from './ui/separator';
+import { Separator } from "./ui/separator";
 
 type HeadingProps = {
   title: string;
   description?: string;
-  actions?: React.ReactElement;
-  topNav?: React.ReactElement;
+  breadcrumbs?: React.ReactNode;
+  tabs?: React.ReactNode;
 };
 
-const Heading = ({
-  title,
-  description,
-  actions,
-  topNav,
-}: HeadingProps) => {
+const Heading = ({ title, description, breadcrumbs, tabs }: HeadingProps) => {
   return (
     <>
-      {topNav}
-      <div className="flex items-center justify-between px-8">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight">
-            {title}
-          </h2>
-          {description && (
-            <p className="text-sm text-muted-foreground">
-              {description}
-            </p>
-          )}
+      <div className="px-8">
+        <div className="flex justify-between items-center">
+          <div>{breadcrumbs}</div>
+          <div>{tabs}</div>
         </div>
-        <div className="flex gap-x-2">{actions}</div>
+
+        <h2 className="text-3xl font-bold tracking-tight">{title}</h2>
+        {description && (
+          <p className="text-sm text-muted-foreground">{description}</p>
+        )}
       </div>
 
       <Separator />

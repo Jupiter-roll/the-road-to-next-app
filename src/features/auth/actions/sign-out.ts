@@ -1,10 +1,11 @@
-'use server';
+"use server";
 
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { lucia } from '@/lib/lucia';
-import { signInPath } from '@/paths';
-import { getAuth } from '../queries/get-auth';
+import "server-only";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { lucia } from "@/lib/lucia";
+import { signInPath } from "@/paths";
+import { getAuth } from "../queries/get-auth";
 
 export const signOut = async (_formData: FormData) => {
   const { session } = await getAuth();
