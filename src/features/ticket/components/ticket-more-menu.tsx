@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { Ticket, TicketStatus } from "@prisma/client";
-import { LucideTrash } from "lucide-react";
-import { toast } from "sonner";
-import { useConfirmDialog } from "@/components/confirm-dialog";
+import { TicketStatus } from '@prisma/client';
+import { TrashIcon } from 'lucide-react';
+import { toast } from 'sonner';
+import { useConfirmDialog } from '@/components/confirm-dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,13 +12,14 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { deleteTicket } from "../actions/delete-ticket";
-import { updateTicketStatus } from "../actions/update-ticket-status";
-import { TICKET_STATUS_LABELS } from "../constants";
+} from '@/components/ui/dropdown-menu';
+import { deleteTicket } from '../actions/delete-ticket';
+import { updateTicketStatus } from '../actions/update-ticket-status';
+import { TICKET_STATUS_LABELS } from '../constants';
+import { TicketWithMetadata } from '../types';
 
 type TicketMoreMenuProps = {
-  ticket: Ticket;
+  ticket: TicketWithMetadata;
   trigger: React.ReactElement;
 };
 
@@ -27,23 +28,27 @@ const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
     action: deleteTicket.bind(null, ticket.id),
     trigger: (
       <DropdownMenuItem>
-        <LucideTrash className="mr-2 h-4 w-4" />
+        <TrashIcon className="w-4 h-4 mr-2" />
         <span>Delete</span>
       </DropdownMenuItem>
     ),
   });
+
   const handleUpdateTicketStatus = async (value: string) => {
-    const promise = updateTicketStatus(ticket.id, value as TicketStatus);
+    const promise = updateTicketStatus(
+      ticket.id,
+      value as TicketStatus
+    );
 
     toast.promise(promise, {
-      loading: "Updating status...",
+      loading: 'Updating status...',
     });
 
     const result = await promise;
 
-    if (result.status === "ERROR") {
+    if (result.status === 'ERROR') {
       toast.error(result.message);
-    } else if (result.status === "SUCCESS") {
+    } else {
       toast.success(result.message);
     }
   };
@@ -53,11 +58,13 @@ const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
       value={ticket.status}
       onValueChange={handleUpdateTicketStatus}
     >
-      {(Object.keys(TICKET_STATUS_LABELS) as Array<TicketStatus>).map((key) => (
-        <DropdownMenuRadioItem key={key} value={key}>
-          {TICKET_STATUS_LABELS[key]}
-        </DropdownMenuRadioItem>
-      ))}
+      {(Object.keys(TICKET_STATUS_LABELS) as Array<TicketStatus>).map(
+        (key) => (
+          <DropdownMenuRadioItem key={key} value={key}>
+            {TICKET_STATUS_LABELS[key]}
+          </DropdownMenuRadioItem>
+        )
+      )}
     </DropdownMenuRadioGroup>
   );
 
@@ -69,8 +76,12 @@ const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
         <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" side="right">
           {ticketStatusRadioGroupItems}
-          <DropdownMenuSeparator />
-          {deleteButton}
+          {ticket.permissions.canDeleteTicket ? (
+            <>
+              <DropdownMenuSeparator />
+              {deleteButton}
+            </>
+          ) : null}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

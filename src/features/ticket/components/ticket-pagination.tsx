@@ -1,29 +1,28 @@
-"use client";
+'use client';
 
-import { useQueryState, useQueryStates } from "nuqs";
-import { useEffect, useRef } from "react";
-import { Pagination } from "@/components/pagination";
-import { PaginatedData } from "@/types/pagination";
+import { useQueryState, useQueryStates } from 'nuqs';
+import { useEffect, useRef } from 'react';
+import { Pagination } from '@/components/pagination';
 import {
-  paginationOptions,
   paginationParser,
+  pagionationOptions,
   searchParser,
-} from "../search-params";
-import { TicketWithMetadata } from "../types";
+} from '../search-params';
 
 type TicketPaginationProps = {
-  paginatedTicketsMetadata: PaginatedData<TicketWithMetadata>["metadata"];
+  count: number;
+  hasNextPage: boolean;
 };
 
-const TicketPagination = ({
-  paginatedTicketsMetadata,
-}: TicketPaginationProps) => {
+const TicketPagination = (props: TicketPaginationProps) => {
   const [pagination, setPagination] = useQueryStates(
     paginationParser,
-    paginationOptions
+    pagionationOptions
   );
 
-  const [search] = useQueryState("search", searchParser);
+  // reactive effects
+
+  const [search] = useQueryState('search', searchParser);
   const prevSearch = useRef(search);
 
   useEffect(() => {
@@ -31,7 +30,6 @@ const TicketPagination = ({
     prevSearch.current = search;
 
     setPagination({ ...pagination, page: 0 });
-
     // add more reactive effects here once needed ...
   }, [search, pagination, setPagination]);
 
@@ -39,7 +37,7 @@ const TicketPagination = ({
     <Pagination
       pagination={pagination}
       onPagination={setPagination}
-      paginatedMetadata={paginatedTicketsMetadata}
+      {...props}
     />
   );
 };

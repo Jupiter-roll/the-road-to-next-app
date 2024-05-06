@@ -1,6 +1,9 @@
+import { LucideIcon } from 'lucide-react';
+
 export type NavItem = {
-  separator?: boolean;
   title: string;
-  icon: React.ReactElement;
+  icon: LucideIcon;
+  color?: string;
   href: string;
+  children?: NavItem[];
 };

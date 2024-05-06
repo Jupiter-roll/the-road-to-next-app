@@ -1,44 +1,37 @@
-"use server";
+'use server';
 
-import { TicketStatus } from "@prisma/client";
-import { revalidatePath } from "next/cache";
+import { TicketStatus } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
 import {
   fromErrorToFormState,
   toFormState,
-} from "@/components/form/utils/to-form-state";
-import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
-import { isOwner } from "@/features/auth/utils/is-owner";
-import { prisma } from "@/lib/prisma";
-import { ticketPath, ticketsPath } from "@/paths";
+} from '@/components/form/utils/to-form-state';
+import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-auth-or-redirect';
+import { prisma } from '@/lib/prisma';
+import { ticketPath, ticketsPath } from '@/paths';
 
-export const updateTicketStatus = async (id: string, status: TicketStatus) => {
-  const { user } = await getAuthOrRedirect();
+export const updateTicketStatus = async (
+  id: string,
+  ticketStatus: TicketStatus
+) => {
+  const { user } = await getCurrentAuthOrRedirect();
 
   try {
-    const ticket = await prisma.ticket.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!ticket || !isOwner(user, ticket)) {
-      return toFormState("ERROR", "Not authorized");
-    }
-
     await prisma.ticket.update({
       where: {
         id,
+        userId: user.id,
       },
       data: {
-        status,
+        status: ticketStatus,
       },
     });
   } catch (error) {
     return fromErrorToFormState(error);
   }
 
-  revalidatePath(ticketPath(id));
   revalidatePath(ticketsPath());
+  revalidatePath(ticketPath(id));
 
-  return toFormState("SUCCESS", "Status updated");
+  return toFormState('SUCCESS', 'Status updated');
 };

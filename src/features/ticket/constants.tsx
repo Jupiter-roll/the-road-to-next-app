@@ -1,13 +1,18 @@
-import { LucideCheckCircle, LucideFileText, LucidePencil } from "lucide-react";
+import { TicketStatus } from '@prisma/client';
+import {
+  CheckCircleIcon,
+  FileTextIcon,
+  PencilIcon,
+} from 'lucide-react';
 
 export const TICKET_ICONS = {
-  OPEN: <LucideFileText />,
-  DONE: <LucideCheckCircle />,
-  IN_PROGRESS: <LucidePencil />,
+  OPEN: <FileTextIcon />,
+  IN_PROGRESS: <PencilIcon />,
+  DONE: <CheckCircleIcon />,
 };
 
-export const TICKET_STATUS_LABELS = {
-  OPEN: "Open",
-  DONE: "Done",
-  IN_PROGRESS: "In Progress",
+export const TICKET_STATUS_LABELS: Record<TicketStatus, string> = {
+  OPEN: 'Open',
+  IN_PROGRESS: 'In Progress',
+  DONE: 'Done',
 };

@@ -1,4 +1,4 @@
-import { LucideLoader2 } from "lucide-react";
+import { Loader2Icon } from 'lucide-react';
 
 const Spinner = () => {
   return (
@@ -6,7 +6,7 @@ const Spinner = () => {
       role="status"
       className="flex-1 self-center flex flex-col items-center justify-center"
     >
-      <LucideLoader2 className="h-16 w-16 animate-spin" />
+      <Loader2Icon className="h-16 w-16 animate-spin" />
     </div>
   );
 };

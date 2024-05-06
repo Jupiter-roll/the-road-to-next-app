@@ -1,10 +1,43 @@
-import { InfiniteData, useQueryClient } from "@tanstack/react-query";
-import { getComments } from "./queries/get-comments";
-import { CommentWithMetadata } from "./types";
+import { InfiniteData, useQueryClient } from '@tanstack/react-query';
+import { getComments } from './queries/get-comments';
+import { CommentWithMetadata } from './types';
+
+export const getInitialData = (
+  initialComments: CommentWithMetadata[],
+  initialHasNextPage: boolean
+) => {
+  return {
+    pages: [
+      {
+        list: initialComments,
+        metadata: { hasNextPage: initialHasNextPage },
+      },
+    ],
+    pageParams: [0],
+  };
+};
 
 type CacheArgs = {
   queryClient: ReturnType<typeof useQueryClient>;
   queryKey: string[];
+};
+
+export const removeCommentFromCache = (
+  { queryClient, queryKey }: CacheArgs,
+  payload: { id: string }
+) => {
+  queryClient.setQueryData<
+    InfiniteData<Awaited<ReturnType<typeof getComments>>>
+  >(queryKey, (cache) => {
+    if (!cache) return cache;
+
+    const pages = cache.pages.map((page) => ({
+      ...page,
+      list: page.list.filter((comment) => comment.id !== payload.id),
+    }));
+
+    return { ...cache, pages };
+  });
 };
 
 export const addCommentInCache = (
@@ -28,9 +61,9 @@ export const addCommentInCache = (
   });
 };
 
-export const removeCommentFromCache = (
+export const removeAttachmentFromCache = (
   { queryClient, queryKey }: CacheArgs,
-  payload: { id: string }
+  payload: { attachmentId: string; commentId: string }
 ) => {
   queryClient.setQueryData<
     InfiniteData<Awaited<ReturnType<typeof getComments>>>
@@ -39,7 +72,18 @@ export const removeCommentFromCache = (
 
     const pages = cache.pages.map((page) => ({
       ...page,
-      list: page.list.filter((comment) => comment.id !== payload.id),
+      list: page.list.map((comment) => {
+        if (comment.id === payload.commentId) {
+          return {
+            ...comment,
+            attachments: comment.attachments.filter(
+              (attachment) => attachment.id !== payload.attachmentId
+            ),
+          };
+        }
+
+        return comment;
+      }),
     }));
 
     return { ...cache, pages };

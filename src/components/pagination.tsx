@@ -1,12 +1,11 @@
-import { PaginatedData } from "@/types/pagination";
-import { Button } from "./ui/button";
+import { Button } from './ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from './ui/select';
 
 type PageAndSize = {
   page: number;
@@ -15,13 +14,15 @@ type PageAndSize = {
 
 type PaginationProps = {
   pagination: PageAndSize;
-  paginatedMetadata: PaginatedData<unknown>["metadata"];
+  count: number;
+  hasNextPage: boolean;
   onPagination: (pagination: PageAndSize) => void;
 };
 
 const Pagination = ({
   pagination,
-  paginatedMetadata: { count, hasNextPage },
+  count,
+  hasNextPage,
   onPagination,
 }: PaginationProps) => {
   const startOffset = pagination.page * pagination.size + 1;

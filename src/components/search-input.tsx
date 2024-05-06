@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useDebouncedCallback } from "use-debounce";
-import { Input } from "./ui/input";
+import { useDebouncedCallback } from 'use-debounce';
+import { Input } from './ui/input';
 
 type SearchInputProps = {
   value: string;
@@ -9,7 +9,11 @@ type SearchInputProps = {
   placeholder: string;
 };
 
-const SearchInput = ({ value, onChange, placeholder }: SearchInputProps) => {
+const SearchInput = ({
+  value,
+  onChange,
+  placeholder,
+}: SearchInputProps) => {
   const handleSearch = useDebouncedCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       onChange(event.target.value);

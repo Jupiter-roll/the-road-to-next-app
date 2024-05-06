@@ -1,31 +1,42 @@
-import Link from "next/link";
-import { CardCompact } from "@/components/card-compact";
-import { SignInForm } from "@/features/auth/components/sign-in-form";
-import { passwordForgotPath, signUpPath } from "@/paths";
+import Link from 'next/link';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { SignInForm } from '@/features/auth/components/sign-in-form';
+import { passwordForgotPath, signUpPath } from '@/paths';
 
 const SignInPage = () => {
   return (
     <div className="flex-1 flex flex-col justify-center items-center">
-      <CardCompact
-        title="Sign In"
-        description="Sign in to your account"
-        className="w-full max-w-[420px] animate-fade-in-from-top"
-        content={<SignInForm />}
-        footer={
-          <>
-            <Link className="text-sm text-muted-foreground" href={signUpPath()}>
-              No account yet?
-            </Link>
+      <Card className="w-[420px] animate-fade-in-from-top">
+        <CardHeader>
+          <CardTitle>Sign In</CardTitle>
+          <CardDescription>Sign in to your account.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <SignInForm />
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <Link
+            className="text-sm text-muted-foreground"
+            href={signUpPath()}
+          >
+            No account yet?
+          </Link>
 
-            <Link
-              className="text-sm text-muted-foreground"
-              href={passwordForgotPath()}
-            >
-              Forgot Password?
-            </Link>
-          </>
-        }
-      />
+          <Link
+            className="text-sm text-muted-foreground"
+            href={passwordForgotPath()}
+          >
+            Forgot Password?
+          </Link>
+        </CardFooter>
+      </Card>
     </div>
   );
 };

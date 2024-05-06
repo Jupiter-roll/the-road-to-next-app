@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { format } from "date-fns";
-import { LucideCalendar } from "lucide-react";
-import { useImperativeHandle, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { format } from 'date-fns';
+import { CalendarIcon } from 'lucide-react';
+import { useImperativeHandle, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from '@/components/ui/popover';
 
 type DatePickerProps = {
   id: string;
@@ -26,13 +26,6 @@ const DatePicker = ({
   defaultValue,
   imperativeHandleRef,
 }: DatePickerProps) => {
-  const [open, setOpen] = useState(false);
-
-  const handleSelect = (selectedDate: Date | undefined) => {
-    setDate(selectedDate);
-    setOpen(false);
-  };
-
   const [date, setDate] = useState<Date | undefined>(
     defaultValue ? new Date(defaultValue) : new Date()
   );
@@ -47,18 +40,29 @@ const DatePicker = ({
     []
   );
 
-  const formattedStringDate = date ? format(date, "yyyy-MM-dd") : "";
+  const [open, setOpen] = useState(false);
+
+  const handleSelect = (selectedDate: Date | undefined) => {
+    setDate(selectedDate);
+    setOpen(false);
+  };
+
+  const formattedStringDate = date ? format(date, 'yyyy-MM-dd') : '';
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger id={id} className="w-full" asChild>
         <Button
           variant="outline"
-          className="justify-start text-left font-normal"
+          className="justify-start font-normal text-left"
         >
-          <LucideCalendar className="mr-2 h-4 w-4" />
+          <CalendarIcon className="w-4 h-4 mr-2" />
           {formattedStringDate}
-          <input type="hidden" name={name} value={formattedStringDate} />
+          <input
+            type="hidden"
+            name={name}
+            value={formattedStringDate}
+          />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

@@ -1,39 +1,32 @@
-"use server";
+'use server';
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from 'next/cache';
 import {
   fromErrorToFormState,
   toFormState,
-} from "@/components/form/utils/to-form-state";
-import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
-import { isOwner } from "@/features/auth/utils/is-owner";
-import { prisma } from "@/lib/prisma";
-import { ticketPath } from "@/paths";
+} from '@/components/form/utils/to-form-state';
+import { getCurrentAuthOrRedirect } from '@/features/auth/queries/get-current-auth-or-redirect';
+import * as ticketService from '@/features/ticket/services';
+import { prisma } from '@/lib/prisma';
+import { ticketPath } from '@/paths';
 
 export const deleteComment = async (id: string) => {
-  const { user } = await getAuthOrRedirect();
+  const { user } = await getCurrentAuthOrRedirect();
 
   try {
-    const comment = await prisma.comment.findUnique({
+    const comment = await prisma.comment.delete({
       where: {
         id,
+        userId: user.id,
       },
     });
 
-    if (!comment || !isOwner(user, comment)) {
-      return toFormState("ERROR", "Not authorized");
-    }
-
-    await prisma.comment.delete({
-      where: {
-        id,
-      },
-    });
+    await ticketService.disconnectReferencedTickets(comment);
   } catch (error) {
     return fromErrorToFormState(error);
   }
 
   revalidatePath(ticketPath(id));
 
-  return toFormState("SUCCESS", "Comment deleted");
+  return toFormState('SUCCESS', 'Comment deleted');
 };
