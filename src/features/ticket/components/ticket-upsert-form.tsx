@@ -3,6 +3,7 @@
 import { Ticket } from "@prisma/client";
 import { useActionState } from "react";
 import { SubmitButton } from "@/components/form/submit-button";
+import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,7 +16,7 @@ type TicketUpsertFormProps = {
 const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
   const [actionState, action] = useActionState(
     upsertTicket.bind(null, ticket?.id),
-    { message: "" }
+    EMPTY_ACTION_STATE
   );
 
   return (
