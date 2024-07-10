@@ -27,7 +27,7 @@ const Header = () => {
         <ThemeSwitcher />
         <Link
           href={ticketsPath()}
-          className={buttonVariants({ variant: "outline" })}
+          className={buttonVariants({ variant: "default" })}
         >
           Tickets
         </Link>
