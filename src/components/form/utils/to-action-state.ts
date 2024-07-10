@@ -1,7 +1,7 @@
 import { ZodError } from "zod";
 
 export type ActionState = {
-  status: "IDLE" | "SUCCESS" | "ERROR";
+  status?: "SUCCESS" | "ERROR";
   message: string;
   payload?: FormData;
   fieldErrors: Record<string, string[] | undefined>;
@@ -9,7 +9,6 @@ export type ActionState = {
 };
 
 export const EMPTY_ACTION_STATE: ActionState = {
-  status: "IDLE",
   message: "",
   fieldErrors: {},
   timestamp: Date.now(),
