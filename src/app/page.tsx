@@ -1,28 +1,24 @@
-import { SearchParams } from 'nuqs/server';
-import { Suspense } from 'react';
-import { Heading } from '@/components/heading';
-import { Spinner } from '@/components/spinner';
-import { TicketList } from '@/features/ticket/components/ticket-list';
-import { searchParamsCache } from '@/features/ticket/search-params';
+import { SearchParams } from "nuqs/server";
+import { Suspense } from "react";
+import { Heading } from "@/components/heading";
+import { Spinner } from "@/components/spinner";
+import { TicketList } from "@/features/ticket/components/ticket-list";
+import { searchParamsCache } from "@/features/ticket/search-params";
 
 type HomePageProps = {
   searchParams: SearchParams;
 };
 
-const HomePage = async ({ searchParams }: HomePageProps) => {
+const HomePage = ({ searchParams }: HomePageProps) => {
   return (
-    <div className="flex flex-col flex-1 gap-y-8">
+    <div className="flex-1 flex flex-col gap-y-8">
       <Heading
         title="All Tickets"
         description="Tickets by everyone at one place"
       />
 
       <Suspense fallback={<Spinner />}>
-        <div className="flex-1 flex mx-auto animate-fade-in-from-top">
-          <TicketList
-            searchParams={searchParamsCache.parse(searchParams)}
-          />
-        </div>
+        <TicketList searchParams={searchParamsCache.parse(searchParams)} />
       </Suspense>
     </div>
   );

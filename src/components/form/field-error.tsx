@@ -1,24 +1,18 @@
-import { FormState } from '@/components/form/utils/to-form-state';
-import { cn } from '@/lib/utils';
+import { ActionState } from "@/components/form/utils/to-action-state";
 
 type FieldErrorProps = {
-  formState: FormState;
+  actionState: ActionState;
   name: string;
-  className?: string;
 };
 
-const FieldError = ({
-  formState,
-  name,
-  className,
-}: FieldErrorProps) => {
-  const message = formState.fieldErrors[name]?.[0];
+const FieldError = ({ actionState, name }: FieldErrorProps) => {
+  const message = actionState.fieldErrors[name]?.[0];
 
   if (!message) return null;
 
   return (
-    <span className={cn('text-xs text-red-500', className)}>
-      {formState.fieldErrors[name]?.[0]}
+    <span className="text-xs text-red-500">
+      {actionState.fieldErrors[name]?.[0]}
     </span>
   );
 };

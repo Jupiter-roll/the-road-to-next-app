@@ -1,12 +1,13 @@
-'use client';
-
-import { cloneElement, useRef, useState, useTransition } from 'react';
-import { useFormState } from 'react-dom';
-import { toast } from 'sonner';
 import {
-  EMPTY_FORM_STATE,
-  FormState,
-} from '@/components/form/utils/to-form-state';
+  cloneElement,
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { toast } from "sonner";
+import { useActionFeedback } from "./form/hooks/use-action-feedback";
+import { ActionState, EMPTY_ACTION_STATE } from "./form/utils/to-action-state";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,91 +17,80 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { useFormFeedback } from './form/hooks/use-form-feedback';
-import { Button } from './ui/button';
+} from "./ui/alert-dialog";
+import { Button } from "./ui/button";
 
-type useConfirmDialogArgs = {
-  action: () => Promise<FormState | undefined>;
-  trigger:
-    | React.ReactElement
-    | ((isLoading: boolean) => React.ReactElement);
-  onSuccess?: () => void;
+type UseConfirmDialogProps = {
+  title?: string;
+  description?: string;
+  action: () => Promise<ActionState>;
+  trigger: React.ReactElement | ((isPending: boolean) => React.ReactElement);
+  onSuccess?: (actionState: ActionState) => void;
 };
 
 const useConfirmDialog = ({
+  title = "Are you absolutely sure?",
+  description = "This action cannot be undone. Make sure you understand the consequences.",
   action,
   trigger,
   onSuccess,
-}: useConfirmDialogArgs) => {
+}: UseConfirmDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const [formState, formAction] = useFormState(
+  const [actionState, formAction, isPending] = useActionState(
     action,
-    EMPTY_FORM_STATE
+    EMPTY_ACTION_STATE
   );
 
-  const toastRef = useRef<string | number | null>(null);
-
-  useFormFeedback(formState ?? EMPTY_FORM_STATE, {
-    onSuccess: ({ formState, reset }) => {
-      if (formState.message) {
-        toast.success(formState.message);
-      }
-
-      reset();
-      onSuccess?.();
-    },
-    onError: ({ formState }) => {
-      if (formState.message) {
-        toast.error(formState.message);
-      }
-    },
-    onSettled: () => {
-      if (toastRef.current) {
-        toast.dismiss(toastRef.current);
-      }
-    },
-    onCleanup: () => {
-      if (toastRef.current) {
-        toast.dismiss(toastRef.current);
-      }
-    },
-  });
-
-  const [isPending, startTransition] = useTransition();
-
-  const dialogTriggerWithClickHandler = cloneElement(
-    typeof trigger === 'function' ? trigger(isPending) : trigger,
+  const dialogTrigger = cloneElement(
+    typeof trigger === "function" ? trigger(isPending) : trigger,
     {
       onClick: () => setIsOpen((state) => !state),
     }
   );
 
-  const handleAction = () => {
-    toastRef.current = toast.loading('Deleting ...');
+  const toastRef = useRef<string | number | null>(null);
 
-    startTransition(() => {
-      formAction();
-    });
-  };
+  useEffect(() => {
+    if (isPending) {
+      toastRef.current = toast.loading("Deleting ...");
+    } else if (toastRef.current) {
+      toast.dismiss(toastRef.current);
+    }
+
+    return () => {
+      if (toastRef.current) {
+        toast.dismiss(toastRef.current);
+      }
+    };
+  }, [isPending]);
+
+  useActionFeedback(actionState, {
+    onSuccess: ({ actionState }) => {
+      if (actionState.message) {
+        toast.success(actionState.message);
+      }
+
+      onSuccess?.(actionState);
+    },
+    onError: ({ actionState }) => {
+      if (actionState.message) {
+        toast.error(actionState.message);
+      }
+    },
+  });
 
   const dialog = (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>
-            Are you absolutely sure?
-          </AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. Make sure you understand the
-            consequences.
-          </AlertDialogDescription>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
-            <form action={handleAction}>
+            <form action={formAction}>
               <Button type="submit">Confirm</Button>
             </form>
           </AlertDialogAction>
@@ -109,7 +99,7 @@ const useConfirmDialog = ({
     </AlertDialog>
   );
 
-  return [dialogTriggerWithClickHandler, dialog] as const;
+  return [dialogTrigger, dialog];
 };
 
 export { useConfirmDialog };

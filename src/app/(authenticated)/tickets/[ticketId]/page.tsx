@@ -1,13 +1,11 @@
-import { notFound } from 'next/navigation';
-import { Breadcrumbs } from '@/components/breadcrumbs';
-import { Separator } from '@/components/ui/separator';
-import { Attachments } from '@/features/attachment/components/attachments';
-import { Comments } from '@/features/comment/components/comments';
-import { getComments } from '@/features/comment/queries/get-comments';
-import { ReferencedTickets } from '@/features/ticket/components/referenced-tickets';
-import { TicketItem } from '@/features/ticket/components/ticket-item';
-import { getTicket } from '@/features/ticket/queries/get-ticket';
-import { homePath } from '@/paths';
+import { notFound } from "next/navigation";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { Separator } from "@/components/ui/separator";
+import { Comments } from "@/features/comment/components/comments";
+import { getComments } from "@/features/comment/queries/get-comments";
+import { TicketItem } from "@/features/ticket/components/ticket-item";
+import { getTicket } from "@/features/ticket/queries/get-ticket";
+import { homePath } from "@/paths";
 
 type TicketPageProps = {
   params: {
@@ -16,51 +14,40 @@ type TicketPageProps = {
 };
 
 const TicketPage = async ({ params }: TicketPageProps) => {
-  const ticket = await getTicket(params.ticketId);
+  const ticketPromise = getTicket(params.ticketId);
+  const commentsPromise = getComments(params.ticketId);
 
-  const { list: comments, metadata } = await getComments(
-    params.ticketId
-  );
+  const [ticket, paginatedComments] = await Promise.all([
+    ticketPromise,
+    commentsPromise,
+  ]);
 
   if (!ticket) {
     notFound();
   }
 
   return (
-    <div className="flex flex-col flex-1 gap-y-8">
+    <div className="flex-1 flex flex-col gap-y-8">
       <Breadcrumbs
         breadcrumbs={[
-          { title: 'Tickets', href: homePath() },
+          { title: "Tickets", href: homePath() },
           { title: ticket.title },
         ]}
       />
 
       <Separator />
 
-      <div className="flex flex-col gap-y-8">
-        <div className="flex-1 flex mx-auto animate-fade-in-from-top">
-          <TicketItem
-            ticket={ticket}
-            isDetail
-            referencedTickets={
-              <ReferencedTickets ticketId={ticket.id} />
-            }
-            attachments={
-              <Attachments
-                entityId={ticket.id}
-                entity="TICKET"
-                isOwner={ticket.isOwner}
-              />
-            }
-            comments={
-              <Comments
-                ticketId={ticket.id}
-                initialComments={comments}
-                {...metadata}
-              />
-            }
-          />
-        </div>
+      <div className="flex justify-center animate-fade-in-from-top">
+        <TicketItem
+          ticket={ticket}
+          isDetail
+          comments={
+            <Comments
+              ticketId={ticket.id}
+              paginatedComments={paginatedComments}
+            />
+          }
+        />
       </div>
     </div>
   );
