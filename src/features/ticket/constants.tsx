@@ -5,3 +5,9 @@ export const TICKET_ICONS = {
   DONE: <LucideCheckCircle />,
   IN_PROGRESS: <LucidePencil />,
 };
+
+export const TICKET_STATUS_LABELS = {
+  OPEN: "Open",
+  DONE: "Done",
+  IN_PROGRESS: "In Progress",
+};
