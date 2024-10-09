@@ -10,7 +10,7 @@
     "lint-fix": "next lint --fix"
   },
   "dependencies": {
-    "next": "^15.0.0-rc.0",
+    "next": "^15.0.0-canary.181",
     "react": "^19.0.0-rc-ed966dac-20241007",
     "react-dom": "^19.0.0-rc-ed966dac-20241007"
   },
