@@ -7,10 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint-fix": "next lint --fix"
+    "lint-fix": "next lint --fix",
+    "type": "tsc --noEmit"
   },
   "dependencies": {
-    "next": "^15.0.0-canary.181",
+    "next": "^15.0.0-rc.0",
     "react": "^19.0.0-rc-ed966dac-20241007",
     "react-dom": "^19.0.0-rc-ed966dac-20241007"
   },
