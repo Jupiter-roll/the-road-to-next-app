@@ -11,6 +11,7 @@
     "type": "tsc --noEmit"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
     "next": "^15.0.0-rc.0",
     "react": "^19.0.0-rc-ed966dac-20241007",
     "react-dom": "^19.0.0-rc-ed966dac-20241007"
