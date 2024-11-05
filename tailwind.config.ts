@@ -12,15 +12,6 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
-      keyframes: {
-        "fade-from-top": {
-          from: { opacity: "0", transform: "translateY(-16px)" },
-          to: { opacity: "1", transform: "translateY(0)" },
-        },
-      },
-      animation: {
-        "fade-from-top": "fade-from-top 0.5s ease-out",
-      },
     },
   },
   plugins: [],
