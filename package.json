@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "lint-fix": "next lint --fix",
-    "type": "tsc --noEmit"
+    "type": "tsc --noEmit",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@radix-ui/react-separator": "^1.1.0",
@@ -31,6 +32,7 @@
     "eslint-config-next": "15.0.2",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "postcss": "^8",
+    "prisma": "^5.22.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
