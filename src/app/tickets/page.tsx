@@ -1,5 +1,11 @@
-import clsx from "clsx";
 import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { initialTickets } from "@/data";
 import { ticketPath } from "@/paths";
 
@@ -72,23 +78,24 @@ const TicketsPage = () => {
 
       <div className="flex-1 flex flex-col items-center gap-y-4 animate-fade-from-top">
         {initialTickets.map((ticket) => (
-          <div
-            key={ticket.id}
-            className="w-full max-w-[420px] p-4 border border-slate-100 rounded"
-          >
-            <div>{TICKET_ICONS[ticket.status]}</div>
-            <h3 className="text-lg font-semibold truncate">{ticket.title}</h3>
-            <p
-              className={clsx("text-sm text-slate-500 truncate", {
-                "line-through": ticket.status === "DONE",
-              })}
-            >
-              {ticket.content}
-            </p>
-            <Link href={ticketPath(ticket.id)} className="text-sm underline">
-              View
-            </Link>
-          </div>
+          <Card key={ticket.id} className="w-full max-w-[420px]">
+            <CardHeader>
+              <CardTitle className="flex gap-x-2">
+                <span>{TICKET_ICONS[ticket.status]}</span>
+                <span className="truncate">{ticket.title}</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <span className="line-clamp-3 whitespace-break-spaces">
+                {ticket.content}
+              </span>
+            </CardContent>
+            <CardFooter>
+              <Link href={ticketPath(ticket.id)} className="text-sm underline">
+                View
+              </Link>
+            </CardFooter>
+          </Card>
         ))}
       </div>
     </div>
