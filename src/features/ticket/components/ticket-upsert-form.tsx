@@ -1,5 +1,3 @@
-"use client";
-
 import { Ticket } from "@prisma/client";
 import { SubmitButton } from "@/components/form/submit-button";
 import { Input } from "@/components/ui/input";
