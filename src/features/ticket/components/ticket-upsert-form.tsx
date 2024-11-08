@@ -50,6 +50,7 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
         <div className="w-1/2">
           <Label htmlFor="deadline">Deadline</Label>
           <DatePicker
+            // key={actionState.timestamp}
             id="deadline"
             name="deadline"
             defaultValue={
