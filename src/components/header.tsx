@@ -1,27 +1,20 @@
 "use client";
 
-import { User as AuthUser } from "lucia";
 import { LucideKanban, LucideLogOut } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { signOut } from "@/features/auth/actions/sign-out";
-import { getAuth } from "@/features/auth/queries/get-auth";
+import { useAuth } from "@/features/auth/hooks/use-auth";
 import { homePath, signInPath, signUpPath, ticketsPath } from "@/paths";
 import { SubmitButton } from "./form/submit-button";
 import { ThemeSwitcher } from "./theme/theme-switcher";
 import { buttonVariants } from "./ui/button";
 
 const Header = () => {
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const { user, isFetched } = useAuth();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { user } = await getAuth();
-      setUser(user);
-    };
-
-    fetchUser();
-  }, []);
+  if (!isFetched) {
+    return null;
+  }
 
   const navItems = user ? (
     <>
@@ -55,6 +48,7 @@ const Header = () => {
   return (
     <nav
       className="
+        animate-header-from-top
         supports-backdrop-blur:bg-background/60
         fixed left-0 right-0 top-0 z-20
         border-b bg-background/95 backdrop-blur

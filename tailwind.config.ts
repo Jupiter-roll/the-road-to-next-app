@@ -57,9 +57,14 @@ const config: Config = {
           from: { opacity: "0", transform: "translateY(-16px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
+        "header-from-top": {
+          from: { transform: "translateY(-100%)" },
+          to: { transform: "translateY(0)" },
+        },
       },
       animation: {
         "fade-from-top": "fade-from-top 0.5s ease-out",
+        "header-from-top": "header-from-top 0.5s ease-out",
       },
       borderRadius: {
         lg: "var(--radius)",
