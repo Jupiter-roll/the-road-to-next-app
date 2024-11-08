@@ -27,6 +27,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
+    "fastest-levenshtein": "^1.0.16",
     "lucia": "^3.2.2",
     "lucide-react": "^0.454.0",
     "next": "15.0.2",
