@@ -61,10 +61,15 @@ const config: Config = {
           from: { transform: "translateY(-100%)" },
           to: { transform: "translateY(0)" },
         },
+        "sidebar-from-left": {
+          from: { transform: "translateX(-100%)" },
+          to: { transform: "translateX(0)" },
+        },
       },
       animation: {
         "fade-from-top": "fade-from-top 0.5s ease-out",
         "header-from-top": "header-from-top 0.5s ease-out",
+        "sidebar-from-left": "sidebar-from-left 0.5s ease-out",
       },
       borderRadius: {
         lg: "var(--radius)",
