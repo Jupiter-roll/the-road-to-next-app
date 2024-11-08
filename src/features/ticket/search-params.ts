@@ -1,3 +1,4 @@
 export type SearchParams = {
-  search: string;
+  search: string | string[] | undefined;
+  sort: string | string[] | undefined;
 };
