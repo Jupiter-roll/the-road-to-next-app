@@ -44,7 +44,7 @@ const SortSelect = ({ options }: SortSelectProps) => {
         {options.map((option) => (
           <SelectItem
             key={option.sortKey + option.sortValue}
-            value={option.sortKey + "_" + option.sortKey}
+            value={option.sortKey + "_" + option.sortValue}
           >
             {option.label}
           </SelectItem>
