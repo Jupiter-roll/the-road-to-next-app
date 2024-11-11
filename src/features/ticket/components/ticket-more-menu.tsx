@@ -19,7 +19,7 @@ import { TICKET_STATUS_LABELS } from "../constants";
 
 type TicketMoreMenuProps = {
   ticket: Ticket;
-  trigger: React.ReactNode;
+  trigger: React.ReactElement;
 };
 
 const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
@@ -27,7 +27,7 @@ const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
     action: deleteTicket.bind(null, ticket.id),
     trigger: (
       <DropdownMenuItem>
-        <LucideTrash className="mr-2 h-4 w-4" />
+        <LucideTrash className="h-4 w-4" />
         <span>Delete</span>
       </DropdownMenuItem>
     ),

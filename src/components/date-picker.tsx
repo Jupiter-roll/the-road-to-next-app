@@ -31,23 +31,22 @@ const DatePicker = ({
   const [date, setDate] = useState<Date | undefined>(
     defaultValue ? new Date(defaultValue) : new Date()
   );
+  const [open, setOpen] = useState(false);
 
   useImperativeHandle(imperativeHandleRef, () => ({
     reset: () => setDate(new Date()),
   }));
-
-  const [open, setOpen] = useState(false);
-
-  const formattedStringDate = date ? format(date, "yyyy-MM-dd") : "";
 
   const handleSelect = (selectedDate: Date | undefined) => {
     setDate(selectedDate);
     setOpen(false);
   };
 
+  const formattedStringDate = date ? format(date, "yyyy-MM-dd") : "";
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger className="w-full" id={id} asChild>
+      <PopoverTrigger id={id} className="w-full" asChild>
         <Button
           variant="outline"
           className="justify-start text-left font-normal"

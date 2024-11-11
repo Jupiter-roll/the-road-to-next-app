@@ -50,7 +50,7 @@ const Header = () => {
           className={buttonVariants({ variant: "ghost" })}
         >
           <LucideKanban />
-          <h1 className="ml-2 text-lg font-semibold">TicketBounty</h1>
+          <h1 className="text-lg font-semibold">TicketBounty</h1>
         </Link>
       </div>
       <div className="flex align-items gap-x-2">

@@ -22,7 +22,7 @@ model Session {
   id        String   @id
   expiresAt DateTime
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 
   @@index([userId])
 }
@@ -36,8 +36,8 @@ model Ticket {
   status    TicketStatus @default(OPEN)
   deadline  String
   bounty    Int
-  userId    String
   user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
   comments  Comment[]
 
   @@index([userId])
@@ -47,10 +47,10 @@ model Comment {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   content   String   @db.VarChar(1024)
-  ticketId  String
   ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
-  userId    String?
+  ticketId  String
   user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId    String?
 
   @@index([ticketId])
   @@index([userId])

@@ -30,7 +30,7 @@ export const createComment = async (
     comment = await prisma.comment.create({
       data: {
         userId: user.id,
-        ticketId,
+        ticketId: ticketId,
         ...data,
       },
       include: {

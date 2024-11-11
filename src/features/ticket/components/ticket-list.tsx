@@ -18,7 +18,7 @@ const TicketList = async ({ userId, searchParams }: TicketListProps) => {
   );
 
   return (
-    <div className="flex-1 flex flex-col items-center gap-y-4 animate-fade-in-from-top">
+    <div className="flex-1 flex flex-col items-center gap-y-4 animate-fade-from-top">
       <div className="w-full max-w-[420px] flex gap-x-2">
         <TicketSearchInput placeholder="Search tickets ..." />
         <TicketSortSelect

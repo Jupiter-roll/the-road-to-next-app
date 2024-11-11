@@ -24,7 +24,7 @@ const upsertTicketSchema = z.object({
 
 export const upsertTicket = async (
   id: string | undefined,
-  _formState: ActionState,
+  _actionState: ActionState,
   formData: FormData
 ) => {
   const { user } = await getAuthOrRedirect();
@@ -56,9 +56,7 @@ export const upsertTicket = async (
     };
 
     await prisma.ticket.upsert({
-      where: {
-        id: id || "",
-      },
+      where: { id: id || "" },
       update: dbData,
       create: dbData,
     });
@@ -69,7 +67,7 @@ export const upsertTicket = async (
   revalidatePath(ticketsPath());
 
   if (id) {
-    setCookieByKey("toast", "Ticket updated");
+    await setCookieByKey("toast", "Ticket updated");
     redirect(ticketPath(id));
   }
 

@@ -33,7 +33,7 @@ const TicketPagination = ({
     setPagination({ ...pagination, page: 0 });
 
     // add more reactive effects here once needed ...
-  }, [pagination, search, setPagination]);
+  }, [search, pagination, setPagination]);
 
   return (
     <Pagination

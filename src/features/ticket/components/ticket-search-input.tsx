@@ -4,11 +4,11 @@ import { useQueryState } from "nuqs";
 import { SearchInput } from "@/components/search-input";
 import { searchParser } from "../search-params";
 
-type TicketSearchInputProps = {
+type SearchInputProps = {
   placeholder: string;
 };
 
-const TicketSearchInput = ({ placeholder }: TicketSearchInputProps) => {
+const TicketSearchInput = ({ placeholder }: SearchInputProps) => {
   const [search, setSearch] = useQueryState("search", searchParser);
 
   return (

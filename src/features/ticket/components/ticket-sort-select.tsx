@@ -11,7 +11,7 @@ type TicketSortSelectProps = {
 const TicketSortSelect = ({ options }: TicketSortSelectProps) => {
   const [sort, setSort] = useQueryStates(sortParser, sortOptions);
 
-  return <SortSelect options={options} value={sort} onChange={setSort} />;
+  return <SortSelect value={sort} onChange={setSort} options={options} />;
 };
 
 export { TicketSortSelect };

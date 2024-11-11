@@ -17,7 +17,7 @@ export const getTickets = async (
     },
   };
 
-  const skip = searchParams.page * searchParams.size;
+  const skip = searchParams.size * searchParams.page;
   const take = searchParams.size;
 
   const [tickets, count] = await prisma.$transaction([

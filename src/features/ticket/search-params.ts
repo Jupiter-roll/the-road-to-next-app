@@ -35,4 +35,6 @@ export const searchParamsCache = createSearchParamsCache({
   ...paginationParser,
 });
 
-export type ParsedSearchParams = ReturnType<typeof searchParamsCache.parse>;
+export type ParsedSearchParams = Awaited<
+  ReturnType<typeof searchParamsCache.parse>
+>;

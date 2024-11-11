@@ -20,7 +20,7 @@ type AccountDropdownProps = {
 const AccountDropdown = ({ user }: AccountDropdownProps) => {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild className="cursor-pointer">
         <Avatar>
           <AvatarFallback>{user.username[0].toUpperCase()}</AvatarFallback>
         </Avatar>

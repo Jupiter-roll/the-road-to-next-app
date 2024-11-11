@@ -50,8 +50,8 @@ const seed = async () => {
   console.log("DB Seed: Started ...");
 
   await prisma.comment.deleteMany();
-  await prisma.user.deleteMany();
   await prisma.ticket.deleteMany();
+  await prisma.user.deleteMany();
 
   const passwordHash = await hash("geheimnis");
 
@@ -72,8 +72,8 @@ const seed = async () => {
   await prisma.comment.createMany({
     data: comments.map((comment) => ({
       ...comment,
-      userId: dbUsers[1].id,
       ticketId: dbTickets[0].id,
+      userId: dbUsers[1].id,
     })),
   });
 

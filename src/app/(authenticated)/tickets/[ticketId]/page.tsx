@@ -8,14 +8,15 @@ import { getTicket } from "@/features/ticket/queries/get-ticket";
 import { homePath } from "@/paths";
 
 type TicketPageProps = {
-  params: {
+  params: Promise<{
     ticketId: string;
-  };
+  }>;
 };
 
 const TicketPage = async ({ params }: TicketPageProps) => {
-  const ticketPromise = getTicket(params.ticketId);
-  const commentsPromise = getComments(params.ticketId);
+  const { ticketId } = await params;
+  const ticketPromise = getTicket(ticketId);
+  const commentsPromise = getComments(ticketId);
 
   const [ticket, paginatedComments] = await Promise.all([
     ticketPromise,
@@ -37,7 +38,7 @@ const TicketPage = async ({ params }: TicketPageProps) => {
 
       <Separator />
 
-      <div className="flex justify-center animate-fade-in-from-top">
+      <div className="flex justify-center animate-fade-from-top">
         <TicketItem
           ticket={ticket}
           isDetail

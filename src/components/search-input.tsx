@@ -20,8 +20,8 @@ const SearchInput = ({ value, onChange, placeholder }: SearchInputProps) => {
   return (
     <Input
       defaultValue={value}
-      placeholder={placeholder}
       onChange={handleSearch}
+      placeholder={placeholder}
     />
   );
 };

@@ -6,8 +6,6 @@ import {
   useState,
 } from "react";
 import { toast } from "sonner";
-import { useActionFeedback } from "./form/hooks/use-action-feedback";
-import { ActionState, EMPTY_ACTION_STATE } from "./form/utils/to-action-state";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,14 +15,16 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "./ui/alert-dialog";
+} from "@/components/ui/alert-dialog";
+import { useActionFeedback } from "./form/hooks/use-action-feedback";
+import { ActionState, EMPTY_ACTION_STATE } from "./form/utils/to-action-state";
 import { Button } from "./ui/button";
 
-type UseConfirmDialogProps = {
+type UseConfirmDialogArgs = {
   title?: string;
   description?: string;
   action: () => Promise<ActionState>;
-  trigger: React.ReactElement | ((isPending: boolean) => React.ReactElement);
+  trigger: React.ReactElement | ((isLoading: boolean) => React.ReactElement);
   onSuccess?: (actionState: ActionState) => void;
 };
 
@@ -34,7 +34,7 @@ const useConfirmDialog = ({
   action,
   trigger,
   onSuccess,
-}: UseConfirmDialogProps) => {
+}: UseConfirmDialogArgs) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const [actionState, formAction, isPending] = useActionState(
@@ -99,7 +99,7 @@ const useConfirmDialog = ({
     </AlertDialog>
   );
 
-  return [dialogTrigger, dialog];
+  return [dialogTrigger, dialog] as const;
 };
 
 export { useConfirmDialog };

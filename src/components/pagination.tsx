@@ -28,7 +28,7 @@ const Pagination = ({
   const endOffset = startOffset - 1 + pagination.size;
   const actualEndOffset = Math.min(endOffset, count);
 
-  const label = `${startOffset} - ${actualEndOffset} of ${count}`;
+  const label = `${startOffset}-${actualEndOffset} of ${count}`;
 
   const handlePreviousPage = () => {
     onPagination({ ...pagination, page: pagination.page - 1 });

@@ -15,7 +15,7 @@ const Sidebar = () => {
 
   const { activeIndex } = getActivePath(
     pathName,
-    navItems.map((item) => item.href),
+    navItems.map((navItem) => navItem.href),
     [signInPath(), signUpPath()]
   );
 

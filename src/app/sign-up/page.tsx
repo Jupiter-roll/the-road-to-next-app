@@ -9,7 +9,7 @@ const SignUpPage = () => {
       <CardCompact
         title="Sign Up"
         description="Create an account to get started"
-        className="w-full max-w-[420px] animate-fade-in-from-top"
+        className="w-full max-w-[420px] animate-fade-from-top"
         content={<SignUpForm />}
         footer={
           <Link className="text-sm text-muted-foreground" href={signInPath()}>

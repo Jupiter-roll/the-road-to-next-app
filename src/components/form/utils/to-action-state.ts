@@ -1,5 +1,6 @@
 import { ZodError } from "zod";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ActionState<T = any> = {
   status?: "SUCCESS" | "ERROR";
   message: string;
@@ -23,24 +24,24 @@ export const fromErrorToActionState = (
     return {
       status: "ERROR",
       message: "",
-      fieldErrors: error.flatten().fieldErrors,
       payload: formData,
+      fieldErrors: error.flatten().fieldErrors,
       timestamp: Date.now(),
     };
   } else if (error instanceof Error) {
     return {
       status: "ERROR",
       message: error.message,
-      fieldErrors: {},
       payload: formData,
+      fieldErrors: {},
       timestamp: Date.now(),
     };
   } else {
     return {
       status: "ERROR",
       message: "An unknown error occurred",
-      fieldErrors: {},
       payload: formData,
+      fieldErrors: {},
       timestamp: Date.now(),
     };
   }

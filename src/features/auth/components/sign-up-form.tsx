@@ -28,17 +28,17 @@ const SignUpForm = () => {
       <FieldError actionState={actionState} name="email" />
 
       <Input
+        type="password"
         name="password"
         placeholder="Password"
-        type="password"
         defaultValue={actionState.payload?.get("password") as string}
       />
       <FieldError actionState={actionState} name="password" />
 
       <Input
+        type="password"
         name="confirmPassword"
         placeholder="Confirm Password"
-        type="password"
         defaultValue={actionState.payload?.get("confirmPassword") as string}
       />
       <FieldError actionState={actionState} name="confirmPassword" />

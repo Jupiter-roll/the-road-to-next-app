@@ -7,13 +7,14 @@ import { getTicket } from "@/features/ticket/queries/get-ticket";
 import { homePath, ticketPath } from "@/paths";
 
 type TicketEditPageProps = {
-  params: {
+  params: Promise<{
     ticketId: string;
-  };
+  }>;
 };
 
 const TicketEditPage = async ({ params }: TicketEditPageProps) => {
-  const ticket = await getTicket(params.ticketId);
+  const { ticketId } = await params;
+  const ticket = await getTicket(ticketId);
 
   const isTicketFound = !!ticket;
 
@@ -37,7 +38,7 @@ const TicketEditPage = async ({ params }: TicketEditPageProps) => {
         <CardCompact
           title="Edit Ticket"
           description="Edit an existing ticket"
-          className="w-full max-w-[420px] animate-fade-in-from-top"
+          className="w-full max-w-[420px] animate-fade-from-top"
           content={<TicketUpsertForm ticket={ticket} />}
         />
       </div>

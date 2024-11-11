@@ -9,7 +9,7 @@ import { TicketUpsertForm } from "@/features/ticket/components/ticket-upsert-for
 import { searchParamsCache } from "@/features/ticket/search-params";
 
 type TicketsPageProps = {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 };
 
 const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
@@ -29,7 +29,7 @@ const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
       <Suspense fallback={<Spinner />}>
         <TicketList
           userId={user?.id}
-          searchParams={searchParamsCache.parse(searchParams)}
+          searchParams={searchParamsCache.parse(await searchParams)}
         />
       </Suspense>
     </div>
