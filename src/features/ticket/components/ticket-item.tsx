@@ -5,6 +5,7 @@ import {
   LucidePencil,
 } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { getAuth } from "@/features/auth/queries/get-auth";
 import { isOwner } from "@/features/auth/utils/is-owner";
 import { Comments } from "@/features/comment/components/comments";
@@ -107,7 +109,19 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
         </div>
       </div>
 
-      {isDetail ? <Comments ticketId={ticket.id} /> : null}
+      {isDetail ? (
+        <Suspense
+          fallback={
+            <div className="flex flex-col gap-y-4">
+              <Skeleton className="h-[250px] w-full" />
+              <Skeleton className="h-[80px] ml-8" />
+              <Skeleton className="h-[80px] ml-8" />
+            </div>
+          }
+        >
+          <Comments ticketId={ticket.id} />
+        </Suspense>
+      ) : null}
     </div>
   );
 };
