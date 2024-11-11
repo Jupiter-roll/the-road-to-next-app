@@ -2,6 +2,7 @@
 
 import { CardCompact } from "@/components/card-compact";
 import { Button } from "@/components/ui/button";
+import { getComments } from "../queries/get-comments";
 import { CommentWithMetadata } from "../types";
 import { CommentCreateForm } from "./comment-create-form";
 import { CommentDeleteButton } from "./comment-delete-button";
@@ -13,8 +14,9 @@ type CommentsProps = {
 };
 
 const Comments = ({ ticketId, comments = [] }: CommentsProps) => {
-  const handleMore = () => {
-    console.log("More");
+  const handleMore = async () => {
+    const result = await getComments(ticketId);
+    console.log(result);
   };
 
   return (
