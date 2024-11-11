@@ -1,15 +1,13 @@
 import { getTickets } from "@/features/ticket/queries/get-tickets";
+import { searchParamsCache } from "@/features/ticket/search-params";
 
-export const dynamic = "force-dynamic";
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
 
-export async function GET() {
-  const { list, metadata } = await getTickets(undefined, {
-    search: "",
-    size: 5,
-    page: 0,
-    sortKey: "createdAt",
-    sortValue: "desc",
-  });
+  const untypedSearchParams = Object.fromEntries(searchParams);
+  const typedSearchParams = searchParamsCache.parse(untypedSearchParams);
+
+  const { list, metadata } = await getTickets(undefined, typedSearchParams);
 
   return Response.json({ list, metadata });
 }
