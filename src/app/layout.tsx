@@ -6,6 +6,7 @@ import { Sidebar } from "@/app/_navigation/sidebar/components/sidebar";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { Header } from "./_navigation/header";
+import { ReactQueryProvider } from "./_providers/react-query/react-query-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -35,22 +36,24 @@ export default function RootLayout({
       >
         <NuqsAdapter>
           <ThemeProvider>
-            <Header />
-            <div className="flex h-screen overflow-hidden border-collapse">
-              <Sidebar />
-              <main
-                className="
+            <ReactQueryProvider>
+              <Header />
+              <div className="flex h-screen overflow-hidden border-collapse">
+                <Sidebar />
+                <main
+                  className="
                 min-h-screen flex-1
                 overflow-y-auto overflow-x-hidden
                 py-24 px-8
                 bg-secondary/20
                 flex flex-col
               "
-              >
-                {children}
-              </main>
-            </div>
-            <Toaster expand />
+                >
+                  {children}
+                </main>
+              </div>
+              <Toaster expand />
+            </ReactQueryProvider>
           </ThemeProvider>
         </NuqsAdapter>
       </body>
