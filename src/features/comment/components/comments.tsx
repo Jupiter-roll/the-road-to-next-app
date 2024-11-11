@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { CardCompact } from "@/components/card-compact";
 import { Button } from "@/components/ui/button";
 import { getComments } from "../queries/get-comments";
@@ -17,14 +18,13 @@ type CommentsProps = {
 };
 
 const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
-  const comments = paginatedComments.list;
+  const [comments, setComments] = useState(paginatedComments.list);
 
   const handleMore = async () => {
     const morePaginatedComments = await getComments(ticketId);
     const moreComments = morePaginatedComments.list;
 
-    console.log(moreComments);
-    // TODO: append moreComments to comments
+    setComments([...comments, ...moreComments]);
   };
 
   return (
