@@ -8,8 +8,6 @@ The finished application that you get after completing the first journey of The 
 2. Add your own `.env` file with the following content [0] coming from [Supabase](https://supabase.com/)
 3. Run `npm install` to install the dependencies (maybe you have to append the `--force` flag)
 4. Run the database migration `npx prisma db push` to create the DB tables
-5. Run the seed script `npm run seed` to seed the database
-6. Run `npm run dev` to start the development server
 
 [0]
 
@@ -18,4 +16,18 @@ The finished application that you get after completing the first journey of The 
 DATABASE_URL="postgres://postgres.[project]:[password]@aws-0-[aws-region].pooler.supabase.com:6543/postgres?pgbouncer=true"
 
 DIRECT_URL="postgres://postgres.[project]:[password]@aws-0-[aws-region].pooler.supabase.com:5432/postgres"
+```
+
+## Usage
+
+```sh
+npm run seed
+```
+
+```sh
+npm run dev
+```
+
+```sh
+npx prisma studio
 ```
