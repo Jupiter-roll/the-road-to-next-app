@@ -21,7 +21,7 @@ DIRECT_URL="postgres://postgres.[project]:[password]@aws-0-[aws-region].pooler.s
 ## Usage
 
 ```sh
-npm run seed
+npm run prisma-seed
 ```
 
 ```sh
